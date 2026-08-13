@@ -1,0 +1,480 @@
+package com.example.lession
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+
+// ==========================================
+// 1. PALETA DE COLORES Y TEMA
+// ==========================================
+val DarkPurpleBg = Color(0xFF1E1B4B)
+val CardPurpleBg = Color(0xFF282560)
+val InputPurpleBg = Color(0xFF332F75)
+val AccentNeon = Color(0xFFCCFF00)
+val ButtonPurple = Color(0xFF4338CA)
+val TextLight = Color(0xFFE0E7FF)
+val TextMuted = Color(0xFF9CA3AF)
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = DarkPurpleBg
+                ) {
+                    AppNavigation()
+                }
+            }
+        }
+    }
+}
+
+// ==========================================
+// 2. NAVEGACIÓN PRINCIPAL
+// ==========================================
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "welcome") {
+        composable("welcome") {
+            WelcomeScreen(
+                onNavigateToLogin = { navController.navigate("login") },
+                onNavigateToRegister = { navController.navigate("profile_config") }
+            )
+        }
+        composable("login") {
+            LoginScreen(
+                onLoginClick = { navController.navigate("profile_config") },
+                onForgotPasswordClick = { /* Lógica de recuperar contraseña */ }
+            )
+        }
+        composable("profile_config") {
+            ProfileConfigScreen(
+                onSaveProfile = { /* Lógica de guardado final */ }
+            )
+        }
+    }
+}
+
+// ==========================================
+// 3. COMPONENTE REUTILIZABLE: INPUT FIELD
+// ==========================================
+@Composable
+fun CustomTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    isPassword: Boolean = false,
+    trailingIcon: @Composable (() -> Unit)? = null
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = { Text(placeholder, color = TextMuted, fontSize = 13.sp) },
+        singleLine = true,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        trailingIcon = trailingIcon,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = InputPurpleBg,
+            unfocusedContainerColor = InputPurpleBg,
+            disabledContainerColor = InputPurpleBg,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White
+        ),
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+    )
+}
+
+// ==========================================
+// 4. PANTALLA 1: WELCOME SCREEN
+// ==========================================
+@Composable
+fun WelcomeScreen(
+    onNavigateToLogin: () -> Unit,
+    onNavigateToRegister: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DarkPurpleBg)
+    ) {
+        // Fondo inferior (Asegúrate de agregar 'bg_fitness_1' en res/drawable)
+        Image(
+            painter = painterResource(id = R.drawable.bg_fitness_1),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.55f)
+                .align(Alignment.BottomCenter)
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = 40.dp)
+            ) {
+                // Logo (Asegúrate de agregar 'ic_lession_logo' en res/drawable)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_lession_logo),
+                    contentDescription = "Lession Logo",
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(110.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "MÁS RENDIMIENTO\nMENOS IMPACTO",
+                    color = AccentNeon,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = onNavigateToLogin,
+                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = Modifier.width(130.dp)
+                ) {
+                    Text("Log In", color = Color.White)
+                }
+
+                Button(
+                    onClick = onNavigateToRegister,
+                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
+                    shape = RoundedCornerShape(20.dp),
+                    modifier = Modifier.width(130.dp)
+                ) {
+                    Text("Sing In", color = Color.White)
+                }
+            }
+        }
+    }
+}
+
+// ==========================================
+// 5. PANTALLA 2: LOGIN SCREEN
+// ==========================================
+@Composable
+fun LoginScreen(
+    onLoginClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit
+) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DarkPurpleBg)
+    ) {
+        // Fondo inferior (Asegúrate de agregar 'bg_fitness_2' en res/drawable)
+        Image(
+            painter = painterResource(id = R.drawable.bg_fitness_2),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.55f)
+                .align(Alignment.BottomCenter)
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Icon(
+                painter = painterResource(id = R.drawable.ic_lession_logo),
+                contentDescription = "Logo",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(90.dp)
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            CustomTextField(
+                value = username,
+                onValueChange = { username = it },
+                placeholder = "Username or email"
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CustomTextField(
+                value = password,
+                onValueChange = { password = it },
+                placeholder = "Password",
+                isPassword = true,
+                trailingIcon = {
+                    Text(
+                        text = "Forgot it?",
+                        color = TextMuted,
+                        fontSize = 12.sp,
+                        modifier = Modifier
+                            .clickable { onForgotPasswordClick() }
+                            .padding(end = 12.dp)
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = onLoginClick,
+                colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(48.dp)
+            ) {
+                Text("LOGIN", color = Color.White, fontWeight = FontWeight.Bold)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("or ", color = TextMuted)
+                // Agregar 'ic_google' en res/drawable
+                Image(
+                    painter = painterResource(id = R.drawable.ic_google),
+                    contentDescription = "Google Sign In",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    }
+}
+
+// ==========================================
+// 6. PANTALLA 3: CONFIGURAR PERFIL
+// ==========================================
+@Composable
+fun ProfileConfigScreen(
+    onSaveProfile: () -> Unit
+) {
+    var nombre by remember { mutableStateOf("") }
+    var fechaNacimiento by remember { mutableStateOf("") }
+    var peso by remember { mutableStateOf("") }
+    var altura by remember { mutableStateOf("") }
+    var sexo by remember { mutableStateOf("") }
+    var tipoCuerpo by remember { mutableStateOf("") }
+    var deporte by remember { mutableStateOf("") }
+    var horasActividad by remember { mutableStateOf("") }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DarkPurpleBg)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_lession_logo),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .height(36.dp)
+                    .padding(vertical = 4.dp)
+            )
+
+            Text(
+                text = "Configura tu perfil",
+                color = Color.White,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            // Tarjeta del formulario
+            Card(
+                colors = CardDefaults.cardColors(containerColor = CardPurpleBg),
+                shape = RoundedCornerShape(24.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .background(InputPurpleBg, CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    CustomTextField(value = nombre, onValueChange = { nombre = it }, placeholder = "Nombre")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CustomTextField(value = fechaNacimiento, onValueChange = { fechaNacimiento = it }, placeholder = "Fecha de nacimiento")
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Fila dividida: Formulario + Silueta
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            CustomTextField(value = peso, onValueChange = { peso = it }, placeholder = "Peso")
+                            Spacer(modifier = Modifier.height(8.dp))
+                            CustomTextField(value = altura, onValueChange = { altura = it }, placeholder = "Altura")
+                            Spacer(modifier = Modifier.height(8.dp))
+                            CustomTextField(value = sexo, onValueChange = { sexo = it }, placeholder = "Sexo")
+                            Spacer(modifier = Modifier.height(8.dp))
+                            CustomTextField(value = tipoCuerpo, onValueChange = { tipoCuerpo = it }, placeholder = "Tipo de cuerpo")
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .weight(0.75f)
+                                .height(224.dp)
+                                .background(InputPurpleBg, RoundedCornerShape(16.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            // Agregar 'ic_body_silhouette' en res/drawable
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_body_silhouette),
+                                contentDescription = "Silueta",
+                                modifier = Modifier.fillMaxHeight(0.85f)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = "Opcionales",
+                        color = TextMuted,
+                        fontSize = 11.sp,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+                    CustomTextField(value = deporte, onValueChange = { deporte = it }, placeholder = "Deporte que realizas")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CustomTextField(value = horasActividad, onValueChange = { horasActividad = it }, placeholder = "Horas semanales de actividad")
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = onSaveProfile,
+                        colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.width(100.dp)
+                    ) {
+                        Text("Save", color = Color.White)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Tarjeta de Conectividad
+            Card(
+                colors = CardDefaults.cardColors(containerColor = CardPurpleBg),
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Elije como\nconectarte a\nla banda",
+                        color = TextLight,
+                        fontSize = 12.sp,
+                        lineHeight = 16.sp
+                    )
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        IconButton(
+                            onClick = { },
+                            modifier = Modifier
+                                .size(44.dp)
+                                .background(ButtonPurple, CircleShape)
+                        ) {
+                            Icon(imageVector = Icons.Default.Wifi, contentDescription = "WiFi", tint = Color.White)
+                        }
+
+                        IconButton(
+                            onClick = { },
+                            modifier = Modifier
+                                .size(44.dp)
+                                .background(ButtonPurple, CircleShape)
+                        ) {
+                            Icon(imageVector = Icons.Default.Bluetooth, contentDescription = "Bluetooth", tint = Color.White)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
