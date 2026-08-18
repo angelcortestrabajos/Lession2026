@@ -1,9 +1,13 @@
-package com.example.lession
+package com.lession.app
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,469 +16,2078 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 
-// ==========================================
-// 1. PALETA DE COLORES Y TEMA
-// ==========================================
-val DarkPurpleBg = Color(0xFF1E1B4B)
-val CardPurpleBg = Color(0xFF282560)
-val InputPurpleBg = Color(0xFF332F75)
-val AccentNeon = Color(0xFFCCFF00)
-val ButtonPurple = Color(0xFF4338CA)
-val TextLight = Color(0xFFE0E7FF)
-val TextMuted = Color(0xFF9CA3AF)
+private enum class Screen {
+    PROFILE_SETUP,
+    DASHBOARD,
+    MENU,
+    PROFILE,
+    LOGIN
+}
+
+// ============================================================
+// COLORES
+// ============================================================
+
+private val Background = Color(0xFF291477)
+private val Purple = Color(0xFF4930D2)
+private val PurpleLight = Color(0xFF6045E8)
+private val PurpleCard = Color(0xFF38218D)
+private val PurpleDark = Color(0xFF21105F)
+
+private val Neon = Color(0xFFD9FF00)
+private val White = Color.White
+private val Gray = Color(0xFFB9B0E8)
+
+private val Green = Color(0xFF64E572)
+private val Yellow = Color(0xFFFFD83D)
+private val Red = Color(0xFFFF5757)
+private val Blue = Color(0xFF59B7FF)
+
+
+// ============================================================
+// MAIN
+// ============================================================
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
+
         setContent {
-            MaterialTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = DarkPurpleBg
-                ) {
-                    AppNavigation()
-                }
-            }
+            LessionApp()
         }
     }
 }
 
-// ==========================================
-// 2. NAVEGACIÓN PRINCIPAL
-// ==========================================
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "welcome") {
-        composable("welcome") {
-            WelcomeScreen(
-                onNavigateToLogin = { navController.navigate("login") },
-                onNavigateToRegister = { navController.navigate("profile_config") }
+// ============================================================
+// APP
+// ============================================================
+
+@Composable
+private fun LessionApp() {
+
+    /*
+     * AHORA EL PERFIL APARECE ANTES DEL DASHBOARD.
+     */
+    var screen by remember {
+        mutableStateOf(Screen.PROFILE_SETUP)
+    }
+
+    var nombre by remember {
+        mutableStateOf("")
+    }
+
+    var fechaNacimiento by remember {
+        mutableStateOf("")
+    }
+
+    var peso by remember {
+        mutableStateOf("")
+    }
+
+    var altura by remember {
+        mutableStateOf("")
+    }
+
+    var sexo by remember {
+        mutableStateOf("")
+    }
+
+    var tipoCuerpo by remember {
+        mutableStateOf("")
+    }
+
+    var deporte by remember {
+        mutableStateOf("")
+    }
+
+    var horasActividad by remember {
+        mutableStateOf("")
+    }
+
+    var avatarUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+    when (screen) {
+
+        // ----------------------------------------------------
+        // PERFIL INICIAL
+        // ----------------------------------------------------
+
+        Screen.PROFILE_SETUP -> {
+
+            ProfileSetupScreen(
+
+                nombre = nombre,
+                fechaNacimiento = fechaNacimiento,
+                peso = peso,
+                altura = altura,
+                sexo = sexo,
+                tipoCuerpo = tipoCuerpo,
+                deporte = deporte,
+                horasActividad = horasActividad,
+                avatarUri = avatarUri,
+
+                onAvatarChange = {
+                    avatarUri = it
+                },
+
+                onNombreChange = {
+                    nombre = it
+                },
+
+                onFechaChange = {
+                    fechaNacimiento = it
+                },
+
+                onPesoChange = {
+                    peso = it
+                },
+
+                onAlturaChange = {
+                    altura = it
+                },
+
+                onSexoChange = {
+                    sexo = it
+                },
+
+                onTipoCuerpoChange = {
+                    tipoCuerpo = it
+                },
+
+                onDeporteChange = {
+                    deporte = it
+                },
+
+                onHorasChange = {
+                    horasActividad = it
+                },
+
+                onContinue = {
+                    screen = Screen.DASHBOARD
+                }
             )
         }
-        composable("login") {
+
+
+        // ----------------------------------------------------
+        // DASHBOARD
+        // ----------------------------------------------------
+
+        Screen.DASHBOARD -> {
+
+            DashboardScreen(
+
+                nombre = nombre,
+                avatarUri = avatarUri,
+
+                onMenu = {
+                    screen = Screen.MENU
+                }
+            )
+        }
+
+
+        // ----------------------------------------------------
+        // MENU
+        // ----------------------------------------------------
+
+        Screen.MENU -> {
+
+            MenuScreen(
+
+                nombre = nombre,
+                avatarUri = avatarUri,
+
+                onHome = {
+                    screen = Screen.DASHBOARD
+                },
+
+                onProfile = {
+                    screen = Screen.PROFILE
+                },
+
+                onConfiguration = {
+                    screen = Screen.PROFILE
+                },
+
+                onBack = {
+                    screen = Screen.DASHBOARD
+                }
+            )
+        }
+
+
+        // ----------------------------------------------------
+        // PERFIL
+        // ----------------------------------------------------
+
+        Screen.PROFILE -> {
+
+            ProfileScreen(
+
+                nombre = nombre,
+                fechaNacimiento = fechaNacimiento,
+                peso = peso,
+                altura = altura,
+                sexo = sexo,
+                tipoCuerpo = tipoCuerpo,
+                deporte = deporte,
+                horasActividad = horasActividad,
+                avatarUri = avatarUri,
+
+                onAvatarChange = {
+                    avatarUri = it
+                },
+
+                onNombreChange = {
+                    nombre = it
+                },
+
+                onFechaChange = {
+                    fechaNacimiento = it
+                },
+
+                onPesoChange = {
+                    peso = it
+                },
+
+                onAlturaChange = {
+                    altura = it
+                },
+
+                onSexoChange = {
+                    sexo = it
+                },
+
+                onTipoCuerpoChange = {
+                    tipoCuerpo = it
+                },
+
+                onDeporteChange = {
+                    deporte = it
+                },
+
+                onHorasChange = {
+                    horasActividad = it
+                },
+
+                onSave = {
+                    screen = Screen.DASHBOARD
+                },
+
+                onMenu = {
+                    screen = Screen.MENU
+                }
+            )
+        }
+
+
+        // ----------------------------------------------------
+        // LOGIN
+        // ----------------------------------------------------
+
+        Screen.LOGIN -> {
+
             LoginScreen(
-                onLoginClick = { navController.navigate("profile_config") },
-                onForgotPasswordClick = { /* Lógica de recuperar contraseña */ }
-            )
-        }
-        composable("profile_config") {
-            ProfileConfigScreen(
-                onSaveProfile = { /* Lógica de guardado final */ }
+                onLogin = {
+                    screen = Screen.DASHBOARD
+                },
+
+                onBack = {
+                    screen = Screen.PROFILE_SETUP
+                }
             )
         }
     }
 }
 
-// ==========================================
-// 3. COMPONENTE REUTILIZABLE: INPUT FIELD
-// ==========================================
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-    isPassword: Boolean = false,
-    trailingIcon: @Composable (() -> Unit)? = null
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { Text(placeholder, color = TextMuted, fontSize = 13.sp) },
-        singleLine = true,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        trailingIcon = trailingIcon,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = InputPurpleBg,
-            unfocusedContainerColor = InputPurpleBg,
-            disabledContainerColor = InputPurpleBg,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White
-        ),
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-    )
-}
 
-// ==========================================
-// 4. PANTALLA 1: WELCOME SCREEN
-// ==========================================
+// ============================================================
+// PERFIL INICIAL
+// ============================================================
+
 @Composable
-fun WelcomeScreen(
-    onNavigateToLogin: () -> Unit,
-    onNavigateToRegister: () -> Unit
+private fun ProfileSetupScreen(
+
+    nombre: String,
+    fechaNacimiento: String,
+    peso: String,
+    altura: String,
+    sexo: String,
+    tipoCuerpo: String,
+    deporte: String,
+    horasActividad: String,
+    avatarUri: Uri?,
+
+    onAvatarChange: (Uri) -> Unit,
+    onNombreChange: (String) -> Unit,
+    onFechaChange: (String) -> Unit,
+    onPesoChange: (String) -> Unit,
+    onAlturaChange: (String) -> Unit,
+    onSexoChange: (String) -> Unit,
+    onTipoCuerpoChange: (String) -> Unit,
+    onDeporteChange: (String) -> Unit,
+    onHorasChange: (String) -> Unit,
+
+    onContinue: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DarkPurpleBg)
-    ) {
-        // Fondo inferior (Asegúrate de agregar 'bg_fitness_1' en res/drawable)
-        Image(
-            painter = painterResource(id = R.drawable.bg_fitness_1),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.55f)
-                .align(Alignment.BottomCenter)
-        )
+
+    val launcher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) { uri ->
+
+            if (uri != null) {
+                onAvatarChange(uri)
+            }
+        }
+
+    BaseScreen {
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+                .verticalScroll(
+                    rememberScrollState()
+                )
+                .padding(
+                    horizontal = 24.dp,
+                    vertical = 20.dp
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 40.dp)
-            ) {
-                // Logo (Asegúrate de agregar 'ic_lession_logo' en res/drawable)
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_lession_logo),
-                    contentDescription = "Lession Logo",
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(110.dp)
-                )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "MÁS RENDIMIENTO\nMENOS IMPACTO",
-                    color = AccentNeon,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            Row(
+            // LOGO REAL
+            LessionLogo(
                 modifier = Modifier
+                    .height(90.dp)
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Button(
-                    onClick = onNavigateToLogin,
-                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = Modifier.width(130.dp)
-                ) {
-                    Text("Log In", color = Color.White)
-                }
-
-                Button(
-                    onClick = onNavigateToRegister,
-                    colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
-                    shape = RoundedCornerShape(20.dp),
-                    modifier = Modifier.width(130.dp)
-                ) {
-                    Text("Sing In", color = Color.White)
-                }
-            }
-        }
-    }
-}
-
-// ==========================================
-// 5. PANTALLA 2: LOGIN SCREEN
-// ==========================================
-@Composable
-fun LoginScreen(
-    onLoginClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit
-) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DarkPurpleBg)
-    ) {
-        // Fondo inferior (Asegúrate de agregar 'bg_fitness_2' en res/drawable)
-        Image(
-            painter = painterResource(id = R.drawable.bg_fitness_2),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.55f)
-                .align(Alignment.BottomCenter)
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_lession_logo),
-                contentDescription = "Logo",
-                tint = Color.Unspecified,
-                modifier = Modifier.size(90.dp)
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            CustomTextField(
-                value = username,
-                onValueChange = { username = it },
-                placeholder = "Username or email"
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            CustomTextField(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = "Password",
-                isPassword = true,
-                trailingIcon = {
-                    Text(
-                        text = "Forgot it?",
-                        color = TextMuted,
-                        fontSize = 12.sp,
-                        modifier = Modifier
-                            .clickable { onForgotPasswordClick() }
-                            .padding(end = 12.dp)
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = onLoginClick,
-                colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
-                shape = RoundedCornerShape(20.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(48.dp)
-            ) {
-                Text("LOGIN", color = Color.White, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("or ", color = TextMuted)
-                // Agregar 'ic_google' en res/drawable
-                Image(
-                    painter = painterResource(id = R.drawable.ic_google),
-                    contentDescription = "Google Sign In",
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
-    }
-}
-
-// ==========================================
-// 6. PANTALLA 3: CONFIGURAR PERFIL
-// ==========================================
-@Composable
-fun ProfileConfigScreen(
-    onSaveProfile: () -> Unit
-) {
-    var nombre by remember { mutableStateOf("") }
-    var fechaNacimiento by remember { mutableStateOf("") }
-    var peso by remember { mutableStateOf("") }
-    var altura by remember { mutableStateOf("") }
-    var sexo by remember { mutableStateOf("") }
-    var tipoCuerpo by remember { mutableStateOf("") }
-    var deporte by remember { mutableStateOf("") }
-    var horasActividad by remember { mutableStateOf("") }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DarkPurpleBg)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_lession_logo),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .height(36.dp)
-                    .padding(vertical = 4.dp)
+            Spacer(
+                modifier = Modifier.height(15.dp)
             )
 
             Text(
                 text = "Configura tu perfil",
-                color = Color.White,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(bottom = 12.dp)
+                color = White,
+                fontSize = 29.sp,
+                fontWeight = FontWeight.Bold
             )
 
-            // Tarjeta del formulario
-            Card(
-                colors = CardDefaults.cardColors(containerColor = CardPurpleBg),
-                shape = RoundedCornerShape(24.dp),
-                modifier = Modifier.fillMaxWidth()
+            Spacer(
+                modifier = Modifier.height(6.dp)
+            )
+
+            Text(
+                text = "Cuéntanos un poco sobre ti",
+                color = Gray,
+                fontSize = 16.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+
+            // AVATAR
+            AvatarSelector(
+                avatarUri = avatarUri,
+                onClick = {
+                    launcher.launch("image/*")
+                }
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            Text(
+                text = "Agregar avatar",
+                color = Neon,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+
+            BigTextField(
+                value = nombre,
+                onValueChange = onNombreChange,
+                placeholder = "Nombre"
+            )
+
+            Spacer(Modifier.height(13.dp))
+
+            BigTextField(
+                value = fechaNacimiento,
+                onValueChange = onFechaChange,
+                placeholder = "Fecha de nacimiento"
+            )
+
+            Spacer(Modifier.height(13.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
+
+                BigTextField(
+                    value = peso,
+                    onValueChange = onPesoChange,
+                    placeholder = "Peso",
+                    modifier = Modifier.weight(1f)
+                )
+
+                BigTextField(
+                    value = altura,
+                    onValueChange = onAlturaChange,
+                    placeholder = "Altura",
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(13.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                BigTextField(
+                    value = sexo,
+                    onValueChange = onSexoChange,
+                    placeholder = "Sexo",
+                    modifier = Modifier.weight(1f)
+                )
+
+                BigTextField(
+                    value = tipoCuerpo,
+                    onValueChange = onTipoCuerpoChange,
+                    placeholder = "Tipo de cuerpo",
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(24.dp)
+            )
+
+            Text(
+                text = "Opcionales",
+                color = White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.Start)
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            BigTextField(
+                value = deporte,
+                onValueChange = onDeporteChange,
+                placeholder = "Deporte que realizas"
+            )
+
+            Spacer(
+                modifier = Modifier.height(13.dp)
+            )
+
+            BigTextField(
+                value = horasActividad,
+                onValueChange = onHorasChange,
+                placeholder = "Horas semanales de actividad"
+            )
+
+            Spacer(
+                modifier = Modifier.height(28.dp)
+            )
+
+            PrimaryButton(
+                text = "CONTINUAR",
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onContinue
+            )
+
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+        }
+    }
+}
+
+
+// ============================================================
+// AVATAR
+// ============================================================
+
+@Composable
+private fun AvatarSelector(
+    avatarUri: Uri?,
+    onClick: () -> Unit
+) {
+
+    Box(
+        modifier = Modifier
+            .size(120.dp)
+            .clip(CircleShape)
+            .background(PurpleLight)
+            .clickable {
+                onClick()
+            },
+        contentAlignment = Alignment.Center
+    ) {
+
+        if (avatarUri != null) {
+
+            AsyncImage(
+                model = avatarUri,
+                contentDescription = "Avatar",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+
+        } else {
+
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = null,
+                tint = White,
+                modifier = Modifier.size(65.dp)
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .size(38.dp)
+                .clip(CircleShape)
+                .background(Neon),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Agregar",
+                tint = PurpleDark,
+                modifier = Modifier.size(25.dp)
+            )
+        }
+    }
+}
+
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+
+@Composable
+private fun DashboardScreen(
+    nombre: String,
+    avatarUri: Uri?,
+    onMenu: () -> Unit
+) {
+
+    BaseScreen {
+
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+
+            // ------------------------------------------------
+            // TOP BAR
+            // ------------------------------------------------
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(72.dp)
+                    .background(Purple)
+                    .padding(horizontal = 18.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                LessionLogo(
+                    modifier = Modifier.width(145.dp)
+                )
+
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+
+                if (avatarUri != null) {
+
+                    AsyncImage(
+                        model = avatarUri,
+                        contentDescription = "Avatar",
                         modifier = Modifier
-                            .size(56.dp)
-                            .background(InputPurpleBg, CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    CustomTextField(value = nombre, onValueChange = { nombre = it }, placeholder = "Nombre")
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(value = fechaNacimiento, onValueChange = { fechaNacimiento = it }, placeholder = "Fecha de nacimiento")
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // Fila dividida: Formulario + Silueta
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            CustomTextField(value = peso, onValueChange = { peso = it }, placeholder = "Peso")
-                            Spacer(modifier = Modifier.height(8.dp))
-                            CustomTextField(value = altura, onValueChange = { altura = it }, placeholder = "Altura")
-                            Spacer(modifier = Modifier.height(8.dp))
-                            CustomTextField(value = sexo, onValueChange = { sexo = it }, placeholder = "Sexo")
-                            Spacer(modifier = Modifier.height(8.dp))
-                            CustomTextField(value = tipoCuerpo, onValueChange = { tipoCuerpo = it }, placeholder = "Tipo de cuerpo")
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .weight(0.75f)
-                                .height(224.dp)
-                                .background(InputPurpleBg, RoundedCornerShape(16.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            // Agregar 'ic_body_silhouette' en res/drawable
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_body_silhouette),
-                                contentDescription = "Silueta",
-                                modifier = Modifier.fillMaxHeight(0.85f)
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        text = "Opcionales",
-                        color = TextMuted,
-                        fontSize = 11.sp,
-                        modifier = Modifier.align(Alignment.Start)
+                            .size(43.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
                     )
 
-                    Spacer(modifier = Modifier.height(4.dp))
-                    CustomTextField(value = deporte, onValueChange = { deporte = it }, placeholder = "Deporte que realizas")
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(value = horasActividad, onValueChange = { horasActividad = it }, placeholder = "Horas semanales de actividad")
+                    Spacer(
+                        modifier = Modifier.width(12.dp)
+                    )
+                }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                IconButton(
+                    onClick = onMenu
+                ) {
 
-                    Button(
-                        onClick = onSaveProfile,
-                        colors = ButtonDefaults.buttonColors(containerColor = ButtonPurple),
-                        shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.width(100.dp)
-                    ) {
-                        Text("Save", color = Color.White)
-                    }
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Menú",
+                        tint = White,
+                        modifier = Modifier.size(30.dp)
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            // ------------------------------------------------
+            // CONTENIDO
+            // ------------------------------------------------
 
-            // Tarjeta de Conectividad
-            Card(
-                colors = CardDefaults.cardColors(containerColor = CardPurpleBg),
-                shape = RoundedCornerShape(20.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Elije como\nconectarte a\nla banda",
-                        color = TextLight,
-                        fontSize = 12.sp,
-                        lineHeight = 16.sp
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(
+                        rememberScrollState()
                     )
+                    .padding(20.dp)
+            ) {
 
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        IconButton(
-                            onClick = { },
-                            modifier = Modifier
-                                .size(44.dp)
-                                .background(ButtonPurple, CircleShape)
-                        ) {
-                            Icon(imageVector = Icons.Default.Wifi, contentDescription = "WiFi", tint = Color.White)
-                        }
+                Text(
+                    text =
+                        if (nombre.isBlank())
+                            "Estado corporal"
+                        else
+                            "Hola, $nombre",
 
-                        IconButton(
-                            onClick = { },
-                            modifier = Modifier
-                                .size(44.dp)
-                                .background(ButtonPurple, CircleShape)
-                        ) {
-                            Icon(imageVector = Icons.Default.Bluetooth, contentDescription = "Bluetooth", tint = Color.White)
-                        }
-                    }
-                }
+                    color = White,
+                    fontSize = 27.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "Tu rendimiento de hoy",
+                    color = Gray,
+                    fontSize = 16.sp
+                )
+
+                Spacer(
+                    modifier = Modifier.height(20.dp)
+                )
+
+                // ------------------------------------------------
+                // RENDIMIENTO
+                // ------------------------------------------------
+
+                PerformanceCard()
+
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
+
+                // ------------------------------------------------
+                // FRECUENCIA CARDÍACA
+                // ------------------------------------------------
+
+                HeartRateCard()
+
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
+
+                // ------------------------------------------------
+                // ESTADO CORPORAL
+                // ------------------------------------------------
+
+                BodyAnalysisCard()
+
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
+
+                // ------------------------------------------------
+                // MÉTRICAS
+                // ------------------------------------------------
+
+                MetricsGrid()
+
+                Spacer(
+                    modifier = Modifier.height(25.dp)
+                )
             }
         }
     }
 }
+
+
+// ============================================================
+// PERFORMANCE
+// ============================================================
+
+@Composable
+private fun PerformanceCard() {
+
+    CardContainer {
+
+        Text(
+            text = "Rendimiento",
+            color = White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(15.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            PerformanceGauge(
+                modifier = Modifier.size(150.dp),
+                percentage = 0.82f
+            )
+
+            Spacer(
+                modifier = Modifier.width(25.dp)
+            )
+
+            Column {
+
+                Text(
+                    text = "Excelente",
+                    color = Neon,
+                    fontSize = 23.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(
+                    modifier = Modifier.height(5.dp)
+                )
+
+                Text(
+                    text = "82%",
+                    color = White,
+                    fontSize = 34.sp,
+                    fontWeight = FontWeight.Black
+                )
+
+                Text(
+                    text = "nivel de rendimiento",
+                    color = Gray,
+                    fontSize = 14.sp
+                )
+            }
+        }
+    }
+}
+
+
+// ============================================================
+// GAUGE
+// ============================================================
+
+@Composable
+private fun PerformanceGauge(
+    modifier: Modifier,
+    percentage: Float
+) {
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+
+        Canvas(
+            modifier = Modifier.fillMaxSize()
+        ) {
+
+            val stroke = 18f
+
+            drawArc(
+                color = PurpleDark,
+                startAngle = 140f,
+                sweepAngle = 260f,
+                useCenter = false,
+                style = Stroke(
+                    width = stroke,
+                    cap = StrokeCap.Round
+                )
+            )
+
+            drawArc(
+                color = Neon,
+                startAngle = 140f,
+                sweepAngle = 260f * percentage,
+                useCenter = false,
+                style = Stroke(
+                    width = stroke,
+                    cap = StrokeCap.Round
+                )
+            )
+        }
+
+        Text(
+            text = "${(percentage * 100).toInt()}%",
+            color = White,
+            fontSize = 27.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+
+// ============================================================
+// HEART RATE
+// ============================================================
+
+@Composable
+private fun HeartRateCard() {
+
+    CardContainer {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+
+                Text(
+                    text = "Frecuencia cardíaca",
+                    color = White,
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(
+                    modifier = Modifier.height(6.dp)
+                )
+
+                Row(
+                    verticalAlignment = Alignment.Bottom
+                ) {
+
+                    Text(
+                        text = "154",
+                        color = Neon,
+                        fontSize = 34.sp,
+                        fontWeight = FontWeight.Black
+                    )
+
+                    Spacer(
+                        modifier = Modifier.width(5.dp)
+                    )
+
+                    Text(
+                        text = "BPM",
+                        color = Gray,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+
+            Text(
+                text = "NORMAL",
+                color = Green,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
+
+        HeartRateGraph()
+    }
+}
+
+
+// ============================================================
+// HEART GRAPH
+// ============================================================
+
+@Composable
+private fun HeartRateGraph() {
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(110.dp)
+    ) {
+
+        // líneas de referencia
+
+        for (i in 1..3) {
+
+            val y =
+                size.height * i / 4f
+
+            drawLine(
+                color = PurpleLight,
+                start = Offset(
+                    0f,
+                    y
+                ),
+                end = Offset(
+                    size.width,
+                    y
+                ),
+                strokeWidth = 1.5f
+            )
+        }
+
+        val points = listOf(
+            0.00f to 0.62f,
+            0.08f to 0.58f,
+            0.16f to 0.72f,
+            0.24f to 0.38f,
+            0.32f to 0.55f,
+            0.40f to 0.20f,
+            0.48f to 0.62f,
+            0.56f to 0.44f,
+            0.64f to 0.68f,
+            0.72f to 0.32f,
+            0.80f to 0.50f,
+            0.88f to 0.25f,
+            1.00f to 0.40f
+        )
+
+        val path = Path()
+
+        points.forEachIndexed { index, point ->
+
+            val x = size.width * point.first
+            val y = size.height * point.second
+
+            if (index == 0) {
+                path.moveTo(x, y)
+            } else {
+                path.lineTo(x, y)
+            }
+        }
+
+        drawPath(
+            path = path,
+            color = Neon,
+            style = Stroke(
+                width = 5f,
+                cap = StrokeCap.Round
+            )
+        )
+    }
+}
+
+
+// ============================================================
+// BODY ANALYSIS
+// ============================================================
+
+@Composable
+private fun BodyAnalysisCard() {
+
+    CardContainer {
+
+        Text(
+            text = "Análisis corporal",
+            color = White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(15.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            BodyGraphic(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(240.dp)
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+
+                BodyStatus(
+                    title = "Atención",
+                    value = "Normal",
+                    color = Green
+                )
+
+                BodyStatus(
+                    title = "Esfuerzo",
+                    value = "Moderado",
+                    color = Yellow
+                )
+
+                BodyStatus(
+                    title = "Impacto",
+                    value = "Bajo",
+                    color = Neon
+                )
+            }
+        }
+    }
+}
+
+
+// ============================================================
+// BODY GRAPHIC
+// ============================================================
+
+@Composable
+private fun BodyGraphic(
+    modifier: Modifier
+) {
+
+    Canvas(
+        modifier = modifier
+    ) {
+
+        val cx = size.width / 2f
+
+        // cabeza
+
+        drawCircle(
+            color = White,
+            radius = 22f,
+            center = Offset(
+                cx,
+                28f
+            )
+        )
+
+        // cuerpo
+
+        drawRoundRect(
+            color = White,
+            topLeft = Offset(
+                cx - 34f,
+                58f
+            ),
+            size = Size(
+                68f,
+                95f
+            ),
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                28f,
+                28f
+            )
+        )
+
+        // brazo izquierdo
+
+        drawRoundRect(
+            color = White,
+            topLeft = Offset(
+                cx - 58f,
+                60f
+            ),
+            size = Size(
+                22f,
+                90f
+            ),
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                15f,
+                15f
+            )
+        )
+
+        // brazo derecho
+
+        drawRoundRect(
+            color = White,
+            topLeft = Offset(
+                cx + 36f,
+                60f
+            ),
+            size = Size(
+                22f,
+                90f
+            ),
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                15f,
+                15f
+            )
+        )
+
+        // pierna izquierda
+
+        drawRoundRect(
+            color = White,
+            topLeft = Offset(
+                cx - 30f,
+                140f
+            ),
+            size = Size(
+                24f,
+                80f
+            ),
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                15f,
+                15f
+            )
+        )
+
+        // pierna derecha
+
+        drawRoundRect(
+            color = White,
+            topLeft = Offset(
+                cx + 6f,
+                140f
+            ),
+            size = Size(
+                24f,
+                80f
+            ),
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
+                15f,
+                15f
+            )
+        )
+
+        // puntos de análisis
+
+        drawCircle(
+            color = Red,
+            radius = 9f,
+            center = Offset(
+                cx + 45f,
+                93f
+            )
+        )
+
+        drawCircle(
+            color = Yellow,
+            radius = 9f,
+            center = Offset(
+                cx - 17f,
+                174f
+            )
+        )
+
+        drawCircle(
+            color = Green,
+            radius = 9f,
+            center = Offset(
+                cx,
+                115f
+            )
+        )
+    }
+}
+
+
+// ============================================================
+// STATUS
+// ============================================================
+
+@Composable
+private fun BodyStatus(
+    title: String,
+    value: String,
+    color: Color
+) {
+
+    Column {
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .size(11.dp)
+                    .clip(CircleShape)
+                    .background(color)
+            )
+
+            Spacer(
+                modifier = Modifier.width(9.dp)
+            )
+
+            Text(
+                text = title,
+                color = Gray,
+                fontSize = 14.sp
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.height(3.dp)
+        )
+
+        Text(
+            text = value,
+            color = White,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+
+// ============================================================
+// MÉTRICAS
+// ============================================================
+
+@Composable
+private fun MetricsGrid() {
+
+    Column {
+
+        Text(
+            text = "Datos actuales",
+            color = White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(
+            modifier = Modifier.height(13.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+
+            MetricCard(
+                title = "SpO₂",
+                value = "97%",
+                modifier = Modifier.weight(1f)
+            )
+
+            MetricCard(
+                title = "Pulso",
+                value = "154 BPM",
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.height(12.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+
+            MetricCard(
+                title = "Calorías",
+                value = "486 kcal",
+                modifier = Modifier.weight(1f)
+            )
+
+            MetricCard(
+                title = "Actividad",
+                value = "72 min",
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun MetricCard(
+    title: String,
+    value: String,
+    modifier: Modifier
+) {
+
+    Box(
+        modifier = modifier
+            .clip(
+                RoundedCornerShape(17.dp)
+            )
+            .background(PurpleCard)
+            .padding(17.dp)
+    ) {
+
+        Column {
+
+            Text(
+                text = title,
+                color = Gray,
+                fontSize = 14.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(6.dp)
+            )
+
+            Text(
+                text = value,
+                color = Neon,
+                fontSize = 19.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+
+// ============================================================
+// MENU
+// ============================================================
+
+@Composable
+private fun MenuScreen(
+    nombre: String,
+    avatarUri: Uri?,
+    onHome: () -> Unit,
+    onProfile: () -> Unit,
+    onConfiguration: () -> Unit,
+    onBack: () -> Unit
+) {
+
+    BaseScreen {
+
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(72.dp)
+                    .background(Purple)
+                    .padding(horizontal = 18.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                LessionLogo(
+                    modifier = Modifier.width(145.dp)
+                )
+
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+
+                IconButton(
+                    onClick = onBack
+                ) {
+
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Cerrar",
+                        tint = White
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(22.dp)
+            ) {
+
+                Text(
+                    text = "Menú",
+                    color = White,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(
+                    modifier = Modifier.height(25.dp)
+                )
+
+                if (avatarUri != null) {
+
+                    AsyncImage(
+                        model = avatarUri,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(70.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                if (nombre.isNotBlank()) {
+
+                    Spacer(
+                        modifier = Modifier.height(10.dp)
+                    )
+
+                    Text(
+                        text = nombre,
+                        color = White,
+                        fontSize = 19.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(
+                    modifier = Modifier.height(25.dp)
+                )
+
+                MenuOption(
+                    text = "Inicio",
+                    onClick = onHome
+                )
+
+                MenuOption(
+                    text = "Perfil",
+                    onClick = onProfile
+                )
+
+                MenuOption(
+                    text = "Configuración",
+                    onClick = onConfiguration
+                )
+
+                MenuOption(
+                    text = "Sobre nosotros",
+                    onClick = onConfiguration
+                )
+
+                MenuOption(
+                    text = "+ Info",
+                    onClick = onConfiguration
+                )
+            }
+        }
+    }
+}
+
+
+// ============================================================
+// PERFIL
+// ============================================================
+
+@Composable
+private fun ProfileScreen(
+
+    nombre: String,
+    fechaNacimiento: String,
+    peso: String,
+    altura: String,
+    sexo: String,
+    tipoCuerpo: String,
+    deporte: String,
+    horasActividad: String,
+    avatarUri: Uri?,
+
+    onAvatarChange: (Uri) -> Unit,
+    onNombreChange: (String) -> Unit,
+    onFechaChange: (String) -> Unit,
+    onPesoChange: (String) -> Unit,
+    onAlturaChange: (String) -> Unit,
+    onSexoChange: (String) -> Unit,
+    onTipoCuerpoChange: (String) -> Unit,
+    onDeporteChange: (String) -> Unit,
+    onHorasChange: (String) -> Unit,
+
+    onSave: () -> Unit,
+    onMenu: () -> Unit
+) {
+
+    val launcher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) { uri ->
+
+            if (uri != null) {
+                onAvatarChange(uri)
+            }
+        }
+
+    BaseScreen {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(
+                    rememberScrollState()
+                )
+                .padding(
+                    horizontal = 24.dp,
+                    vertical = 15.dp
+                )
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                LessionLogo(
+                    modifier = Modifier.width(145.dp)
+                )
+
+                IconButton(
+                    onClick = onMenu
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Menú",
+                        tint = White
+                    )
+                }
+            }
+
+            Spacer(
+                modifier = Modifier.height(15.dp)
+            )
+
+            Text(
+                text = "Mi perfil",
+                color = White,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+
+            AvatarSelector(
+                avatarUri = avatarUri,
+                onClick = {
+                    launcher.launch("image/*")
+                }
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            Text(
+                text = "Cambiar avatar",
+                color = Neon,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+
+            BigTextField(
+                value = nombre,
+                onValueChange = onNombreChange,
+                placeholder = "Nombre"
+            )
+
+            Spacer(Modifier.height(13.dp))
+
+            BigTextField(
+                value = fechaNacimiento,
+                onValueChange = onFechaChange,
+                placeholder = "Fecha de nacimiento"
+            )
+
+            Spacer(Modifier.height(13.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                BigTextField(
+                    value = peso,
+                    onValueChange = onPesoChange,
+                    placeholder = "Peso",
+                    modifier = Modifier.weight(1f)
+                )
+
+                BigTextField(
+                    value = altura,
+                    onValueChange = onAlturaChange,
+                    placeholder = "Altura",
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(13.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                BigTextField(
+                    value = sexo,
+                    onValueChange = onSexoChange,
+                    placeholder = "Sexo",
+                    modifier = Modifier.weight(1f)
+                )
+
+                BigTextField(
+                    value = tipoCuerpo,
+                    onValueChange = onTipoCuerpoChange,
+                    placeholder = "Tipo de cuerpo",
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+
+            Text(
+                text = "Opcionales",
+                color = White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            BigTextField(
+                value = deporte,
+                onValueChange = onDeporteChange,
+                placeholder = "Deporte que realizas"
+            )
+
+            Spacer(
+                modifier = Modifier.height(13.dp)
+            )
+
+            BigTextField(
+                value = horasActividad,
+                onValueChange = onHorasChange,
+                placeholder = "Horas semanales de actividad"
+            )
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+
+            PrimaryButton(
+                text = "GUARDAR CAMBIOS",
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onSave
+            )
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+        }
+    }
+}
+
+
+// ============================================================
+// LOGIN
+// ============================================================
+
+@Composable
+private fun LoginScreen(
+    onLogin: () -> Unit,
+    onBack: () -> Unit
+) {
+
+    var email by remember {
+        mutableStateOf("")
+    }
+
+    var password by remember {
+        mutableStateOf("")
+    }
+
+    var showPassword by remember {
+        mutableStateOf(false)
+    }
+
+    BaseScreen {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(25.dp)
+        ) {
+
+            IconButton(
+                onClick = onBack
+            ) {
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = White
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(30.dp)
+            )
+
+            LessionLogo(
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(
+                modifier = Modifier.height(40.dp)
+            )
+
+            Text(
+                text = "Iniciar sesión",
+                color = White,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+
+            BigTextField(
+                value = email,
+                onValueChange = {
+                    email = it
+                },
+                placeholder = "Usuario o email"
+            )
+
+            Spacer(
+                modifier = Modifier.height(15.dp)
+            )
+
+            BigTextField(
+                value = password,
+                onValueChange = {
+                    password = it
+                },
+                placeholder = "Contraseña",
+
+                visualTransformation =
+                    if (showPassword)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
+
+                trailingIcon = {
+
+                    IconButton(
+                        onClick = {
+                            showPassword = !showPassword
+                        }
+                    ) {
+
+                        Icon(
+                            imageVector =
+                                if (showPassword)
+                                    Icons.Default.VisibilityOff
+                                else
+                                    Icons.Default.Visibility,
+
+                            contentDescription = null,
+                            tint = White
+                        )
+                    }
+                }
+            )
+
+            Spacer(
+                modifier = Modifier.height(25.dp)
+            )
+
+            PrimaryButton(
+                text = "LOGIN",
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onLogin
+            )
+        }
+    }
+}
+
+
+// ============================================================
+// LOGO REAL
+// ============================================================
+
+@Composable
+private fun LessionLogo(
+    modifier: Modifier
+) {
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = "LESSION",
+            color = Neon,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Black,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
+    }
+}
+
+
+// ============================================================
+// BASE
+// ============================================================
+
+@Composable
+private fun BaseScreen(
+    content: @Composable BoxScope.() -> Unit
+) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Background)
+    ) {
+
+        // línea superior característica
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(5.dp)
+                .background(Neon)
+                .align(Alignment.TopCenter)
+        )
+
+        content()
+    }
+}
+
+
+// ============================================================
+// TEXT FIELD
+// ============================================================
+
+@Composable
+private fun BigTextField(
+
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+
+    modifier: Modifier =
+        Modifier.fillMaxWidth(),
+
+    visualTransformation: VisualTransformation =
+        VisualTransformation.None,
+
+    trailingIcon:
+    @Composable (() -> Unit)? = null
+) {
+
+    OutlinedTextField(
+
+        value = value,
+
+        onValueChange = onValueChange,
+
+        modifier = modifier.height(59.dp),
+
+        singleLine = true,
+
+        placeholder = {
+
+            Text(
+                text = placeholder,
+                color = Gray,
+                fontSize = 16.sp
+            )
+        },
+
+        textStyle = LocalTextStyle.current.copy(
+            color = White,
+            fontSize = 17.sp
+        ),
+
+        visualTransformation =
+            visualTransformation,
+
+        trailingIcon =
+            trailingIcon,
+
+        colors =
+            OutlinedTextFieldDefaults.colors(
+
+                focusedContainerColor =
+                    PurpleCard,
+
+                unfocusedContainerColor =
+                    PurpleCard,
+
+                focusedBorderColor =
+                    PurpleLight,
+
+                unfocusedBorderColor =
+                    PurpleLight,
+
+                focusedTextColor =
+                    White,
+
+                unfocusedTextColor =
+                    White,
+
+                cursorColor =
+                    Neon
+            ),
+
+        shape =
+            RoundedCornerShape(18.dp)
+    )
+}
+
+
+// ============================================================
+// BUTTON
+// ============================================================
+
+@Composable
+private fun PrimaryButton(
+
+    text: String,
+
+    modifier: Modifier,
+
+    onClick: () -> Unit
+) {
+
+    Button(
+
+        onClick = onClick,
+
+        modifier =
+            modifier.height(57.dp),
+
+        shape =
+            RoundedCornerShape(30.dp),
+
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = PurpleLight
+            )
+    ) {
+
+        Text(
+            text = text,
+            color = White,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+
+// ============================================================
+// CARD
+// ============================================================
+
+@Composable
+private fun CardContainer(
+    content: @Composable ColumnScope.() -> Unit
+) {
+
+    Column(
+
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(
+                RoundedCornerShape(21.dp)
+            )
+            .background(PurpleCard)
+            .padding(20.dp),
+
+        content = content
+    )
+}
+
+
+// ============================================================
+// MENU OPTION
+// ============================================================
+
+@Composable
+private fun MenuOption(
+    text: String,
+    onClick: () -> Unit
+) {
+
+    Box(
+
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(62.dp)
+            .padding(vertical = 4.dp)
+            .clip(
+                RoundedCornerShape(17.dp)
+            )
+            .background(PurpleCard)
+            .clickable {
+                onClick()
+            }
+            .padding(horizontal = 20.dp),
+
+        contentAlignment = Alignment.CenterStart
+    ) {
+
+        Text(
+            text = text,
+            color = White,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
