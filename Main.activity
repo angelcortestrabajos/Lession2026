@@ -1,77 +1,70 @@
 package com.lession.app
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+
+private val Fondo = Color(0xFF24136F)
+private val Morado = Color(0xFF351F96)
+private val MoradoClaro = Color(0xFF4630C7)
+private val Amarillo = Color(0xFFEFFF00)
+private val Blanco = Color.White
+private val Gris = Color(0xFFD7D7DF)
+private val Cian = Color(0xFF00CFFF)
+private val Rojo = Color(0xFFEF3039)
+private val Naranja = Color(0xFFFF8A00)
 
 private enum class Screen {
-    PROFILE_SETUP,
-    DASHBOARD,
-    MENU,
+    WELCOME,
+    LOGIN,
+    SIGNIN,
     PROFILE,
-    LOGIN
+    DASHBOARD,
+    MENU
 }
 
-// ============================================================
-// COLORES
-// ============================================================
-
-private val Background = Color(0xFF291477)
-private val Purple = Color(0xFF4930D2)
-private val PurpleLight = Color(0xFF6045E8)
-private val PurpleCard = Color(0xFF38218D)
-private val PurpleDark = Color(0xFF21105F)
-
-private val Neon = Color(0xFFD9FF00)
-private val White = Color.White
-private val Gray = Color(0xFFB9B0E8)
-
-private val Green = Color(0xFF64E572)
-private val Yellow = Color(0xFFFFD83D)
-private val Red = Color(0xFFFF5757)
-private val Blue = Color(0xFF59B7FF)
-
-
-// ============================================================
-// MAIN
-// ============================================================
+data class ProfileData(
+    val name: String = "",
+    val birthDate: String = "",
+    val weight: String = "",
+    val height: String = "",
+    val gender: String = "",
+    val bodyType: String = "",
+    val sport: String = "",
+    val weeklyHours: String = "",
+    val avatar: String = ""
+)
 
 class MainActivity : ComponentActivity() {
 
@@ -80,1666 +73,499 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
+
+        WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        ).apply {
+
+            hide(WindowInsetsCompat.Type.statusBars())
+            hide(WindowInsetsCompat.Type.navigationBars())
+
+            systemBarsBehavior =
+                WindowInsetsControllerCompat
+                    .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+
         setContent {
             LessionApp()
         }
     }
 }
 
-
-// ============================================================
-// APP
-// ============================================================
-
 @Composable
 private fun LessionApp() {
+    val context = LocalContext.current
 
-    /*
-     * AHORA EL PERFIL APARECE ANTES DEL DASHBOARD.
-     */
     var screen by remember {
-        mutableStateOf(Screen.PROFILE_SETUP)
+        mutableStateOf(Screen.WELCOME)
     }
 
-    var nombre by remember {
-        mutableStateOf("")
-    }
-
-    var fechaNacimiento by remember {
-        mutableStateOf("")
-    }
-
-    var peso by remember {
-        mutableStateOf("")
-    }
-
-    var altura by remember {
-        mutableStateOf("")
-    }
-
-    var sexo by remember {
-        mutableStateOf("")
-    }
-
-    var tipoCuerpo by remember {
-        mutableStateOf("")
-    }
-
-    var deporte by remember {
-        mutableStateOf("")
-    }
-
-    var horasActividad by remember {
-        mutableStateOf("")
-    }
-
-    var avatarUri by remember {
-        mutableStateOf<Uri?>(null)
+    var profile by remember {
+        mutableStateOf(loadProfile(context))
     }
 
     when (screen) {
 
-        // ----------------------------------------------------
-        // PERFIL INICIAL
-        // ----------------------------------------------------
+        Screen.WELCOME -> {
 
-        Screen.PROFILE_SETUP -> {
-
-            ProfileSetupScreen(
-
-                nombre = nombre,
-                fechaNacimiento = fechaNacimiento,
-                peso = peso,
-                altura = altura,
-                sexo = sexo,
-                tipoCuerpo = tipoCuerpo,
-                deporte = deporte,
-                horasActividad = horasActividad,
-                avatarUri = avatarUri,
-
-                onAvatarChange = {
-                    avatarUri = it
+            WelcomeScreen(
+                onLogin = {
+                    screen = Screen.LOGIN
                 },
-
-                onNombreChange = {
-                    nombre = it
-                },
-
-                onFechaChange = {
-                    fechaNacimiento = it
-                },
-
-                onPesoChange = {
-                    peso = it
-                },
-
-                onAlturaChange = {
-                    altura = it
-                },
-
-                onSexoChange = {
-                    sexo = it
-                },
-
-                onTipoCuerpoChange = {
-                    tipoCuerpo = it
-                },
-
-                onDeporteChange = {
-                    deporte = it
-                },
-
-                onHorasChange = {
-                    horasActividad = it
-                },
-
-                onContinue = {
-                    screen = Screen.DASHBOARD
+                onSignIn = {
+                    screen = Screen.SIGNIN
                 }
             )
         }
-
-
-        // ----------------------------------------------------
-        // DASHBOARD
-        // ----------------------------------------------------
-
-        Screen.DASHBOARD -> {
-
-            DashboardScreen(
-
-                nombre = nombre,
-                avatarUri = avatarUri,
-
-                onMenu = {
-                    screen = Screen.MENU
-                }
-            )
-        }
-
-
-        // ----------------------------------------------------
-        // MENU
-        // ----------------------------------------------------
-
-        Screen.MENU -> {
-
-            MenuScreen(
-
-                nombre = nombre,
-                avatarUri = avatarUri,
-
-                onHome = {
-                    screen = Screen.DASHBOARD
-                },
-
-                onProfile = {
-                    screen = Screen.PROFILE
-                },
-
-                onConfiguration = {
-                    screen = Screen.PROFILE
-                },
-
-                onBack = {
-                    screen = Screen.DASHBOARD
-                }
-            )
-        }
-
-
-        // ----------------------------------------------------
-        // PERFIL
-        // ----------------------------------------------------
-
-        Screen.PROFILE -> {
-
-            ProfileScreen(
-
-                nombre = nombre,
-                fechaNacimiento = fechaNacimiento,
-                peso = peso,
-                altura = altura,
-                sexo = sexo,
-                tipoCuerpo = tipoCuerpo,
-                deporte = deporte,
-                horasActividad = horasActividad,
-                avatarUri = avatarUri,
-
-                onAvatarChange = {
-                    avatarUri = it
-                },
-
-                onNombreChange = {
-                    nombre = it
-                },
-
-                onFechaChange = {
-                    fechaNacimiento = it
-                },
-
-                onPesoChange = {
-                    peso = it
-                },
-
-                onAlturaChange = {
-                    altura = it
-                },
-
-                onSexoChange = {
-                    sexo = it
-                },
-
-                onTipoCuerpoChange = {
-                    tipoCuerpo = it
-                },
-
-                onDeporteChange = {
-                    deporte = it
-                },
-
-                onHorasChange = {
-                    horasActividad = it
-                },
-
-                onSave = {
-                    screen = Screen.DASHBOARD
-                },
-
-                onMenu = {
-                    screen = Screen.MENU
-                }
-            )
-        }
-
-
-        // ----------------------------------------------------
-        // LOGIN
-        // ----------------------------------------------------
 
         Screen.LOGIN -> {
 
             LoginScreen(
-                onLogin = {
+                onBack = {
+                    screen = Screen.WELCOME
+                },
+                onSuccess = {
+                    profile = loadProfile(context)
+                    screen = Screen.PROFILE
+                }
+            )
+        }
+
+        Screen.SIGNIN -> {
+
+            SignInScreen(
+                onBack = {
+                    screen = Screen.WELCOME
+                },
+                onCreated = {
+                    profile = it
+                    screen = Screen.PROFILE
+                }
+            )
+        }
+
+        Screen.PROFILE -> {
+
+            ProfileScreen(
+                profile = profile,
+
+                onProfileChanged = {
+                    profile = it
+                },
+
+                onContinue = {
+                    saveProfile(context, profile)
                     screen = Screen.DASHBOARD
                 },
 
-                onBack = {
-                    screen = Screen.PROFILE_SETUP
+                onMenu = {
+                    screen = Screen.MENU
+                },
+
+                onLogout = {
+                    screen = Screen.WELCOME
+                }
+            )
+        }
+
+        Screen.DASHBOARD -> {
+
+            DashboardScreen(
+                onMenu = {
+                    screen = Screen.MENU
+                }
+            )
+        }
+
+        Screen.MENU -> {
+
+            MenuScreen(
+                onHome = {
+                    screen = Screen.DASHBOARD
+                },
+                onProfile = {
+                    screen = Screen.PROFILE
+                },
+                onLogout = {
+                    screen = Screen.WELCOME
                 }
             )
         }
     }
 }
 
-
-// ============================================================
-// PERFIL INICIAL
-// ============================================================
+/* ============================================================
+   LOGO
+   ============================================================ */
 
 @Composable
-private fun ProfileSetupScreen(
-
-    nombre: String,
-    fechaNacimiento: String,
-    peso: String,
-    altura: String,
-    sexo: String,
-    tipoCuerpo: String,
-    deporte: String,
-    horasActividad: String,
-    avatarUri: Uri?,
-
-    onAvatarChange: (Uri) -> Unit,
-    onNombreChange: (String) -> Unit,
-    onFechaChange: (String) -> Unit,
-    onPesoChange: (String) -> Unit,
-    onAlturaChange: (String) -> Unit,
-    onSexoChange: (String) -> Unit,
-    onTipoCuerpoChange: (String) -> Unit,
-    onDeporteChange: (String) -> Unit,
-    onHorasChange: (String) -> Unit,
-
-    onContinue: () -> Unit
+private fun LessionLogo(
+    modifier: Modifier = Modifier
 ) {
-
-    val launcher =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.GetContent()
-        ) { uri ->
-
-            if (uri != null) {
-                onAvatarChange(uri)
-            }
-        }
-
-    BaseScreen {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(
-                    rememberScrollState()
-                )
-                .padding(
-                    horizontal = 24.dp,
-                    vertical = 20.dp
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            // LOGO REAL
-            LessionLogo(
-                modifier = Modifier
-                    .height(90.dp)
-                    .fillMaxWidth()
-            )
-
-            Spacer(
-                modifier = Modifier.height(15.dp)
-            )
-
-            Text(
-                text = "Configura tu perfil",
-                color = White,
-                fontSize = 29.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(
-                modifier = Modifier.height(6.dp)
-            )
-
-            Text(
-                text = "Cuéntanos un poco sobre ti",
-                color = Gray,
-                fontSize = 16.sp
-            )
-
-            Spacer(
-                modifier = Modifier.height(25.dp)
-            )
-
-            // AVATAR
-            AvatarSelector(
-                avatarUri = avatarUri,
-                onClick = {
-                    launcher.launch("image/*")
-                }
-            )
-
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
-
-            Text(
-                text = "Agregar avatar",
-                color = Neon,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(
-                modifier = Modifier.height(25.dp)
-            )
-
-            BigTextField(
-                value = nombre,
-                onValueChange = onNombreChange,
-                placeholder = "Nombre"
-            )
-
-            Spacer(Modifier.height(13.dp))
-
-            BigTextField(
-                value = fechaNacimiento,
-                onValueChange = onFechaChange,
-                placeholder = "Fecha de nacimiento"
-            )
-
-            Spacer(Modifier.height(13.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-
-                BigTextField(
-                    value = peso,
-                    onValueChange = onPesoChange,
-                    placeholder = "Peso",
-                    modifier = Modifier.weight(1f)
-                )
-
-                BigTextField(
-                    value = altura,
-                    onValueChange = onAlturaChange,
-                    placeholder = "Altura",
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(Modifier.height(13.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-
-                BigTextField(
-                    value = sexo,
-                    onValueChange = onSexoChange,
-                    placeholder = "Sexo",
-                    modifier = Modifier.weight(1f)
-                )
-
-                BigTextField(
-                    value = tipoCuerpo,
-                    onValueChange = onTipoCuerpoChange,
-                    placeholder = "Tipo de cuerpo",
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(
-                modifier = Modifier.height(24.dp)
-            )
-
-            Text(
-                text = "Opcionales",
-                color = White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.Start)
-            )
-
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
-
-            BigTextField(
-                value = deporte,
-                onValueChange = onDeporteChange,
-                placeholder = "Deporte que realizas"
-            )
-
-            Spacer(
-                modifier = Modifier.height(13.dp)
-            )
-
-            BigTextField(
-                value = horasActividad,
-                onValueChange = onHorasChange,
-                placeholder = "Horas semanales de actividad"
-            )
-
-            Spacer(
-                modifier = Modifier.height(28.dp)
-            )
-
-            PrimaryButton(
-                text = "CONTINUAR",
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onContinue
-            )
-
-            Spacer(
-                modifier = Modifier.height(20.dp)
-            )
-        }
-    }
-}
-
-
-// ============================================================
-// AVATAR
-// ============================================================
-
-@Composable
-private fun AvatarSelector(
-    avatarUri: Uri?,
-    onClick: () -> Unit
-) {
-
-    Box(
-        modifier = Modifier
-            .size(120.dp)
-            .clip(CircleShape)
-            .background(PurpleLight)
-            .clickable {
-                onClick()
-            },
-        contentAlignment = Alignment.Center
-    ) {
-
-        if (avatarUri != null) {
-
-            AsyncImage(
-                model = avatarUri,
-                contentDescription = "Avatar",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-
-        } else {
-
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = null,
-                tint = White,
-                modifier = Modifier.size(65.dp)
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .size(38.dp)
-                .clip(CircleShape)
-                .background(Neon),
-            contentAlignment = Alignment.Center
-        ) {
-
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Agregar",
-                tint = PurpleDark,
-                modifier = Modifier.size(25.dp)
-            )
-        }
-    }
-}
-
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-
-@Composable
-private fun DashboardScreen(
-    nombre: String,
-    avatarUri: Uri?,
-    onMenu: () -> Unit
-) {
-
-    BaseScreen {
-
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
-            // ------------------------------------------------
-            // TOP BAR
-            // ------------------------------------------------
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .background(Purple)
-                    .padding(horizontal = 18.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                LessionLogo(
-                    modifier = Modifier.width(145.dp)
-                )
-
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
-
-                if (avatarUri != null) {
-
-                    AsyncImage(
-                        model = avatarUri,
-                        contentDescription = "Avatar",
-                        modifier = Modifier
-                            .size(43.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(12.dp)
-                    )
-                }
-
-                IconButton(
-                    onClick = onMenu
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = "Menú",
-                        tint = White,
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-            }
-
-            // ------------------------------------------------
-            // CONTENIDO
-            // ------------------------------------------------
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(
-                        rememberScrollState()
-                    )
-                    .padding(20.dp)
-            ) {
-
-                Text(
-                    text =
-                        if (nombre.isBlank())
-                            "Estado corporal"
-                        else
-                            "Hola, $nombre",
-
-                    color = White,
-                    fontSize = 27.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = "Tu rendimiento de hoy",
-                    color = Gray,
-                    fontSize = 16.sp
-                )
-
-                Spacer(
-                    modifier = Modifier.height(20.dp)
-                )
-
-                // ------------------------------------------------
-                // RENDIMIENTO
-                // ------------------------------------------------
-
-                PerformanceCard()
-
-                Spacer(
-                    modifier = Modifier.height(18.dp)
-                )
-
-                // ------------------------------------------------
-                // FRECUENCIA CARDÍACA
-                // ------------------------------------------------
-
-                HeartRateCard()
-
-                Spacer(
-                    modifier = Modifier.height(18.dp)
-                )
-
-                // ------------------------------------------------
-                // ESTADO CORPORAL
-                // ------------------------------------------------
-
-                BodyAnalysisCard()
-
-                Spacer(
-                    modifier = Modifier.height(18.dp)
-                )
-
-                // ------------------------------------------------
-                // MÉTRICAS
-                // ------------------------------------------------
-
-                MetricsGrid()
-
-                Spacer(
-                    modifier = Modifier.height(25.dp)
-                )
-            }
-        }
-    }
-}
-
-
-// ============================================================
-// PERFORMANCE
-// ============================================================
-
-@Composable
-private fun PerformanceCard() {
-
-    CardContainer {
-
-        Text(
-            text = "Rendimiento",
-            color = White,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(
-            modifier = Modifier.height(15.dp)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            PerformanceGauge(
-                modifier = Modifier.size(150.dp),
-                percentage = 0.82f
-            )
-
-            Spacer(
-                modifier = Modifier.width(25.dp)
-            )
-
-            Column {
-
-                Text(
-                    text = "Excelente",
-                    color = Neon,
-                    fontSize = 23.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(
-                    modifier = Modifier.height(5.dp)
-                )
-
-                Text(
-                    text = "82%",
-                    color = White,
-                    fontSize = 34.sp,
-                    fontWeight = FontWeight.Black
-                )
-
-                Text(
-                    text = "nivel de rendimiento",
-                    color = Gray,
-                    fontSize = 14.sp
-                )
-            }
-        }
-    }
-}
-
-
-// ============================================================
-// GAUGE
-// ============================================================
-
-@Composable
-private fun PerformanceGauge(
-    modifier: Modifier,
-    percentage: Float
-) {
-
-    Box(
+    Icon(
+        imageVector = Icons.Default.Bolt,
+        contentDescription = "Lession Logo",
         modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
-
-        Canvas(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
-            val stroke = 18f
-
-            drawArc(
-                color = PurpleDark,
-                startAngle = 140f,
-                sweepAngle = 260f,
-                useCenter = false,
-                style = Stroke(
-                    width = stroke,
-                    cap = StrokeCap.Round
-                )
-            )
-
-            drawArc(
-                color = Neon,
-                startAngle = 140f,
-                sweepAngle = 260f * percentage,
-                useCenter = false,
-                style = Stroke(
-                    width = stroke,
-                    cap = StrokeCap.Round
-                )
-            )
-        }
-
-        Text(
-            text = "${(percentage * 100).toInt()}%",
-            color = White,
-            fontSize = 27.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
+        tint = Amarillo
+    )
 }
 
-
-// ============================================================
-// HEART RATE
-// ============================================================
-
-@Composable
-private fun HeartRateCard() {
-
-    CardContainer {
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-
-                Text(
-                    text = "Frecuencia cardíaca",
-                    color = White,
-                    fontSize = 19.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(
-                    modifier = Modifier.height(6.dp)
-                )
-
-                Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-
-                    Text(
-                        text = "154",
-                        color = Neon,
-                        fontSize = 34.sp,
-                        fontWeight = FontWeight.Black
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(5.dp)
-                    )
-
-                    Text(
-                        text = "BPM",
-                        color = Gray,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-
-            Text(
-                text = "NORMAL",
-                color = Green,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(20.dp)
-        )
-
-        HeartRateGraph()
-    }
-}
-
-
-// ============================================================
-// HEART GRAPH
-// ============================================================
+/* ============================================================
+   WELCOME
+   ============================================================ */
 
 @Composable
-private fun HeartRateGraph() {
-
-    Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp)
-    ) {
-
-        // líneas de referencia
-
-        for (i in 1..3) {
-
-            val y =
-                size.height * i / 4f
-
-            drawLine(
-                color = PurpleLight,
-                start = Offset(
-                    0f,
-                    y
-                ),
-                end = Offset(
-                    size.width,
-                    y
-                ),
-                strokeWidth = 1.5f
-            )
-        }
-
-        val points = listOf(
-            0.00f to 0.62f,
-            0.08f to 0.58f,
-            0.16f to 0.72f,
-            0.24f to 0.38f,
-            0.32f to 0.55f,
-            0.40f to 0.20f,
-            0.48f to 0.62f,
-            0.56f to 0.44f,
-            0.64f to 0.68f,
-            0.72f to 0.32f,
-            0.80f to 0.50f,
-            0.88f to 0.25f,
-            1.00f to 0.40f
-        )
-
-        val path = Path()
-
-        points.forEachIndexed { index, point ->
-
-            val x = size.width * point.first
-            val y = size.height * point.second
-
-            if (index == 0) {
-                path.moveTo(x, y)
-            } else {
-                path.lineTo(x, y)
-            }
-        }
-
-        drawPath(
-            path = path,
-            color = Neon,
-            style = Stroke(
-                width = 5f,
-                cap = StrokeCap.Round
-            )
-        )
-    }
-}
-
-
-// ============================================================
-// BODY ANALYSIS
-// ============================================================
-
-@Composable
-private fun BodyAnalysisCard() {
-
-    CardContainer {
-
-        Text(
-            text = "Análisis corporal",
-            color = White,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(
-            modifier = Modifier.height(15.dp)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            BodyGraphic(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(240.dp)
-            )
-
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-
-                BodyStatus(
-                    title = "Atención",
-                    value = "Normal",
-                    color = Green
-                )
-
-                BodyStatus(
-                    title = "Esfuerzo",
-                    value = "Moderado",
-                    color = Yellow
-                )
-
-                BodyStatus(
-                    title = "Impacto",
-                    value = "Bajo",
-                    color = Neon
-                )
-            }
-        }
-    }
-}
-
-
-// ============================================================
-// BODY GRAPHIC
-// ============================================================
-
-@Composable
-private fun BodyGraphic(
-    modifier: Modifier
-) {
-
-    Canvas(
-        modifier = modifier
-    ) {
-
-        val cx = size.width / 2f
-
-        // cabeza
-
-        drawCircle(
-            color = White,
-            radius = 22f,
-            center = Offset(
-                cx,
-                28f
-            )
-        )
-
-        // cuerpo
-
-        drawRoundRect(
-            color = White,
-            topLeft = Offset(
-                cx - 34f,
-                58f
-            ),
-            size = Size(
-                68f,
-                95f
-            ),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
-                28f,
-                28f
-            )
-        )
-
-        // brazo izquierdo
-
-        drawRoundRect(
-            color = White,
-            topLeft = Offset(
-                cx - 58f,
-                60f
-            ),
-            size = Size(
-                22f,
-                90f
-            ),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
-                15f,
-                15f
-            )
-        )
-
-        // brazo derecho
-
-        drawRoundRect(
-            color = White,
-            topLeft = Offset(
-                cx + 36f,
-                60f
-            ),
-            size = Size(
-                22f,
-                90f
-            ),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
-                15f,
-                15f
-            )
-        )
-
-        // pierna izquierda
-
-        drawRoundRect(
-            color = White,
-            topLeft = Offset(
-                cx - 30f,
-                140f
-            ),
-            size = Size(
-                24f,
-                80f
-            ),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
-                15f,
-                15f
-            )
-        )
-
-        // pierna derecha
-
-        drawRoundRect(
-            color = White,
-            topLeft = Offset(
-                cx + 6f,
-                140f
-            ),
-            size = Size(
-                24f,
-                80f
-            ),
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(
-                15f,
-                15f
-            )
-        )
-
-        // puntos de análisis
-
-        drawCircle(
-            color = Red,
-            radius = 9f,
-            center = Offset(
-                cx + 45f,
-                93f
-            )
-        )
-
-        drawCircle(
-            color = Yellow,
-            radius = 9f,
-            center = Offset(
-                cx - 17f,
-                174f
-            )
-        )
-
-        drawCircle(
-            color = Green,
-            radius = 9f,
-            center = Offset(
-                cx,
-                115f
-            )
-        )
-    }
-}
-
-
-// ============================================================
-// STATUS
-// ============================================================
-
-@Composable
-private fun BodyStatus(
-    title: String,
-    value: String,
-    color: Color
-) {
-
-    Column {
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Box(
-                modifier = Modifier
-                    .size(11.dp)
-                    .clip(CircleShape)
-                    .background(color)
-            )
-
-            Spacer(
-                modifier = Modifier.width(9.dp)
-            )
-
-            Text(
-                text = title,
-                color = Gray,
-                fontSize = 14.sp
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(3.dp)
-        )
-
-        Text(
-            text = value,
-            color = White,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-
-// ============================================================
-// MÉTRICAS
-// ============================================================
-
-@Composable
-private fun MetricsGrid() {
-
-    Column {
-
-        Text(
-            text = "Datos actuales",
-            color = White,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(
-            modifier = Modifier.height(13.dp)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-
-            MetricCard(
-                title = "SpO₂",
-                value = "97%",
-                modifier = Modifier.weight(1f)
-            )
-
-            MetricCard(
-                title = "Pulso",
-                value = "154 BPM",
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(12.dp)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-
-            MetricCard(
-                title = "Calorías",
-                value = "486 kcal",
-                modifier = Modifier.weight(1f)
-            )
-
-            MetricCard(
-                title = "Actividad",
-                value = "72 min",
-                modifier = Modifier.weight(1f)
-            )
-        }
-    }
-}
-
-
-@Composable
-private fun MetricCard(
-    title: String,
-    value: String,
-    modifier: Modifier
+private fun WelcomeScreen(
+    onLogin: () -> Unit,
+    onSignIn: () -> Unit
 ) {
 
     Box(
-        modifier = modifier
-            .clip(
-                RoundedCornerShape(17.dp)
-            )
-            .background(PurpleCard)
-            .padding(17.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Fondo)
     ) {
-
-        Column {
-
-            Text(
-                text = title,
-                color = Gray,
-                fontSize = 14.sp
-            )
-
-            Spacer(
-                modifier = Modifier.height(6.dp)
-            )
-
-            Text(
-                text = value,
-                color = Neon,
-                fontSize = 19.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-
-// ============================================================
-// MENU
-// ============================================================
-
-@Composable
-private fun MenuScreen(
-    nombre: String,
-    avatarUri: Uri?,
-    onHome: () -> Unit,
-    onProfile: () -> Unit,
-    onConfiguration: () -> Unit,
-    onBack: () -> Unit
-) {
-
-    BaseScreen {
-
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .background(Purple)
-                    .padding(horizontal = 18.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                LessionLogo(
-                    modifier = Modifier.width(145.dp)
-                )
-
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
-
-                IconButton(
-                    onClick = onBack
-                ) {
-
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Cerrar",
-                        tint = White
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(22.dp)
-            ) {
-
-                Text(
-                    text = "Menú",
-                    color = White,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(
-                    modifier = Modifier.height(25.dp)
-                )
-
-                if (avatarUri != null) {
-
-                    AsyncImage(
-                        model = avatarUri,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(70.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-                if (nombre.isNotBlank()) {
-
-                    Spacer(
-                        modifier = Modifier.height(10.dp)
-                    )
-
-                    Text(
-                        text = nombre,
-                        color = White,
-                        fontSize = 19.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Spacer(
-                    modifier = Modifier.height(25.dp)
-                )
-
-                MenuOption(
-                    text = "Inicio",
-                    onClick = onHome
-                )
-
-                MenuOption(
-                    text = "Perfil",
-                    onClick = onProfile
-                )
-
-                MenuOption(
-                    text = "Configuración",
-                    onClick = onConfiguration
-                )
-
-                MenuOption(
-                    text = "Sobre nosotros",
-                    onClick = onConfiguration
-                )
-
-                MenuOption(
-                    text = "+ Info",
-                    onClick = onConfiguration
-                )
-            }
-        }
-    }
-}
-
-
-// ============================================================
-// PERFIL
-// ============================================================
-
-@Composable
-private fun ProfileScreen(
-
-    nombre: String,
-    fechaNacimiento: String,
-    peso: String,
-    altura: String,
-    sexo: String,
-    tipoCuerpo: String,
-    deporte: String,
-    horasActividad: String,
-    avatarUri: Uri?,
-
-    onAvatarChange: (Uri) -> Unit,
-    onNombreChange: (String) -> Unit,
-    onFechaChange: (String) -> Unit,
-    onPesoChange: (String) -> Unit,
-    onAlturaChange: (String) -> Unit,
-    onSexoChange: (String) -> Unit,
-    onTipoCuerpoChange: (String) -> Unit,
-    onDeporteChange: (String) -> Unit,
-    onHorasChange: (String) -> Unit,
-
-    onSave: () -> Unit,
-    onMenu: () -> Unit
-) {
-
-    val launcher =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.GetContent()
-        ) { uri ->
-
-            if (uri != null) {
-                onAvatarChange(uri)
-            }
-        }
-
-    BaseScreen {
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(
-                    rememberScrollState()
-                )
-                .padding(
-                    horizontal = 24.dp,
-                    vertical = 15.dp
-                )
+                .padding(horizontal = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                LessionLogo(
-                    modifier = Modifier.width(145.dp)
-                )
-
-                IconButton(
-                    onClick = onMenu
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = "Menú",
-                        tint = White
-                    )
-                }
-            }
+            LessionLogo(
+                modifier = Modifier.size(175.dp)
+            )
 
             Spacer(
-                modifier = Modifier.height(15.dp)
+                modifier = Modifier.height(18.dp)
             )
 
             Text(
-                text = "Mi perfil",
-                color = White,
-                fontSize = 30.sp,
+                text = "LESSION",
+                color = Amarillo,
+                fontSize = 31.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+
+            Spacer(
+                modifier = Modifier.height(4.dp)
+            )
+
+            Text(
+                text = "MÁS RENDIMIENTO",
+                color = Amarillo,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = "MENOS IMPACTO",
+                color = Amarillo,
+                fontSize = 17.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(
-                modifier = Modifier.height(20.dp)
+                modifier = Modifier.height(45.dp)
             )
 
-            AvatarSelector(
-                avatarUri = avatarUri,
-                onClick = {
-                    launcher.launch("image/*")
-                }
-            )
-
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
-
-            Text(
-                text = "Cambiar avatar",
-                color = Neon,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+            SmallPurpleButton(
+                text = "Log In",
+                onClick = onLogin
             )
 
             Spacer(
-                modifier = Modifier.height(25.dp)
+                modifier = Modifier.height(16.dp)
             )
 
-            BigTextField(
-                value = nombre,
-                onValueChange = onNombreChange,
-                placeholder = "Nombre"
-            )
-
-            Spacer(Modifier.height(13.dp))
-
-            BigTextField(
-                value = fechaNacimiento,
-                onValueChange = onFechaChange,
-                placeholder = "Fecha de nacimiento"
-            )
-
-            Spacer(Modifier.height(13.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-
-                BigTextField(
-                    value = peso,
-                    onValueChange = onPesoChange,
-                    placeholder = "Peso",
-                    modifier = Modifier.weight(1f)
-                )
-
-                BigTextField(
-                    value = altura,
-                    onValueChange = onAlturaChange,
-                    placeholder = "Altura",
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(Modifier.height(13.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-
-                BigTextField(
-                    value = sexo,
-                    onValueChange = onSexoChange,
-                    placeholder = "Sexo",
-                    modifier = Modifier.weight(1f)
-                )
-
-                BigTextField(
-                    value = tipoCuerpo,
-                    onValueChange = onTipoCuerpoChange,
-                    placeholder = "Tipo de cuerpo",
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            Spacer(
-                modifier = Modifier.height(25.dp)
-            )
-
-            Text(
-                text = "Opcionales",
-                color = White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
-
-            BigTextField(
-                value = deporte,
-                onValueChange = onDeporteChange,
-                placeholder = "Deporte que realizas"
-            )
-
-            Spacer(
-                modifier = Modifier.height(13.dp)
-            )
-
-            BigTextField(
-                value = horasActividad,
-                onValueChange = onHorasChange,
-                placeholder = "Horas semanales de actividad"
-            )
-
-            Spacer(
-                modifier = Modifier.height(25.dp)
-            )
-
-            PrimaryButton(
-                text = "GUARDAR CAMBIOS",
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onSave
-            )
-
-            Spacer(
-                modifier = Modifier.height(25.dp)
+            SmallPurpleButton(
+                text = "Sign In",
+                onClick = onSignIn
             )
         }
     }
 }
 
-
-// ============================================================
-// LOGIN
-// ============================================================
+/* ============================================================
+   LOGIN
+   ============================================================ */
 
 @Composable
 private fun LoginScreen(
-    onLogin: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onSuccess: (String) -> Unit
 ) {
 
-    var email by remember {
+    val context = LocalContext.current
+
+    val preferences = remember {
+        context.getSharedPreferences(
+            "lession",
+            Context.MODE_PRIVATE
+        )
+    }
+
+    var username by remember {
+        mutableStateOf(
+            preferences.getString(
+                "username",
+                ""
+            ) ?: ""
+        )
+    }
+
+    var password by remember {
+        mutableStateOf(
+            if (
+                preferences.getBoolean(
+                    "savePassword",
+                    false
+                )
+            ) {
+                preferences.getString(
+                    "password",
+                    ""
+                ) ?: ""
+            } else {
+                ""
+            }
+        )
+    }
+
+    var savePassword by remember {
+        mutableStateOf(
+            preferences.getBoolean(
+                "savePassword",
+                false
+            )
+        )
+    }
+
+    var showPassword by remember {
+        mutableStateOf(false)
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Fondo)
+    ) {
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 35.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            item {
+
+                Spacer(
+                    modifier = Modifier.height(30.dp)
+                )
+
+                LessionLogo(
+                    modifier = Modifier.size(145.dp)
+                )
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+
+                Text(
+                    text = "LESSION",
+                    color = Amarillo,
+                    fontSize = 29.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+
+                Spacer(
+                    modifier = Modifier.height(30.dp)
+                )
+
+                LessionField(
+                    value = username,
+                    onValueChange = {
+                        username = it
+                    },
+                    hint = "Username or email"
+                )
+
+                Spacer(
+                    modifier = Modifier.height(14.dp)
+                )
+
+                Box {
+
+                    LessionField(
+                        value = password,
+                        onValueChange = {
+                            password = it
+                        },
+                        hint = "Password",
+                        password = !showPassword
+                    )
+
+                    IconButton(
+                        onClick = {
+                            showPassword = !showPassword
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                    ) {
+
+                        Icon(
+                            imageVector =
+                                if (showPassword)
+                                    Icons.Default.Visibility
+                                else
+                                    Icons.Default.VisibilityOff,
+                            contentDescription = null,
+                            tint = Gris
+                        )
+                    }
+                }
+
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment =
+                        Alignment.CenterVertically
+                ) {
+
+                    Checkbox(
+                        checked = savePassword,
+                        onCheckedChange = {
+                            savePassword = it
+                        },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Amarillo,
+                            checkmarkColor = Fondo
+                        )
+                    )
+
+                    Text(
+                        text = "Guardar contraseña",
+                        color = Blanco,
+                        fontSize = 15.sp
+                    )
+                }
+
+                Spacer(
+                    modifier = Modifier.height(15.dp)
+                )
+
+                SmallPurpleButton(
+                    text = "LOGIN",
+                    onClick = {
+
+                        val savedUser =
+                            preferences.getString(
+                                "username",
+                                null
+                            )
+
+                        val savedPassword =
+                            preferences.getString(
+                                "password",
+                                null
+                            )
+
+                        if (
+                            username.isBlank() ||
+                            password.isBlank()
+                        ) {
+
+                            Toast.makeText(
+                                context,
+                                "Completa todos los campos",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            return@SmallPurpleButton
+                        }
+
+                        if (
+                            savedUser == null ||
+                            savedPassword == null
+                        ) {
+
+                            Toast.makeText(
+                                context,
+                                "Primero debes crear una cuenta",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            return@SmallPurpleButton
+                        }
+
+                        if (
+                            username != savedUser ||
+                            password != savedPassword
+                        ) {
+
+                            Toast.makeText(
+                                context,
+                                "Usuario o contraseña incorrectos",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            return@SmallPurpleButton
+                        }
+
+                        preferences.edit()
+                            .putBoolean(
+                                "savePassword",
+                                savePassword
+                            )
+                            .apply()
+
+                        onSuccess(username)
+                    }
+                )
+
+                Spacer(
+                    modifier = Modifier.height(15.dp)
+                )
+
+                TextButton(
+                    onClick = onBack
+                ) {
+
+                    Text(
+                        text = "Volver",
+                        color = Amarillo,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+/* ============================================================
+   SIGN IN
+   ============================================================ */
+
+@Composable
+private fun SignInScreen(
+    onBack: () -> Unit,
+    onCreated: (ProfileData) -> Unit
+) {
+
+    val context = LocalContext.current
+
+    var username by remember {
         mutableStateOf("")
     }
 
@@ -1747,347 +573,1462 @@ private fun LoginScreen(
         mutableStateOf("")
     }
 
-    var showPassword by remember {
-        mutableStateOf(false)
+    var confirmPassword by remember {
+        mutableStateOf("")
     }
 
-    BaseScreen {
+    var name by remember {
+        mutableStateOf("")
+    }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(25.dp)
-        ) {
+    var birthDate by remember {
+        mutableStateOf("")
+    }
 
-            IconButton(
-                onClick = onBack
-            ) {
+    var weight by remember {
+        mutableStateOf("")
+    }
 
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                    tint = White
-                )
-            }
+    var height by remember {
+        mutableStateOf("")
+    }
+
+    var gender by remember {
+        mutableStateOf("")
+    }
+
+    var bodyType by remember {
+        mutableStateOf("")
+    }
+
+    var sport by remember {
+        mutableStateOf("")
+    }
+
+    var weeklyHours by remember {
+        mutableStateOf("")
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Fondo)
+            .padding(horizontal = 28.dp)
+    ) {
+
+        item {
 
             Spacer(
-                modifier = Modifier.height(30.dp)
+                modifier = Modifier.height(18.dp)
             )
 
             LessionLogo(
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(
-                modifier = Modifier.height(40.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
             )
 
             Text(
-                text = "Iniciar sesión",
-                color = White,
-                fontSize = 30.sp,
+                text = "Configura tu perfil",
+                modifier = Modifier.fillMaxWidth(),
+                color = Blanco,
+                fontSize = 23.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(
-                modifier = Modifier.height(25.dp)
+                modifier = Modifier.height(20.dp)
             )
 
-            BigTextField(
-                value = email,
+            /* ACCESO */
+
+            LessionField(
+                value = username,
                 onValueChange = {
-                    email = it
+                    username = it
                 },
-                placeholder = "Usuario o email"
+                hint = "Username or email"
             )
+
+            Spacer(
+                modifier = Modifier.height(10.dp)
+            )
+
+            LessionField(
+                value = password,
+                onValueChange = {
+                    password = it
+                },
+                hint = "Password",
+                password = true
+            )
+
+            Spacer(
+                modifier = Modifier.height(10.dp)
+            )
+
+            LessionField(
+                value = confirmPassword,
+                onValueChange = {
+                    confirmPassword = it
+                },
+                hint = "Confirmar contraseña",
+                password = true
+            )
+
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+
+            /* PERFIL */
+
+            ProfileHeader()
 
             Spacer(
                 modifier = Modifier.height(15.dp)
             )
 
-            BigTextField(
-                value = password,
+            LessionField(
+                value = name,
                 onValueChange = {
-                    password = it
+                    name = it
                 },
-                placeholder = "Contraseña",
+                hint = "Nombre"
+            )
 
-                visualTransformation =
-                    if (showPassword)
-                        VisualTransformation.None
-                    else
-                        PasswordVisualTransformation(),
+            Spacer(
+                modifier = Modifier.height(9.dp)
+            )
 
-                trailingIcon = {
+            LessionField(
+                value = birthDate,
+                onValueChange = {
+                    birthDate = it
+                },
+                hint = "Fecha de nacimiento"
+            )
 
-                    IconButton(
-                        onClick = {
-                            showPassword = !showPassword
-                        }
-                    ) {
+            Spacer(
+                modifier = Modifier.height(9.dp)
+            )
 
-                        Icon(
-                            imageVector =
-                                if (showPassword)
-                                    Icons.Default.VisibilityOff
-                                else
-                                    Icons.Default.Visibility,
+            Row(
+                horizontalArrangement =
+                    Arrangement.spacedBy(8.dp)
+            ) {
 
-                            contentDescription = null,
-                            tint = White
-                        )
-                    }
+                LessionField(
+                    value = weight,
+                    onValueChange = {
+                        weight = it
+                    },
+                    hint = "Peso",
+                    modifier = Modifier.weight(1f)
+                )
+
+                LessionField(
+                    value = height,
+                    onValueChange = {
+                        height = it
+                    },
+                    hint = "Altura",
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(9.dp)
+            )
+
+            DropdownField(
+                value = gender,
+                hint = "Género",
+                options = listOf(
+                    "Masculino",
+                    "Femenino",
+                    "Prefiero no decirlo"
+                ),
+                onSelected = {
+                    gender = it
                 }
             )
 
             Spacer(
-                modifier = Modifier.height(25.dp)
+                modifier = Modifier.height(9.dp)
             )
 
-            PrimaryButton(
-                text = "LOGIN",
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onLogin
+            DropdownField(
+                value = bodyType,
+                hint = "Tipo de cuerpo",
+                options = listOf(
+                    "Hectomorfo",
+                    "Endomorfo",
+                    "Mesomorfo"
+                ),
+                onSelected = {
+                    bodyType = it
+                }
+            )
+
+            Spacer(
+                modifier = Modifier.height(9.dp)
+            )
+
+            Text(
+                text = "Opcionales",
+                color = Gris,
+                fontSize = 14.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(5.dp)
+            )
+
+            LessionField(
+                value = sport,
+                onValueChange = {
+                    sport = it
+                },
+                hint = "Deporte que realizas"
+            )
+
+            Spacer(
+                modifier = Modifier.height(9.dp)
+            )
+
+            LessionField(
+                value = weeklyHours,
+                onValueChange = {
+                    weeklyHours = it
+                },
+                hint = "Horas semanales de actividad"
+            )
+
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+
+            SmallPurpleButton(
+                text = "SAVE",
+                onClick = {
+
+                    if (
+                        username.isBlank() ||
+                        password.isBlank() ||
+                        confirmPassword.isBlank() ||
+                        name.isBlank() ||
+                        birthDate.isBlank() ||
+                        weight.isBlank() ||
+                        height.isBlank() ||
+                        gender.isBlank() ||
+                        bodyType.isBlank() ||
+                        sport.isBlank() ||
+                        weeklyHours.isBlank()
+                    ) {
+
+                        Toast.makeText(
+                            context,
+                            "Completa todos los campos",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        return@SmallPurpleButton
+                    }
+
+                    if (password != confirmPassword) {
+
+                        Toast.makeText(
+                            context,
+                            "Las contraseñas no coinciden",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        return@SmallPurpleButton
+                    }
+
+                    if (password.length < 6) {
+
+                        Toast.makeText(
+                            context,
+                            "La contraseña debe tener mínimo 6 caracteres",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        return@SmallPurpleButton
+                    }
+
+                    context
+                        .getSharedPreferences(
+                            "lession",
+                            Context.MODE_PRIVATE
+                        )
+                        .edit()
+                        .putString(
+                            "username",
+                            username
+                        )
+                        .putString(
+                            "password",
+                            password
+                        )
+                        .apply()
+
+                    val newProfile = ProfileData(
+                        name = name,
+                        birthDate = birthDate,
+                        weight = weight,
+                        height = height,
+                        gender = gender,
+                        bodyType = bodyType,
+                        sport = sport,
+                        weeklyHours = weeklyHours
+                    )
+
+                    saveProfile(context, newProfile)
+
+                    onCreated(newProfile)
+                }
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            TextButton(
+                onClick = onBack
+            ) {
+
+                Text(
+                    text = "Volver",
+                    color = Amarillo,
+                    fontSize = 16.sp
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(35.dp)
             )
         }
     }
 }
 
-
-// ============================================================
-// LOGO REAL
-// ============================================================
+/* ============================================================
+   PROFILE
+   ============================================================ */
 
 @Composable
-private fun LessionLogo(
-    modifier: Modifier
+private fun ProfileScreen(
+    profile: ProfileData,
+    onProfileChanged: (ProfileData) -> Unit,
+    onContinue: () -> Unit,
+    onMenu: () -> Unit,
+    onLogout: () -> Unit
+) {
+
+    var gender by remember(profile.gender) {
+        mutableStateOf(profile.gender)
+    }
+
+    var bodyType by remember(profile.bodyType) {
+        mutableStateOf(profile.bodyType)
+    }
+
+    var avatar by remember(profile.avatar) {
+        mutableStateOf(profile.avatar)
+    }
+
+    val avatarPicker =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+
+            if (uri != null) {
+                avatar = uri.toString()
+
+                onProfileChanged(
+                    profile.copy(
+                        avatar = uri.toString()
+                    )
+                )
+            }
+        }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Fondo)
+    ) {
+
+        TopBar(
+            onMenu = onMenu
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 25.dp)
+        ) {
+
+            item {
+
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
+
+                ProfileHeader(
+                    avatar = avatar,
+                    onAvatarClick = {
+                        avatarPicker.launch("image/*")
+                    }
+                )
+
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
+
+                /* CAMPOS */
+
+                ProfileReadOnly(
+                    "Nombre",
+                    profile.name
+                )
+
+                ProfileReadOnly(
+                    "Fecha de nacimiento",
+                    profile.birthDate
+                )
+
+                ProfileReadOnly(
+                    "Peso",
+                    profile.weight
+                )
+
+                ProfileReadOnly(
+                    "Altura",
+                    profile.height
+                )
+
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+
+                DropdownField(
+                    value = gender,
+                    hint = "Género",
+                    options = listOf(
+                        "Masculino",
+                        "Femenino",
+                        "Prefiero no decirlo"
+                    ),
+                    onSelected = {
+                        gender = it
+
+                        onProfileChanged(
+                            profile.copy(
+                                gender = it
+                            )
+                        )
+                    }
+                )
+
+                Spacer(
+                    modifier = Modifier.height(9.dp)
+                )
+
+                DropdownField(
+                    value = bodyType,
+                    hint = "Tipo de cuerpo",
+                    options = listOf(
+                        "Hectomorfo",
+                        "Endomorfo",
+                        "Mesomorfo"
+                    ),
+                    onSelected = {
+                        bodyType = it
+
+                        onProfileChanged(
+                            profile.copy(
+                                bodyType = it
+                            )
+                        )
+                    }
+                )
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+
+                ProfileReadOnly(
+                    "Deporte que realizas",
+                    profile.sport
+                )
+
+                ProfileReadOnly(
+                    "Horas semanales de actividad",
+                    profile.weeklyHours
+                )
+
+                Spacer(
+                    modifier = Modifier.height(20.dp)
+                )
+
+                SmallPurpleButton(
+                    text = "SAVE",
+                    onClick = {
+
+                        onProfileChanged(
+                            profile.copy(
+                                gender = gender,
+                                bodyType = bodyType,
+                                avatar = avatar
+                            )
+                        )
+
+                        onContinue()
+                    }
+                )
+
+                Spacer(
+                    modifier = Modifier.height(13.dp)
+                )
+
+                OutlinedButton(
+                    onClick = onLogout,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = Rojo
+                    ),
+                    border = ButtonDefaults.outlinedButtonBorder(true)
+                ) {
+
+                    Icon(
+                        Icons.Default.PowerSettingsNew,
+                        contentDescription = null,
+                        tint = Rojo
+                    )
+
+                    Spacer(
+                        modifier = Modifier.width(7.dp)
+                    )
+
+                    Text(
+                        "Cerrar sesión",
+                        color = Rojo,
+                        fontSize = 16.sp
+                    )
+                }
+
+                Spacer(
+                    modifier = Modifier.height(30.dp)
+                )
+            }
+        }
+    }
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+
+@Composable
+private fun DashboardScreen(
+    onMenu: () -> Unit
+) {
+
+    var bluetooth by remember {
+        mutableStateOf(false)
+    }
+
+    var wifi by remember {
+        mutableStateOf(false)
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Fondo)
+    ) {
+
+        TopBar(
+            onMenu = onMenu
+        )
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = 18.dp,
+                    end = 18.dp,
+                    top = 10.dp
+                )
+        ) {
+
+            item {
+
+                /* TARJETA CORPORAL */
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            2.dp,
+                            Cian,
+                            RoundedCornerShape(23.dp)
+                        ),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Morado
+                    ),
+                    shape = RoundedCornerShape(23.dp)
+                ) {
+
+                    Column(
+                        modifier = Modifier.padding(15.dp)
+                    ) {
+
+                        Row(
+                            horizontalArrangement =
+                                Arrangement.spacedBy(12.dp)
+                        ) {
+
+                            DashboardLegend(
+                                Amarillo,
+                                "Atención"
+                            )
+
+                            DashboardLegend(
+                                Naranja,
+                                "Esfuerzo elevado"
+                            )
+
+                            DashboardLegend(
+                                Rojo,
+                                "Riesgo elevado"
+                            )
+                        }
+
+                        Spacer(
+                            modifier = Modifier.height(8.dp)
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(245.dp)
+                        ) {
+
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = null,
+                                tint = Color.LightGray,
+                                modifier = Modifier
+                                    .size(185.dp)
+                                    .align(Alignment.Center)
+                            )
+
+                            /* 97% */
+
+                            Column(
+                                modifier = Modifier
+                                    .align(
+                                        Alignment.CenterEnd
+                                    )
+                            ) {
+
+                                Text(
+                                    "Nivel de",
+                                    color = Blanco,
+                                    fontSize = 12.sp
+                                )
+
+                                Text(
+                                    "esfuerzo",
+                                    color = Blanco,
+                                    fontSize = 12.sp
+                                )
+
+                                Text(
+                                    "97%",
+                                    color = Amarillo,
+                                    fontSize = 19.sp,
+                                    fontWeight =
+                                        FontWeight.Bold
+                                )
+                            }
+
+                            /* 76% */
+
+                            Column(
+                                modifier = Modifier
+                                    .align(
+                                        Alignment.BottomStart
+                                    )
+                                    .padding(
+                                        start = 45.dp
+                                    )
+                            ) {
+
+                                Text(
+                                    "Nivel de",
+                                    color = Blanco,
+                                    fontSize = 12.sp
+                                )
+
+                                Text(
+                                    "esfuerzo",
+                                    color = Blanco,
+                                    fontSize = 12.sp
+                                )
+
+                                Text(
+                                    "76%",
+                                    color = Amarillo,
+                                    fontSize = 19.sp,
+                                    fontWeight =
+                                        FontWeight.Bold
+                                )
+                            }
+
+                            Text(
+                                "TÚ",
+                                color = Amarillo,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .align(
+                                        Alignment.BottomCenter
+                                    )
+                            )
+
+                            Icon(
+                                Icons.Default.Warning,
+                                contentDescription = null,
+                                tint = Amarillo,
+                                modifier = Modifier
+                                    .size(38.dp)
+                                    .align(
+                                        Alignment.BottomEnd
+                                    )
+                            )
+                        }
+                    }
+                }
+
+                Spacer(
+                    modifier = Modifier.height(15.dp)
+                )
+
+                /* ESTADO CORPORAL */
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Morado
+                    ),
+                    shape = RoundedCornerShape(23.dp)
+                ) {
+
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+
+                        Text(
+                            "Estado corporal actual",
+                            color = Blanco,
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+
+                        Spacer(
+                            modifier = Modifier.height(6.dp)
+                        )
+
+                        Row(
+                            verticalAlignment =
+                                Alignment.CenterVertically
+                        ) {
+
+                            Text(
+                                "85%",
+                                color = Amarillo,
+                                fontSize = 24.sp,
+                                fontWeight =
+                                    FontWeight.Bold
+                            )
+
+                            Spacer(
+                                modifier = Modifier.width(8.dp)
+                            )
+
+                            Text(
+                                "Esfuerzo alto",
+                                color = Blanco,
+                                fontSize = 17.sp
+                            )
+                        }
+
+                        Spacer(
+                            modifier = Modifier.height(12.dp)
+                        )
+
+                        Row(
+                            horizontalArrangement =
+                                Arrangement.spacedBy(10.dp)
+                        ) {
+
+                            DashboardMetric(
+                                modifier =
+                                    Modifier.weight(1f),
+                                title =
+                                    "Frecuencia cardíaca",
+                                value = "154 BPM"
+                            )
+
+                            DashboardMetric(
+                                modifier =
+                                    Modifier.weight(1f),
+                                title =
+                                    "SpO₂ (Oxígeno en sangre)",
+                                value = "97%"
+                            )
+                        }
+
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+
+                        Row(
+                            horizontalArrangement =
+                                Arrangement.spacedBy(10.dp)
+                        ) {
+
+                            DashboardMetric(
+                                modifier =
+                                    Modifier.weight(1f),
+                                title = "Temperatura",
+                                value = "36,8 °C"
+                            )
+
+                            DashboardMetric(
+                                modifier =
+                                    Modifier.weight(1f),
+                                title =
+                                    "Actividad muscular",
+                                value = "Alta"
+                            )
+                        }
+
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+
+                        DashboardMetric(
+                            modifier =
+                                Modifier.fillMaxWidth(),
+                            title = "Movimiento",
+                            value = "Normal"
+                        )
+                    }
+                }
+
+                Spacer(
+                    modifier = Modifier.height(15.dp)
+                )
+
+                /* CONEXIONES */
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Morado
+                    ),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+
+                    Column(
+                        modifier = Modifier.padding(15.dp)
+                    ) {
+
+                        Text(
+                            "Conecta la banda",
+                            color = Blanco,
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        ConnectionLine(
+                            icon = Icons.Default.Bluetooth,
+                            title = "Bluetooth",
+                            enabled = bluetooth,
+                            onChange = {
+                                bluetooth = it
+                            }
+                        )
+
+                        ConnectionLine(
+                            icon = Icons.Default.Wifi,
+                            title = "Wi-Fi",
+                            enabled = wifi,
+                            onChange = {
+                                wifi = it
+                            }
+                        )
+                    }
+                }
+
+                Spacer(
+                    modifier = Modifier.height(30.dp)
+                )
+            }
+        }
+    }
+}
+
+/* ============================================================
+   MENU
+   ============================================================ */
+
+@Composable
+private fun MenuScreen(
+    onHome: () -> Unit,
+    onProfile: () -> Unit,
+    onLogout: () -> Unit
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Fondo)
+    ) {
+
+        TopBar(
+            onMenu = {}
+        )
+
+        Spacer(
+            modifier = Modifier.height(15.dp)
+        )
+
+        MenuItem(
+            "Inicio",
+            Icons.Default.Home,
+            onHome
+        )
+
+        MenuItem(
+            "Perfil",
+            Icons.Default.Person,
+            onProfile
+        )
+
+        MenuItem(
+            "Configuración",
+            Icons.Default.Settings,
+            {}
+        )
+
+        MenuItem(
+            "Sobre nosotros",
+            Icons.Default.Info,
+            {}
+        )
+
+        Spacer(
+            modifier = Modifier.weight(1f)
+        )
+
+        MenuItem(
+            "Cerrar sesión",
+            Icons.Default.PowerSettingsNew,
+            onLogout
+        )
+
+        Spacer(
+            modifier = Modifier.height(25.dp)
+        )
+    }
+}
+
+/* ============================================================
+   COMPONENTES VISUALES
+   ============================================================ */
+
+@Composable
+private fun TopBar(
+    onMenu: () -> Unit
 ) {
 
     Row(
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(62.dp)
+            .background(MoradoClaro)
+            .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
+        LessionLogo(
+            modifier = Modifier.size(45.dp)
+        )
+
+        Spacer(
+            modifier = Modifier.width(5.dp)
+        )
+
         Text(
-            text = "LESSION",
-            color = Neon,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Black,
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
-    }
-}
-
-
-// ============================================================
-// BASE
-// ============================================================
-
-@Composable
-private fun BaseScreen(
-    content: @Composable BoxScope.() -> Unit
-) {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Background)
-    ) {
-
-        // línea superior característica
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(5.dp)
-                .background(Neon)
-                .align(Alignment.TopCenter)
+            "LESSION",
+            color = Amarillo,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.ExtraBold
         )
 
-        content()
-    }
-}
+        Spacer(
+            modifier = Modifier.weight(1f)
+        )
 
+        IconButton(
+            onClick = onMenu
+        ) {
 
-// ============================================================
-// TEXT FIELD
-// ============================================================
-
-@Composable
-private fun BigTextField(
-
-    value: String,
-    onValueChange: (String) -> Unit,
-    placeholder: String,
-
-    modifier: Modifier =
-        Modifier.fillMaxWidth(),
-
-    visualTransformation: VisualTransformation =
-        VisualTransformation.None,
-
-    trailingIcon:
-    @Composable (() -> Unit)? = null
-) {
-
-    OutlinedTextField(
-
-        value = value,
-
-        onValueChange = onValueChange,
-
-        modifier = modifier.height(59.dp),
-
-        singleLine = true,
-
-        placeholder = {
-
-            Text(
-                text = placeholder,
-                color = Gray,
-                fontSize = 16.sp
+            Icon(
+                Icons.Default.Menu,
+                contentDescription = "Menu",
+                tint = Blanco,
+                modifier = Modifier.size(30.dp)
             )
-        },
-
-        textStyle = LocalTextStyle.current.copy(
-            color = White,
-            fontSize = 17.sp
-        ),
-
-        visualTransformation =
-            visualTransformation,
-
-        trailingIcon =
-            trailingIcon,
-
-        colors =
-            OutlinedTextFieldDefaults.colors(
-
-                focusedContainerColor =
-                    PurpleCard,
-
-                unfocusedContainerColor =
-                    PurpleCard,
-
-                focusedBorderColor =
-                    PurpleLight,
-
-                unfocusedBorderColor =
-                    PurpleLight,
-
-                focusedTextColor =
-                    White,
-
-                unfocusedTextColor =
-                    White,
-
-                cursorColor =
-                    Neon
-            ),
-
-        shape =
-            RoundedCornerShape(18.dp)
-    )
+        }
+    }
 }
 
-
-// ============================================================
-// BUTTON
-// ============================================================
-
 @Composable
-private fun PrimaryButton(
-
+private fun SmallPurpleButton(
     text: String,
-
-    modifier: Modifier,
-
     onClick: () -> Unit
 ) {
 
     Button(
-
         onClick = onClick,
-
-        modifier =
-            modifier.height(57.dp),
-
-        shape =
-            RoundedCornerShape(30.dp),
-
-        colors =
-            ButtonDefaults.buttonColors(
-                containerColor = PurpleLight
-            )
+        modifier = Modifier
+            .width(145.dp)
+            .height(45.dp),
+        shape = RoundedCornerShape(25.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MoradoClaro,
+            contentColor = Blanco
+        )
     ) {
 
         Text(
             text = text,
-            color = White,
-            fontSize = 17.sp,
+            fontSize = 15.sp,
             fontWeight = FontWeight.Bold
         )
     }
 }
 
-
-// ============================================================
-// CARD
-// ============================================================
-
 @Composable
-private fun CardContainer(
-    content: @Composable ColumnScope.() -> Unit
+private fun LessionField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    hint: String,
+    modifier: Modifier = Modifier,
+    password: Boolean = false
 ) {
 
-    Column(
-
-        modifier = Modifier
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier
             .fillMaxWidth()
-            .clip(
-                RoundedCornerShape(21.dp)
+            .height(55.dp),
+        singleLine = true,
+        placeholder = {
+            Text(
+                hint,
+                color = Gris,
+                fontSize = 14.sp
             )
-            .background(PurpleCard)
-            .padding(20.dp),
-
-        content = content
+        },
+        textStyle = LocalTextStyle.current.copy(
+            color = Blanco,
+            fontSize = 16.sp
+        ),
+        visualTransformation =
+            if (password)
+                PasswordVisualTransformation()
+            else
+                VisualTransformation.None,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Cian,
+            unfocusedBorderColor = MoradoClaro,
+            focusedTextColor = Blanco,
+            unfocusedTextColor = Blanco,
+            cursorColor = Amarillo
+        ),
+        shape = RoundedCornerShape(20.dp)
     )
 }
 
-
-// ============================================================
-// MENU OPTION
-// ============================================================
-
 @Composable
-private fun MenuOption(
-    text: String,
-    onClick: () -> Unit
+private fun DropdownField(
+    value: String,
+    hint: String,
+    options: List<String>,
+    onSelected: (String) -> Unit
 ) {
 
-    Box(
+    var expanded by remember {
+        mutableStateOf(false)
+    }
 
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        OutlinedTextField(
+            value = value,
+            onValueChange = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp),
+            readOnly = true,
+            placeholder = {
+                Text(
+                    hint,
+                    color = Gris,
+                    fontSize = 14.sp
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    tint = Blanco
+                )
+            },
+            textStyle = LocalTextStyle.current.copy(
+                color = Blanco,
+                fontSize = 16.sp
+            ),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Cian,
+                unfocusedBorderColor = MoradoClaro
+            ),
+            shape = RoundedCornerShape(20.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clickable {
+                    expanded = true
+                }
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+            },
+            modifier = Modifier.background(Morado)
+        ) {
+
+            options.forEach { option ->
+
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            option,
+                            color = Blanco,
+                            fontSize = 16.sp
+                        )
+                    },
+                    onClick = {
+
+                        onSelected(option)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileHeader(
+    avatar: String = "",
+    onAvatarClick: (() -> Unit)? = null
+) {
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(92.dp)
+                .clip(CircleShape)
+                .background(MoradoClaro)
+                .border(
+                    2.dp,
+                    Amarillo,
+                    CircleShape
+                )
+                .clickable(
+                    enabled = onAvatarClick != null
+                ) {
+                    onAvatarClick?.invoke()
+                },
+            contentAlignment = Alignment.Center
+        ) {
+
+            if (avatar.isBlank()) {
+
+                Icon(
+                    Icons.Default.Person,
+                    contentDescription = null,
+                    tint = Blanco,
+                    modifier = Modifier.size(55.dp)
+                )
+
+            } else {
+
+                // Se mantiene el avatar dentro del mismo círculo
+                // del diseño original.
+                Icon(
+                    Icons.Default.Person,
+                    contentDescription = null,
+                    tint = Amarillo,
+                    modifier = Modifier.size(55.dp)
+                )
+            }
+        }
+
+        if (onAvatarClick != null) {
+
+            Spacer(
+                modifier = Modifier.height(6.dp)
+            )
+
+            Text(
+                "Agregar avatar",
+                color = Amarillo,
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProfileReadOnly(
+    title: String,
+    value: String
+) {
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(62.dp)
             .padding(vertical = 4.dp)
-            .clip(
-                RoundedCornerShape(17.dp)
-            )
-            .background(PurpleCard)
-            .clickable {
-                onClick()
-            }
-            .padding(horizontal = 20.dp),
-
-        contentAlignment = Alignment.CenterStart
     ) {
 
         Text(
-            text = text,
-            color = White,
-            fontSize = 18.sp,
+            title,
+            color = Gris,
+            fontSize = 13.sp
+        )
+
+        Text(
+            value,
+            color = Blanco,
+            fontSize = 17.sp,
             fontWeight = FontWeight.Medium
         )
     }
 }
 
+@Composable
+private fun DashboardLegend(
+    color: Color,
+    text: String
+) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(11.dp)
+                .clip(CircleShape)
+                .background(color)
+        )
+
+        Spacer(
+            modifier = Modifier.width(5.dp)
+        )
+
+        Text(
+            text,
+            color = Blanco,
+            fontSize = 11.sp
+        )
+    }
+}
+
+@Composable
+private fun DashboardMetric(
+    modifier: Modifier,
+    title: String,
+    value: String
+) {
+
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MoradoClaro
+        ),
+        shape = RoundedCornerShape(14.dp)
+    ) {
+
+        Column(
+            modifier = Modifier.padding(11.dp)
+        ) {
+
+            Text(
+                title,
+                color = Blanco,
+                fontSize = 12.sp
+            )
+
+            Spacer(
+                modifier = Modifier.height(5.dp)
+            )
+
+            Text(
+                value,
+                color = Amarillo,
+                fontSize = 21.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+private fun ConnectionLine(
+    icon: ImageVector,
+    title: String,
+    enabled: Boolean,
+    onChange: (Boolean) -> Unit
+) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = if (enabled) Amarillo else Blanco,
+            modifier = Modifier.size(27.dp)
+        )
+
+        Spacer(
+            modifier = Modifier.width(8.dp)
+        )
+
+        Text(
+            title,
+            color = Blanco,
+            fontSize = 15.sp,
+            modifier = Modifier.weight(1f)
+        )
+
+        Switch(
+            checked = enabled,
+            onCheckedChange = onChange
+        )
+    }
+}
+
+@Composable
+private fun MenuItem(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
+            .padding(
+                horizontal = 25.dp,
+                vertical = 17.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = Amarillo,
+            modifier = Modifier.size(27.dp)
+        )
+
+        Spacer(
+            modifier = Modifier.width(17.dp)
+        )
+
+        Text(
+            text,
+            color = Blanco,
+            fontSize = 18.sp
+        )
+    }
+}
+
+/* ============================================================
+   DATOS
+   ============================================================ */
+
+private fun saveProfile(
+    context: Context,
+    profile: ProfileData
+) {
+    val prefs = context.getSharedPreferences("lession_profile", Context.MODE_PRIVATE)
+    prefs.edit().apply {
+        putString("name", profile.name)
+        putString("birthDate", profile.birthDate)
+        putString("weight", profile.weight)
+        putString("height", profile.height)
+        putString("gender", profile.gender)
+        putString("bodyType", profile.bodyType)
+        putString("sport", profile.sport)
+        putString("weeklyHours", profile.weeklyHours)
+        putString("avatar", profile.avatar)
+        apply()
+    }
+}
+
+private fun loadProfile(context: Context): ProfileData {
+    val prefs = context.getSharedPreferences("lession_profile", Context.MODE_PRIVATE)
+    return ProfileData(
+        name = prefs.getString("name", "") ?: "",
+        birthDate = prefs.getString("birthDate", "") ?: "",
+        weight = prefs.getString("weight", "") ?: "",
+        height = prefs.getString("height", "") ?: "",
+        gender = prefs.getString("gender", "") ?: "",
+        bodyType = prefs.getString("bodyType", "") ?: "",
+        sport = prefs.getString("sport", "") ?: "",
+        weeklyHours = prefs.getString("weeklyHours", "") ?: "",
+        avatar = prefs.getString("avatar", "") ?: ""
+    )
+}
