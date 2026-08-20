@@ -1,7 +1,6 @@
 package com.lession.app
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -9,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,18 +26,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.edit
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import coil3.compose.AsyncImage
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+
+// ============================================================
+// COLORES
+// ============================================================
 
 private val Fondo = Color(0xFF24136F)
-private val Morado = Color(0xFF351F96)
+private val Morado = Color(0xFF352095)
 private val MoradoClaro = Color(0xFF4630C7)
 private val Amarillo = Color(0xFFEFFF00)
 private val Blanco = Color.White
@@ -44,6 +54,11 @@ private val Gris = Color(0xFFD7D7DF)
 private val Cian = Color(0xFF00CFFF)
 private val Rojo = Color(0xFFEF3039)
 private val Naranja = Color(0xFFFF8A00)
+private val Verde = Color(0xFF35F25B)
+
+// ============================================================
+// PANTALLAS
+// ============================================================
 
 private enum class Screen {
     WELCOME,
@@ -51,25 +66,469 @@ private enum class Screen {
     SIGNIN,
     PROFILE,
     DASHBOARD,
-    MENU
+    MENU,
+    SETTINGS
 }
 
-data class ProfileData(
-    val name: String = "",
-    val birthDate: String = "",
-    val weight: String = "",
-    val height: String = "",
-    val gender: String = "",
-    val bodyType: String = "",
-    val sport: String = "",
-    val weeklyHours: String = "",
-    val avatar: String = ""
+// ============================================================
+// IDIOMAS
+// ============================================================
+
+private enum class AppLanguage {
+    ESPANOL,
+    ENGLISH,
+    ESPANOL_LATINO
+}
+
+// ============================================================
+// TEXTOS DE LA APP
+// ============================================================
+
+private data class AppStrings(
+
+    val login: String,
+    val signIn: String,
+    val save: String,
+    val back: String,
+
+    val morePerformance: String,
+    val lessImpact: String,
+
+    val username: String,
+    val email: String,
+    val password: String,
+    val confirmPassword: String,
+    val savePassword: String,
+
+    val configureProfile: String,
+    val name: String,
+    val birthDate: String,
+    val weight: String,
+    val height: String,
+    val gender: String,
+    val bodyType: String,
+    val sport: String,
+    val weeklyHours: String,
+    val optional: String,
+
+    val male: String,
+    val female: String,
+    val preferNot: String,
+
+    val ectomorph: String,
+    val endomorph: String,
+    val mesomorph: String,
+
+    val addAvatar: String,
+    val logout: String,
+
+    val home: String,
+    val profile: String,
+    val settings: String,
+    val aboutUs: String,
+
+    val attention: String,
+    val highEffort: String,
+    val highRisk: String,
+    val effortLevel: String,
+    val you: String,
+
+    val currentBody: String,
+    val effortHigh: String,
+    val heartRate: String,
+    val oxygen: String,
+    val temperature: String,
+    val movement: String,
+    val muscleActivity: String,
+    val normal: String,
+    val high: String,
+
+    val connectBand: String,
+    val bluetooth: String,
+    val wifi: String,
+    val connected: String,
+    val disconnected: String,
+    val searchBand: String,
+    val syncNow: String,
+    val bandName: String,
+    val battery: String,
+    val lastSync: String,
+    val unpairBand: String,
+
+    val trainingPreferences: String,
+    val mainSport: String,
+    val trainingLevel: String,
+    val intermediate: String,
+    val objective: String,
+    val performance: String,
+    val defaultIntensity: String,
+
+    val alertsSecurity: String,
+    val effortAlerts: String,
+    val heartAlerts: String,
+    val oxygenAlerts: String,
+    val temperatureAlerts: String,
+    val vibration: String,
+    val alertSound: String,
+
+    val bandConnection: String,
+
+    val dataMeasurements: String,
+    val automaticUpdate: String,
+    val updateFrequency: String,
+    val seconds5: String,
+    val seconds15: String,
+    val seconds30: String,
+    val manual: String,
+
+    val appearance: String,
+    val theme: String,
+    val lessionTheme: String,
+    val textSize: String,
+    val normalSize: String,
+    val largeSize: String,
+    val animations: String,
+    val percentages: String,
+
+    val language: String,
+    val spanish: String,
+    val english: String,
+    val latinSpanish: String,
+
+    val privacy: String,
+    val personalData: String,
+    val dataStorage: String,
+    val deleteHistory: String,
+    val deleteAllData: String,
+
+    val aboutLession: String,
+    val slogan: String,
+    val version: String,
+    val support: String,
+    val terms: String,
+    val privacyPolicy: String
 )
+
+// ============================================================
+// ESPAÑOL
+// ============================================================
+
+private fun spanishStrings() = AppStrings(
+
+    login = "Iniciar sesión",
+    signIn = "Registrarse",
+    save = "GUARDAR",
+    back = "Volver",
+
+    morePerformance = "MÁS RENDIMIENTO",
+    lessImpact = "MENOS IMPACTO",
+
+    username = "Usuario o correo",
+    email = "Correo",
+    password = "Contraseña",
+    confirmPassword = "Confirmar contraseña",
+    savePassword = "Guardar contraseña",
+
+    configureProfile = "Configura tu perfil",
+    name = "Nombre",
+    birthDate = "Fecha de nacimiento",
+    weight = "Peso",
+    height = "Altura",
+    gender = "Género",
+    bodyType = "Tipo de cuerpo",
+    sport = "Deporte que realizas",
+    weeklyHours = "Horas semanales de actividad",
+    optional = "Opcionales",
+
+    male = "Masculino",
+    female = "Femenino",
+    preferNot = "Prefiero no decirlo",
+
+    ectomorph = "Hectomorfo",
+    endomorph = "Endomorfo",
+    mesomorph = "Mesomorfo",
+
+    addAvatar = "Agregar avatar",
+    logout = "Cerrar sesión",
+
+    home = "Inicio",
+    profile = "Perfil",
+    settings = "Configuración",
+    aboutUs = "Sobre nosotros",
+
+    attention = "Atención",
+    highEffort = "Esfuerzo elevado",
+    highRisk = "Riesgo elevado",
+    effortLevel = "Nivel de esfuerzo",
+    you = "TÚ",
+
+    currentBody = "Estado corporal actual",
+    effortHigh = "Esfuerzo alto",
+    heartRate = "Frecuencia cardíaca",
+    oxygen = "SpO₂ (Oxígeno en sangre)",
+    temperature = "Temperatura",
+    movement = "Movimiento",
+    muscleActivity = "Actividad muscular",
+    normal = "Normal",
+    high = "Alta",
+
+    connectBand = "Conecta la banda",
+    bluetooth = "Bluetooth",
+    wifi = "Wi-Fi",
+    connected = "Conectado",
+    disconnected = "Desconectado",
+    searchBand = "Buscar banda",
+    syncNow = "Sincronizar ahora",
+    bandName = "Nombre de la banda",
+    battery = "Batería",
+    lastSync = "Última sincronización",
+    unpairBand = "Desvincular banda",
+
+    trainingPreferences = "Preferencias de entrenamiento",
+    mainSport = "Deporte principal",
+    trainingLevel = "Nivel de entrenamiento",
+    intermediate = "Intermedio",
+    objective = "Objetivo",
+    performance = "Rendimiento",
+    defaultIntensity = "Intensidad predeterminada",
+
+    alertsSecurity = "Alertas y seguridad",
+    effortAlerts = "Alertas de esfuerzo elevado",
+    heartAlerts = "Alerta de frecuencia cardíaca",
+    oxygenAlerts = "Alerta de SpO₂ baja",
+    temperatureAlerts = "Alerta de temperatura",
+    vibration = "Vibración de la banda",
+    alertSound = "Sonido de las alertas",
+
+    bandConnection = "Conexión con la banda",
+
+    dataMeasurements = "Datos y mediciones",
+    automaticUpdate = "Actualizar automáticamente",
+    updateFrequency = "Frecuencia de actualización",
+    seconds5 = "5 segundos",
+    seconds15 = "15 segundos",
+    seconds30 = "30 segundos",
+    manual = "Manual",
+
+    appearance = "Apariencia",
+    theme = "Tema",
+    lessionTheme = "Lession",
+    textSize = "Tamaño del texto",
+    normalSize = "Normal",
+    largeSize = "Grande",
+    animations = "Mostrar animaciones",
+    percentages = "Mostrar porcentajes",
+
+    language = "Idioma",
+    spanish = "Español",
+    english = "English",
+    latinSpanish = "Español Latino",
+
+    privacy = "Privacidad",
+    personalData = "Mostrar datos personales",
+    dataStorage = "Permitir almacenamiento de datos",
+    deleteHistory = "Borrar historial",
+    deleteAllData = "Borrar todos los datos",
+
+    aboutLession = "Acerca de Lession",
+    slogan = "Más rendimiento, menos impacto.",
+    version = "Versión 1.0.0",
+    support = "Soporte",
+    terms = "Términos y condiciones",
+    privacyPolicy = "Política de privacidad"
+)
+
+// ============================================================
+// ENGLISH
+// ============================================================
+
+private fun englishStrings() = AppStrings(
+
+    login = "Log In",
+    signIn = "Sign In",
+    save = "SAVE",
+    back = "Back",
+
+    morePerformance = "MORE PERFORMANCE",
+    lessImpact = "LESS IMPACT",
+
+    username = "Username or email",
+    email = "Email",
+    password = "Password",
+    confirmPassword = "Confirm password",
+    savePassword = "Save password",
+
+    configureProfile = "Configure your profile",
+    name = "Name",
+    birthDate = "Date of birth",
+    weight = "Weight",
+    height = "Height",
+    gender = "Gender",
+    bodyType = "Body type",
+    sport = "Sport you practice",
+    weeklyHours = "Weekly activity hours",
+    optional = "Optional",
+
+    male = "Male",
+    female = "Female",
+    preferNot = "Prefer not to say",
+
+    ectomorph = "Ectomorph",
+    endomorph = "Endomorph",
+    mesomorph = "Mesomorph",
+
+    addAvatar = "Add avatar",
+    logout = "Log out",
+
+    home = "Home",
+    profile = "Profile",
+    settings = "Settings",
+    aboutUs = "About us",
+
+    attention = "Attention",
+    highEffort = "High effort",
+    highRisk = "High risk",
+    effortLevel = "Effort level",
+    you = "YOU",
+
+    currentBody = "Current body status",
+    effortHigh = "High effort",
+    heartRate = "Heart rate",
+    oxygen = "SpO₂ (Blood oxygen)",
+    temperature = "Temperature",
+    movement = "Movement",
+    muscleActivity = "Muscle activity",
+    normal = "Normal",
+    high = "High",
+
+    connectBand = "Connect band",
+    bluetooth = "Bluetooth",
+    wifi = "Wi-Fi",
+    connected = "Connected",
+    disconnected = "Disconnected",
+    searchBand = "Search band",
+    syncNow = "Sync now",
+    bandName = "Band name",
+    battery = "Battery",
+    lastSync = "Last synchronization",
+    unpairBand = "Unpair band",
+
+    trainingPreferences = "Training preferences",
+    mainSport = "Main sport",
+    trainingLevel = "Training level",
+    intermediate = "Intermediate",
+    objective = "Objective",
+    performance = "Performance",
+    defaultIntensity = "Default intensity",
+
+    alertsSecurity = "Alerts and safety",
+    effortAlerts = "High effort alerts",
+    heartAlerts = "Heart rate alert",
+    oxygenAlerts = "Low SpO₂ alert",
+    temperatureAlerts = "Temperature alert",
+    vibration = "Band vibration",
+    alertSound = "Alert sound",
+
+    bandConnection = "Band connection",
+
+    dataMeasurements = "Data and measurements",
+    automaticUpdate = "Automatic updates",
+    updateFrequency = "Update frequency",
+    seconds5 = "5 seconds",
+    seconds15 = "15 seconds",
+    seconds30 = "30 seconds",
+    manual = "Manual",
+
+    appearance = "Appearance",
+    theme = "Theme",
+    lessionTheme = "Lession",
+    textSize = "Text size",
+    normalSize = "Normal",
+    largeSize = "Large",
+    animations = "Show animations",
+    percentages = "Show percentages",
+
+    language = "Language",
+    spanish = "Spanish",
+    english = "English",
+    latinSpanish = "Latin American Spanish",
+
+    privacy = "Privacy",
+    personalData = "Show personal data",
+    dataStorage = "Allow data storage",
+    deleteHistory = "Delete history",
+    deleteAllData = "Delete all data",
+
+    aboutLession = "About Lession",
+    slogan = "More performance, less impact.",
+    version = "Version 1.0.0",
+    support = "Support",
+    terms = "Terms and conditions",
+    privacyPolicy = "Privacy policy"
+)
+
+// ============================================================
+// ESPAÑOL LATINO
+// ============================================================
+
+private fun latinSpanishStrings() = spanishStrings().copy(
+    login = "Iniciar sesión",
+    signIn = "Registrarse",
+    save = "GUARDAR",
+    back = "Volver",
+
+    configureProfile = "Configura tu perfil",
+    logout = "Cerrar sesión",
+
+    trainingPreferences = "Preferencias de entrenamiento",
+    alertsSecurity = "Alertas y seguridad",
+    bandConnection = "Conexión con la banda",
+    dataMeasurements = "Datos y mediciones",
+
+    searchBand = "Buscar banda",
+    syncNow = "Sincronizar ahora",
+
+    appearance = "Apariencia",
+    language = "Idioma",
+    privacy = "Privacidad",
+
+    aboutLession = "Acerca de Lession"
+)
+
+// ============================================================
+// OBTENER TEXTOS
+// ============================================================
+
+private fun getStrings(
+    language: AppLanguage
+): AppStrings {
+
+    return when (language) {
+
+        AppLanguage.ESPANOL ->
+            spanishStrings()
+
+        AppLanguage.ENGLISH ->
+            englishStrings()
+
+        AppLanguage.ESPANOL_LATINO ->
+            latinSpanishStrings()
+    }
+}
+
+// ============================================================
+// MAIN ACTIVITY
+// ============================================================
 
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
+
+        super.onCreate(
+            savedInstanceState
+        )
 
         enableEdgeToEdge()
 
@@ -83,8 +542,13 @@ class MainActivity : ComponentActivity() {
             window.decorView
         ).apply {
 
-            hide(WindowInsetsCompat.Type.statusBars())
-            hide(WindowInsetsCompat.Type.navigationBars())
+            hide(
+                WindowInsetsCompat.Type.statusBars()
+            )
+
+            hide(
+                WindowInsetsCompat.Type.navigationBars()
+            )
 
             systemBarsBehavior =
                 WindowInsetsControllerCompat
@@ -97,16 +561,75 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// ============================================================
+// APP
+// ============================================================
+
 @Composable
 private fun LessionApp() {
-    val context = LocalContext.current
+
+    val context =
+        androidx.compose.ui.platform.LocalContext.current
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val preferences = remember {
+
+        context.getSharedPreferences(
+            "lession_data",
+            Context.MODE_PRIVATE
+        )
+    }
 
     var screen by remember {
         mutableStateOf(Screen.WELCOME)
     }
 
+    var language by remember {
+
+        mutableStateOf(
+            when (
+                preferences.getString(
+                    "language",
+                    "es"
+                )
+            ) {
+
+                "en" ->
+                    AppLanguage.ENGLISH
+
+                "es-419" ->
+                    AppLanguage.ESPANOL_LATINO
+
+                else ->
+                    AppLanguage.ESPANOL
+            }
+        )
+    }
+
+    val t = getStrings(language)
+
     var profile by remember {
-        mutableStateOf(loadProfile(context))
+        mutableStateOf<ProfileData?>(null)
+    }
+
+    LaunchedEffect(Unit) {
+        val remoteProfile = obtenerPerfil()
+        if (remoteProfile != null) {
+            profile = ProfileData(
+                name = "${remoteProfile.nombre} ${remoteProfile.apellido}",
+                birthDate = remoteProfile.edad?.toString() ?: "",
+                weight = remoteProfile.peso?.toString() ?: "",
+                height = remoteProfile.altura?.toString() ?: "",
+                gender = remoteProfile.genero ?: "",
+                bodyType = remoteProfile.tipoCuerpo ?: "",
+                sport = remoteProfile.objetivo ?: "",
+                weeklyHours = remoteProfile.nivelActividad ?: "",
+                avatar = remoteProfile.avatarUrl ?: ""
+            )
+        } else {
+            profile = loadProfile(preferences)
+        }
     }
 
     when (screen) {
@@ -114,9 +637,12 @@ private fun LessionApp() {
         Screen.WELCOME -> {
 
             WelcomeScreen(
+                t = t,
+
                 onLogin = {
                     screen = Screen.LOGIN
                 },
+
                 onSignIn = {
                     screen = Screen.SIGNIN
                 }
@@ -126,11 +652,19 @@ private fun LessionApp() {
         Screen.LOGIN -> {
 
             LoginScreen(
+                t = t,
+                preferences = preferences,
+
                 onBack = {
                     screen = Screen.WELCOME
                 },
-                onSuccess = {
-                    profile = loadProfile(context)
+
+                onSuccess = { user ->
+
+                    preferences.edit {
+                        putString("current_user", user)
+                    }
+
                     screen = Screen.PROFILE
                 }
             )
@@ -139,11 +673,16 @@ private fun LessionApp() {
         Screen.SIGNIN -> {
 
             SignInScreen(
+                t = t,
+
                 onBack = {
                     screen = Screen.WELCOME
                 },
+
                 onCreated = {
+
                     profile = it
+
                     screen = Screen.PROFILE
                 }
             )
@@ -151,31 +690,76 @@ private fun LessionApp() {
 
         Screen.PROFILE -> {
 
-            ProfileScreen(
-                profile = profile,
+            profile?.let { currentProfile ->
+                ProfileScreen(
+                    t = t,
+                    profile = currentProfile,
 
-                onProfileChanged = {
-                    profile = it
-                },
+                    onProfileChanged = { updatedProfile ->
 
-                onContinue = {
-                    saveProfile(context, profile)
-                    screen = Screen.DASHBOARD
-                },
+                        profile = updatedProfile
 
-                onMenu = {
-                    screen = Screen.MENU
-                },
+                        saveProfile(
+                            preferences,
+                            updatedProfile
+                        )
 
-                onLogout = {
-                    screen = Screen.WELCOME
-                }
-            )
+                        // Update remote profile
+                        val names = updatedProfile.name.split(" ", limit = 2)
+                        val nombre = names.getOrNull(0) ?: ""
+                        val apellido = names.getOrNull(1) ?: ""
+
+                        coroutineScope.launch {
+                            guardarPerfil(
+                                nombre = nombre,
+                                apellido = apellido,
+                                edad = updatedProfile.birthDate.toIntOrNull(),
+                                genero = updatedProfile.gender,
+                                tipoCuerpo = updatedProfile.bodyType,
+                                altura = updatedProfile.height.toDoubleOrNull(),
+                                peso = updatedProfile.weight.toDoubleOrNull(),
+                                objetivo = updatedProfile.sport,
+                                nivelActividad = updatedProfile.weeklyHours
+                            )
+                        }
+                    },
+
+                    onContinue = {
+
+                        saveProfile(
+                            preferences,
+                            currentProfile
+                        )
+
+                        screen = Screen.DASHBOARD
+                    },
+
+                    onMenu = {
+                        screen = Screen.MENU
+                    },
+
+                    onLogout = {
+
+                        preferences.edit {
+                            remove("current_user")
+                            putBoolean("savePassword", false)
+                        }
+
+                        coroutineScope.launch {
+                            cerrarSesion()
+                        }
+
+                        screen = Screen.WELCOME
+                    }
+                )
+            }
         }
 
         Screen.DASHBOARD -> {
 
             DashboardScreen(
+                t = t,
+
                 onMenu = {
                     screen = Screen.MENU
                 }
@@ -185,42 +769,99 @@ private fun LessionApp() {
         Screen.MENU -> {
 
             MenuScreen(
+                t = t,
+
                 onHome = {
                     screen = Screen.DASHBOARD
                 },
+
                 onProfile = {
                     screen = Screen.PROFILE
                 },
+
+                onSettings = {
+                    screen = Screen.SETTINGS
+                },
+
                 onLogout = {
+
                     screen = Screen.WELCOME
+                }
+            )
+        }
+
+        Screen.SETTINGS -> {
+
+            SettingsScreen(
+                t = t,
+
+                language = language,
+
+                onLanguageChange = {
+
+                    language = it
+
+                    val code =
+                        when (it) {
+
+                            AppLanguage.ENGLISH ->
+                                "en"
+
+                            AppLanguage.ESPANOL_LATINO ->
+                                "es-419"
+
+                            AppLanguage.ESPANOL ->
+                                "es"
+                        }
+
+                    preferences.edit {
+                        putString(
+                            "language",
+                            code
+                        )
+                    }
+                },
+
+                onBack = {
+                    screen = Screen.MENU
                 }
             )
         }
     }
 }
 
-/* ============================================================
-   LOGO
-   ============================================================ */
+// ============================================================
+// LOGO
+// ============================================================
 
 @Composable
 private fun LessionLogo(
     modifier: Modifier = Modifier
 ) {
-    Icon(
-        imageVector = Icons.Default.Bolt,
-        contentDescription = "Lession Logo",
+
+    Image(
+        painter =
+            painterResource(
+                id = R.drawable.logo_lession
+            ),
+
+        contentDescription =
+            "Logo Lession",
+
         modifier = modifier,
-        tint = Amarillo
+
+        contentScale =
+            ContentScale.Fit
     )
 }
 
-/* ============================================================
-   WELCOME
-   ============================================================ */
+// ============================================================
+// WELCOME
+// ============================================================
 
 @Composable
 private fun WelcomeScreen(
+    t: AppStrings,
     onLogin: () -> Unit,
     onSignIn: () -> Unit
 ) {
@@ -234,112 +875,88 @@ private fun WelcomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 40.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(
+                    horizontal = 30.dp
+                ),
+
+            horizontalAlignment =
+                Alignment.CenterHorizontally,
+
+            verticalArrangement =
+                Arrangement.Center
         ) {
 
             LessionLogo(
-                modifier = Modifier.size(175.dp)
+                modifier =
+                    Modifier.size(190.dp)
             )
 
             Spacer(
-                modifier = Modifier.height(18.dp)
+                Modifier.height(12.dp)
             )
 
             Text(
-                text = "LESSION",
+                text = t.morePerformance,
                 color = Amarillo,
-                fontSize = 31.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontSize = 18.sp,
+                fontWeight =
+                    FontWeight.Bold
+            )
+
+            Text(
+                text = t.lessImpact,
+                color = Amarillo,
+                fontSize = 18.sp,
+                fontWeight =
+                    FontWeight.Bold
             )
 
             Spacer(
-                modifier = Modifier.height(4.dp)
-            )
-
-            Text(
-                text = "MÁS RENDIMIENTO",
-                color = Amarillo,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Text(
-                text = "MENOS IMPACTO",
-                color = Amarillo,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(
-                modifier = Modifier.height(45.dp)
+                Modifier.height(35.dp)
             )
 
             SmallPurpleButton(
-                text = "Log In",
-                onClick = onLogin
+                t.login,
+                onLogin
             )
 
             Spacer(
-                modifier = Modifier.height(16.dp)
+                Modifier.height(12.dp)
             )
 
             SmallPurpleButton(
-                text = "Sign In",
-                onClick = onSignIn
+                t.signIn,
+                onSignIn
             )
         }
     }
 }
 
-/* ============================================================
-   LOGIN
-   ============================================================ */
+// ============================================================
+// LOGIN
+// ============================================================
 
 @Composable
 private fun LoginScreen(
+    t: AppStrings,
+    preferences: android.content.SharedPreferences,
     onBack: () -> Unit,
     onSuccess: (String) -> Unit
 ) {
 
-    val context = LocalContext.current
-
-    val preferences = remember {
-        context.getSharedPreferences(
-            "lession",
-            Context.MODE_PRIVATE
-        )
-    }
+    val context =
+        androidx.compose.ui.platform.LocalContext.current
 
     var username by remember {
-        mutableStateOf(
-            preferences.getString(
-                "username",
-                ""
-            ) ?: ""
-        )
+        mutableStateOf("")
     }
 
     var password by remember {
-        mutableStateOf(
-            if (
-                preferences.getBoolean(
-                    "savePassword",
-                    false
-                )
-            ) {
-                preferences.getString(
-                    "password",
-                    ""
-                ) ?: ""
-            } else {
-                ""
-            }
-        )
+        mutableStateOf("")
     }
 
     var savePassword by remember {
+
         mutableStateOf(
             preferences.getBoolean(
                 "savePassword",
@@ -352,218 +969,188 @@ private fun LoginScreen(
         mutableStateOf(false)
     }
 
-    Box(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Fondo)
+            .padding(
+                horizontal = 28.dp
+            ),
+
+        horizontalAlignment =
+            Alignment.CenterHorizontally
     ) {
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 35.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        item {
 
-            item {
+            Spacer(
+                Modifier.height(25.dp)
+            )
 
-                Spacer(
-                    modifier = Modifier.height(30.dp)
+            LessionLogo(
+                Modifier.size(170.dp)
+            )
+
+            Spacer(
+                Modifier.height(20.dp)
+            )
+
+            LessionField(
+                username,
+                { username = it },
+                t.username
+            )
+
+            Spacer(
+                Modifier.height(10.dp)
+            )
+
+            Box {
+
+                LessionField(
+                    password,
+                    { password = it },
+                    t.password,
+                    password = !showPassword
                 )
 
-                LessionLogo(
-                    modifier = Modifier.size(145.dp)
-                )
+                IconButton(
+                    onClick = {
+                        showPassword =
+                            !showPassword
+                    },
 
-                Spacer(
-                    modifier = Modifier.height(10.dp)
+                    modifier =
+                        Modifier.align(
+                            Alignment.CenterEnd
+                        )
+                ) {
+
+                    Icon(
+                        imageVector = if (showPassword)
+                            Icons.Default.Visibility
+                        else
+                            Icons.Default.VisibilityOff,
+
+                        contentDescription = null,
+
+                        tint = Blanco
+                    )
+                }
+            }
+
+            Row(
+                verticalAlignment =
+                    Alignment.CenterVertically
+            ) {
+
+                Checkbox(
+                    checked = savePassword,
+
+                    onCheckedChange = {
+                        savePassword = it
+                    },
+
+                    colors =
+                        CheckboxDefaults.colors(
+                            checkedColor =
+                                Amarillo,
+
+                            checkmarkColor =
+                                Fondo
+                        )
                 )
 
                 Text(
-                    text = "LESSION",
-                    color = Amarillo,
-                    fontSize = 29.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    text = t.savePassword,
+                    color = Blanco,
+                    fontSize = 15.sp
                 )
+            }
 
-                Spacer(
-                    modifier = Modifier.height(30.dp)
-                )
+            Spacer(
+                Modifier.height(10.dp)
+            )
 
-                LessionField(
-                    value = username,
-                    onValueChange = {
-                        username = it
-                    },
-                    hint = "Username or email"
-                )
-
-                Spacer(
-                    modifier = Modifier.height(14.dp)
-                )
-
-                Box {
-
-                    LessionField(
-                        value = password,
-                        onValueChange = {
-                            password = it
-                        },
-                        hint = "Password",
-                        password = !showPassword
-                    )
-
-                    IconButton(
-                        onClick = {
-                            showPassword = !showPassword
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                    ) {
-
-                        Icon(
-                            imageVector =
-                                if (showPassword)
-                                    Icons.Default.Visibility
-                                else
-                                    Icons.Default.VisibilityOff,
-                            contentDescription = null,
-                            tint = Gris
-                        )
-                    }
-                }
-
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment =
-                        Alignment.CenterVertically
-                ) {
-
-                    Checkbox(
-                        checked = savePassword,
-                        onCheckedChange = {
-                            savePassword = it
-                        },
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = Amarillo,
-                            checkmarkColor = Fondo
-                        )
-                    )
-
-                    Text(
-                        text = "Guardar contraseña",
-                        color = Blanco,
-                        fontSize = 15.sp
-                    )
-                }
-
-                Spacer(
-                    modifier = Modifier.height(15.dp)
-                )
+                val coroutineScope = rememberCoroutineScope()
 
                 SmallPurpleButton(
-                    text = "LOGIN",
-                    onClick = {
-
-                        val savedUser =
-                            preferences.getString(
-                                "username",
-                                null
-                            )
-
-                        val savedPassword =
-                            preferences.getString(
-                                "password",
-                                null
-                            )
-
-                        if (
-                            username.isBlank() ||
-                            password.isBlank()
-                        ) {
-
-                            Toast.makeText(
-                                context,
-                                "Completa todos los campos",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            return@SmallPurpleButton
-                        }
-
-                        if (
-                            savedUser == null ||
-                            savedPassword == null
-                        ) {
-
-                            Toast.makeText(
-                                context,
-                                "Primero debes crear una cuenta",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            return@SmallPurpleButton
-                        }
-
-                        if (
-                            username != savedUser ||
-                            password != savedPassword
-                        ) {
-
-                            Toast.makeText(
-                                context,
-                                "Usuario o contraseña incorrectos",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            return@SmallPurpleButton
-                        }
-
-                        preferences.edit()
-                            .putBoolean(
-                                "savePassword",
-                                savePassword
-                            )
-                            .apply()
-
-                        onSuccess(username)
-                    }
-                )
-
-                Spacer(
-                    modifier = Modifier.height(15.dp)
-                )
-
-                TextButton(
-                    onClick = onBack
+                    text = t.login
                 ) {
 
-                    Text(
-                        text = "Volver",
-                        color = Amarillo,
-                        fontSize = 16.sp
-                    )
+                    if (
+                        username.isBlank() ||
+                        password.isBlank()
+                    ) {
+
+                        Toast.makeText(
+                            context,
+                            if (
+                                languageForMessage(t)
+                            )
+                                "Completa todos los campos"
+                            else
+                                "Complete all fields",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        return@SmallPurpleButton
+                    }
+
+                    coroutineScope.launch {
+                        val result = iniciarSesion(username, password)
+                        if (result.isSuccess) {
+                            preferences.edit {
+                                putBoolean(
+                                    "savePassword",
+                                    savePassword
+                                )
+                                if (savePassword) {
+                                    putString("username", username)
+                                    putString("password", password)
+                                }
+                            }
+                            onSuccess(username)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                if (languageForMessage(t))
+                                    "Error al iniciar sesión: ${result.exceptionOrNull()?.message}"
+                                else
+                                    "Login error: ${result.exceptionOrNull()?.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
+
+            TextButton(
+                onClick = onBack
+            ) {
+
+                Text(
+                    text = t.back,
+                    color = Amarillo,
+                    fontSize = 16.sp
+                )
             }
         }
     }
 }
 
-/* ============================================================
-   SIGN IN
-   ============================================================ */
+// ============================================================
+// SIGN IN
+// ============================================================
 
 @Composable
 private fun SignInScreen(
+    t: AppStrings,
     onBack: () -> Unit,
     onCreated: (ProfileData) -> Unit
 ) {
 
-    val context = LocalContext.current
+    val context =
+        androidx.compose.ui.platform.LocalContext.current
 
     var username by remember {
         mutableStateOf("")
@@ -605,7 +1192,7 @@ private fun SignInScreen(
         mutableStateOf("")
     }
 
-    var weeklyHours by remember {
+    var hours by remember {
         mutableStateOf("")
     }
 
@@ -613,103 +1200,91 @@ private fun SignInScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Fondo)
-            .padding(horizontal = 28.dp)
+            .padding(
+                horizontal = 25.dp
+            )
     ) {
 
         item {
 
             Spacer(
-                modifier = Modifier.height(18.dp)
+                Modifier.height(20.dp)
             )
 
             LessionLogo(
-                modifier = Modifier
+                Modifier
                     .fillMaxWidth()
-                    .height(100.dp)
+                    .height(110.dp)
             )
 
             Text(
-                text = "Configura tu perfil",
-                modifier = Modifier.fillMaxWidth(),
+                text = t.configureProfile,
                 color = Blanco,
-                fontSize = 23.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 21.sp,
+                fontWeight =
+                    FontWeight.Bold
             )
 
             Spacer(
-                modifier = Modifier.height(20.dp)
+                Modifier.height(15.dp)
             )
 
-            /* ACCESO */
-
             LessionField(
-                value = username,
-                onValueChange = {
-                    username = it
-                },
-                hint = "Username or email"
+                username,
+                { username = it },
+                t.username
             )
 
             Spacer(
-                modifier = Modifier.height(10.dp)
+                Modifier.height(8.dp)
             )
 
             LessionField(
-                value = password,
-                onValueChange = {
-                    password = it
-                },
-                hint = "Password",
+                password,
+                { password = it },
+                t.password,
                 password = true
             )
 
             Spacer(
-                modifier = Modifier.height(10.dp)
+                Modifier.height(8.dp)
             )
 
             LessionField(
-                value = confirmPassword,
-                onValueChange = {
-                    confirmPassword = it
-                },
-                hint = "Confirmar contraseña",
+                confirmPassword,
+                { confirmPassword = it },
+                t.confirmPassword,
                 password = true
             )
 
             Spacer(
-                modifier = Modifier.height(20.dp)
+                Modifier.height(15.dp)
             )
-
-            /* PERFIL */
 
             ProfileHeader()
 
             Spacer(
-                modifier = Modifier.height(15.dp)
+                Modifier.height(13.dp)
             )
 
             LessionField(
-                value = name,
-                onValueChange = {
-                    name = it
-                },
-                hint = "Nombre"
+                name,
+                { name = it },
+                t.name
             )
 
             Spacer(
-                modifier = Modifier.height(9.dp)
+                Modifier.height(8.dp)
             )
 
             LessionField(
-                value = birthDate,
-                onValueChange = {
-                    birthDate = it
-                },
-                hint = "Fecha de nacimiento"
+                birthDate,
+                { birthDate = it },
+                t.birthDate
             )
 
             Spacer(
-                modifier = Modifier.height(9.dp)
+                Modifier.height(8.dp)
             )
 
             Row(
@@ -718,206 +1293,226 @@ private fun SignInScreen(
             ) {
 
                 LessionField(
-                    value = weight,
-                    onValueChange = {
-                        weight = it
-                    },
-                    hint = "Peso",
-                    modifier = Modifier.weight(1f)
+                    weight,
+                    { weight = it },
+                    t.weight,
+                    Modifier.weight(1f)
                 )
 
                 LessionField(
-                    value = height,
-                    onValueChange = {
-                        height = it
-                    },
-                    hint = "Altura",
-                    modifier = Modifier.weight(1f)
+                    height,
+                    { height = it },
+                    t.height,
+                    Modifier.weight(1f)
                 )
             }
 
             Spacer(
-                modifier = Modifier.height(9.dp)
+                Modifier.height(8.dp)
             )
 
             DropdownField(
-                value = gender,
-                hint = "Género",
-                options = listOf(
-                    "Masculino",
-                    "Femenino",
-                    "Prefiero no decirlo"
-                ),
-                onSelected = {
-                    gender = it
-                }
-            )
+                gender,
+                t.gender,
+
+                listOf(
+                    t.male,
+                    t.female,
+                    t.preferNot
+                )
+            ) {
+                gender = it
+            }
 
             Spacer(
-                modifier = Modifier.height(9.dp)
+                Modifier.height(8.dp)
             )
 
             DropdownField(
-                value = bodyType,
-                hint = "Tipo de cuerpo",
-                options = listOf(
-                    "Hectomorfo",
-                    "Endomorfo",
-                    "Mesomorfo"
-                ),
-                onSelected = {
-                    bodyType = it
-                }
-            )
+                bodyType,
+                t.bodyType,
+
+                listOf(
+                    t.ectomorph,
+                    t.endomorph,
+                    t.mesomorph
+                )
+            ) {
+                bodyType = it
+            }
 
             Spacer(
-                modifier = Modifier.height(9.dp)
+                Modifier.height(10.dp)
             )
 
             Text(
-                text = "Opcionales",
+                text = t.optional,
                 color = Gris,
                 fontSize = 14.sp
             )
 
             Spacer(
-                modifier = Modifier.height(5.dp)
+                Modifier.height(5.dp)
             )
 
             LessionField(
-                value = sport,
-                onValueChange = {
-                    sport = it
-                },
-                hint = "Deporte que realizas"
+                sport,
+                { sport = it },
+                t.sport
             )
 
             Spacer(
-                modifier = Modifier.height(9.dp)
+                Modifier.height(8.dp)
             )
 
             LessionField(
-                value = weeklyHours,
-                onValueChange = {
-                    weeklyHours = it
-                },
-                hint = "Horas semanales de actividad"
+                hours,
+                { hours = it },
+                t.weeklyHours
             )
 
             Spacer(
-                modifier = Modifier.height(20.dp)
+                Modifier.height(18.dp)
             )
+
+            val coroutineScope = rememberCoroutineScope()
 
             SmallPurpleButton(
-                text = "SAVE",
-                onClick = {
+                t.save
+            ) {
 
-                    if (
-                        username.isBlank() ||
-                        password.isBlank() ||
-                        confirmPassword.isBlank() ||
-                        name.isBlank() ||
-                        birthDate.isBlank() ||
-                        weight.isBlank() ||
-                        height.isBlank() ||
-                        gender.isBlank() ||
-                        bodyType.isBlank() ||
-                        sport.isBlank() ||
-                        weeklyHours.isBlank()
-                    ) {
+                if (
+                    username.isBlank() ||
+                    password.isBlank() ||
+                    confirmPassword.isBlank() ||
+                    name.isBlank() ||
+                    birthDate.isBlank() ||
+                    weight.isBlank() ||
+                    height.isBlank() ||
+                    gender.isBlank() ||
+                    bodyType.isBlank() ||
+                    sport.isBlank() ||
+                    hours.isBlank()
+                ) {
 
-                        Toast.makeText(
-                            context,
-                            "Completa todos los campos",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    Toast.makeText(
+                        context,
+                        "Completa todos los campos",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
-                        return@SmallPurpleButton
-                    }
-
-                    if (password != confirmPassword) {
-
-                        Toast.makeText(
-                            context,
-                            "Las contraseñas no coinciden",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        return@SmallPurpleButton
-                    }
-
-                    if (password.length < 6) {
-
-                        Toast.makeText(
-                            context,
-                            "La contraseña debe tener mínimo 6 caracteres",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        return@SmallPurpleButton
-                    }
-
-                    context
-                        .getSharedPreferences(
-                            "lession",
-                            Context.MODE_PRIVATE
-                        )
-                        .edit()
-                        .putString(
-                            "username",
-                            username
-                        )
-                        .putString(
-                            "password",
-                            password
-                        )
-                        .apply()
-
-                    val newProfile = ProfileData(
-                        name = name,
-                        birthDate = birthDate,
-                        weight = weight,
-                        height = height,
-                        gender = gender,
-                        bodyType = bodyType,
-                        sport = sport,
-                        weeklyHours = weeklyHours
-                    )
-
-                    saveProfile(context, newProfile)
-
-                    onCreated(newProfile)
+                    return@SmallPurpleButton
                 }
-            )
 
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
+                if (
+                    password != confirmPassword
+                ) {
+
+                    Toast.makeText(
+                        context,
+                        "Las contraseñas no coinciden",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return@SmallPurpleButton
+                }
+
+                if (
+                    password.length < 6
+                ) {
+
+                    Toast.makeText(
+                        context,
+                        "La contraseña debe tener mínimo 6 caracteres",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return@SmallPurpleButton
+                }
+
+                coroutineScope.launch {
+                    val names = name.split(" ", limit = 2)
+                    val nombre = names.getOrNull(0) ?: ""
+                    val apellido = names.getOrNull(1) ?: ""
+
+                    val result = registrarUsuario(username, password, nombre, apellido)
+
+                    if (result.isSuccess) {
+                        val newProfile = ProfileData(
+                            name,
+                            birthDate,
+                            weight,
+                            height,
+                            gender,
+                            bodyType,
+                            sport,
+                            hours,
+                            ""
+                        )
+
+                        guardarPerfil(
+                            nombre = nombre,
+                            apellido = apellido,
+                            edad = birthDate.toIntOrNull(),
+                            genero = gender,
+                            tipoCuerpo = bodyType,
+                            altura = height.toDoubleOrNull(),
+                            peso = weight.toDoubleOrNull(),
+                            objetivo = sport,
+                            nivelActividad = hours
+                        )
+
+                        onCreated(newProfile)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Error al registrar: ${result.exceptionOrNull()?.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
 
             TextButton(
                 onClick = onBack
             ) {
 
                 Text(
-                    text = "Volver",
-                    color = Amarillo,
-                    fontSize = 16.sp
+                    text = t.back,
+                    color = Amarillo
                 )
             }
 
             Spacer(
-                modifier = Modifier.height(35.dp)
+                Modifier.height(30.dp)
             )
         }
     }
 }
 
-/* ============================================================
-   PROFILE
-   ============================================================ */
+// ============================================================
+// DATOS PERFIL
+// ============================================================
+
+private data class ProfileData(
+    val name: String = "",
+    val birthDate: String = "",
+    val weight: String = "",
+    val height: String = "",
+    val gender: String = "",
+    val bodyType: String = "",
+    val sport: String = "",
+    val weeklyHours: String = "",
+    val avatar: String = ""
+)
+
+// ============================================================
+// PERFIL
+// ============================================================
 
 @Composable
 private fun ProfileScreen(
+    t: AppStrings,
     profile: ProfileData,
     onProfileChanged: (ProfileData) -> Unit,
     onContinue: () -> Unit,
@@ -937,203 +1532,207 @@ private fun ProfileScreen(
         mutableStateOf(profile.avatar)
     }
 
-    val avatarPicker =
+    val picker =
         rememberLauncherForActivityResult(
             ActivityResultContracts.GetContent()
-        ) { uri: Uri? ->
+        ) { uri ->
 
             if (uri != null) {
+
                 avatar = uri.toString()
 
                 onProfileChanged(
                     profile.copy(
-                        avatar = uri.toString()
+                        avatar = avatar
                     )
                 )
             }
         }
 
     Column(
-        modifier = Modifier
+        Modifier
             .fillMaxSize()
             .background(Fondo)
     ) {
 
-        TopBar(
-            onMenu = onMenu
-        )
+        TopBar(onMenu)
 
         LazyColumn(
-            modifier = Modifier
+            Modifier
                 .fillMaxSize()
-                .padding(horizontal = 25.dp)
+                .padding(
+                    horizontal = 25.dp
+                )
         ) {
 
             item {
 
                 Spacer(
-                    modifier = Modifier.height(18.dp)
+                    Modifier.height(15.dp)
                 )
 
                 ProfileHeader(
                     avatar = avatar,
+
                     onAvatarClick = {
-                        avatarPicker.launch("image/*")
-                    }
+                        picker.launch(
+                            "image/*"
+                        )
+                    },
+
+                    addAvatarText =
+                        t.addAvatar
                 )
 
                 Spacer(
-                    modifier = Modifier.height(18.dp)
+                    Modifier.height(15.dp)
                 )
 
-                /* CAMPOS */
-
                 ProfileReadOnly(
-                    "Nombre",
+                    t.name,
                     profile.name
                 )
 
                 ProfileReadOnly(
-                    "Fecha de nacimiento",
+                    t.birthDate,
                     profile.birthDate
                 )
 
                 ProfileReadOnly(
-                    "Peso",
+                    t.weight,
                     profile.weight
                 )
 
                 ProfileReadOnly(
-                    "Altura",
+                    t.height,
                     profile.height
                 )
 
                 Spacer(
-                    modifier = Modifier.height(8.dp)
+                    Modifier.height(7.dp)
                 )
 
                 DropdownField(
-                    value = gender,
-                    hint = "Género",
-                    options = listOf(
-                        "Masculino",
-                        "Femenino",
-                        "Prefiero no decirlo"
-                    ),
-                    onSelected = {
-                        gender = it
+                    gender,
+                    t.gender,
 
-                        onProfileChanged(
-                            profile.copy(
-                                gender = it
-                            )
+                    listOf(
+                        t.male,
+                        t.female,
+                        t.preferNot
+                    )
+                ) {
+
+                    gender = it
+
+                    onProfileChanged(
+                        profile.copy(
+                            gender = it
                         )
-                    }
-                )
+                    )
+                }
 
                 Spacer(
-                    modifier = Modifier.height(9.dp)
+                    Modifier.height(8.dp)
                 )
 
                 DropdownField(
-                    value = bodyType,
-                    hint = "Tipo de cuerpo",
-                    options = listOf(
-                        "Hectomorfo",
-                        "Endomorfo",
-                        "Mesomorfo"
-                    ),
-                    onSelected = {
-                        bodyType = it
+                    bodyType,
+                    t.bodyType,
 
-                        onProfileChanged(
-                            profile.copy(
-                                bodyType = it
-                            )
+                    listOf(
+                        t.ectomorph,
+                        t.endomorph,
+                        t.mesomorph
+                    )
+                ) {
+
+                    bodyType = it
+
+                    onProfileChanged(
+                        profile.copy(
+                            bodyType = it
                         )
-                    }
-                )
+                    )
+                }
 
                 Spacer(
-                    modifier = Modifier.height(10.dp)
+                    Modifier.height(8.dp)
                 )
 
                 ProfileReadOnly(
-                    "Deporte que realizas",
+                    t.sport,
                     profile.sport
                 )
 
                 ProfileReadOnly(
-                    "Horas semanales de actividad",
+                    t.weeklyHours,
                     profile.weeklyHours
                 )
 
                 Spacer(
-                    modifier = Modifier.height(20.dp)
+                    Modifier.height(18.dp)
                 )
 
                 SmallPurpleButton(
-                    text = "SAVE",
-                    onClick = {
+                    t.save
+                ) {
 
-                        onProfileChanged(
-                            profile.copy(
-                                gender = gender,
-                                bodyType = bodyType,
-                                avatar = avatar
-                            )
+                    onProfileChanged(
+                        profile.copy(
+                            gender = gender,
+                            bodyType = bodyType,
+                            avatar = avatar
                         )
+                    )
 
-                        onContinue()
-                    }
-                )
+                    onContinue()
+                }
 
                 Spacer(
-                    modifier = Modifier.height(13.dp)
+                    Modifier.height(10.dp)
                 )
 
                 OutlinedButton(
                     onClick = onLogout,
-                    modifier = Modifier
+
+                    Modifier
                         .fillMaxWidth()
-                        .height(48.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Rojo
-                    ),
-                    border = ButtonDefaults.outlinedButtonBorder(true)
+                        .height(48.dp)
                 ) {
 
                     Icon(
-                        Icons.Default.PowerSettingsNew,
+                        imageVector = Icons.Default.PowerSettingsNew,
                         contentDescription = null,
                         tint = Rojo
                     )
 
                     Spacer(
-                        modifier = Modifier.width(7.dp)
+                        Modifier.width(7.dp)
                     )
 
-                    Text(
-                        "Cerrar sesión",
-                        color = Rojo,
-                        fontSize = 16.sp
-                    )
+                Text(
+                    text = t.logout,
+                    color = Rojo,
+                    fontSize = 16.sp
+                )
                 }
 
                 Spacer(
-                    modifier = Modifier.height(30.dp)
+                    Modifier.height(30.dp)
                 )
             }
         }
     }
 }
 
-/* ============================================================
-   DASHBOARD
-   ============================================================ */
+// ============================================================
+// DASHBOARD
+// ============================================================
 
 @Composable
 private fun DashboardScreen(
+    t: AppStrings,
     onMenu: () -> Unit
 ) {
 
@@ -1146,167 +1745,145 @@ private fun DashboardScreen(
     }
 
     Column(
-        modifier = Modifier
+        Modifier
             .fillMaxSize()
             .background(Fondo)
     ) {
 
-        TopBar(
-            onMenu = onMenu
-        )
+        TopBar(onMenu)
 
         LazyColumn(
-            modifier = Modifier
+            Modifier
                 .fillMaxSize()
                 .padding(
-                    start = 18.dp,
-                    end = 18.dp,
-                    top = 10.dp
+                    18.dp
                 )
         ) {
 
             item {
 
-                /* TARJETA CORPORAL */
-
                 Card(
-                    modifier = Modifier
+                    Modifier
                         .fillMaxWidth()
                         .border(
                             2.dp,
                             Cian,
                             RoundedCornerShape(23.dp)
                         ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Morado
-                    ),
-                    shape = RoundedCornerShape(23.dp)
+
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor =
+                                Morado
+                        ),
+
+                    shape =
+                        RoundedCornerShape(23.dp)
                 ) {
 
                     Column(
-                        modifier = Modifier.padding(15.dp)
+                        Modifier.padding(
+                            15.dp
+                        )
                     ) {
 
                         Row(
                             horizontalArrangement =
-                                Arrangement.spacedBy(12.dp)
+                                Arrangement.spacedBy(
+                                    12.dp
+                                )
                         ) {
 
-                            DashboardLegend(
+                            Legend(
                                 Amarillo,
-                                "Atención"
+                                t.attention
                             )
 
-                            DashboardLegend(
+                            Legend(
                                 Naranja,
-                                "Esfuerzo elevado"
+                                t.highEffort
                             )
 
-                            DashboardLegend(
+                            Legend(
                                 Rojo,
-                                "Riesgo elevado"
+                                t.highRisk
                             )
                         }
 
-                        Spacer(
-                            modifier = Modifier.height(8.dp)
-                        )
-
                         Box(
-                            modifier = Modifier
+                            Modifier
                                 .fillMaxWidth()
-                                .height(245.dp)
+                                .height(250.dp)
                         ) {
 
                             Icon(
-                                Icons.Default.Person,
+                                imageVector = Icons.Default.Person,
                                 contentDescription = null,
-                                tint = Color.LightGray,
+
+                                tint =
+                                    Color.LightGray,
+
                                 modifier = Modifier
-                                    .size(185.dp)
-                                    .align(Alignment.Center)
+                                    .size(190.dp)
+                                    .align(
+                                        Alignment.Center
+                                    )
                             )
 
-                            /* 97% */
-
-                            Column(
-                                modifier = Modifier
+                            Box(
+                                Modifier
+                                    .size(28.dp)
+                                    .clip(
+                                        CircleShape
+                                    )
+                                    .background(
+                                        Color(
+                                            0xFFED6A70
+                                        )
+                                    )
                                     .align(
                                         Alignment.CenterEnd
                                     )
-                            ) {
-
-                                Text(
-                                    "Nivel de",
-                                    color = Blanco,
-                                    fontSize = 12.sp
-                                )
-
-                                Text(
-                                    "esfuerzo",
-                                    color = Blanco,
-                                    fontSize = 12.sp
-                                )
-
-                                Text(
-                                    "97%",
-                                    color = Amarillo,
-                                    fontSize = 19.sp,
-                                    fontWeight =
-                                        FontWeight.Bold
-                                )
-                            }
-
-                            /* 76% */
+                            )
 
                             Column(
-                                modifier = Modifier
+                                Modifier
                                     .align(
-                                        Alignment.BottomStart
+                                        Alignment.CenterEnd
                                     )
                                     .padding(
-                                        start = 45.dp
+                                        end = 3.dp
                                     )
                             ) {
 
                                 Text(
-                                    "Nivel de",
+                                    text = t.effortLevel,
                                     color = Blanco,
-                                    fontSize = 12.sp
+                                    fontSize = 10.sp
                                 )
 
                                 Text(
-                                    "esfuerzo",
-                                    color = Blanco,
-                                    fontSize = 12.sp
-                                )
-
-                                Text(
-                                    "76%",
+                                    text = "97%",
                                     color = Amarillo,
-                                    fontSize = 19.sp,
+                                    fontSize = 20.sp,
                                     fontWeight =
                                         FontWeight.Bold
                                 )
                             }
 
-                            Text(
-                                "TÚ",
-                                color = Amarillo,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier
+
+                                Modifier
                                     .align(
                                         Alignment.BottomCenter
                                     )
-                            )
 
                             Icon(
-                                Icons.Default.Warning,
+                                imageVector = Icons.Default.Warning,
                                 contentDescription = null,
                                 tint = Amarillo,
+
                                 modifier = Modifier
-                                    .size(38.dp)
+                                    .size(37.dp)
                                     .align(
                                         Alignment.BottomEnd
                                     )
@@ -1316,32 +1893,30 @@ private fun DashboardScreen(
                 }
 
                 Spacer(
-                    modifier = Modifier.height(15.dp)
+                    Modifier.height(14.dp)
                 )
 
-                /* ESTADO CORPORAL */
-
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Morado
-                    ),
-                    shape = RoundedCornerShape(23.dp)
+                    Modifier.fillMaxWidth(),
+
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor =
+                                Morado
+                        ),
+
+                    shape =
+                        RoundedCornerShape(23.dp)
                 ) {
 
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        Modifier.padding(15.dp)
                     ) {
 
                         Text(
-                            "Estado corporal actual",
+                            text = t.currentBody,
                             color = Blanco,
-                            fontSize = 19.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-
-                        Spacer(
-                            modifier = Modifier.height(6.dp)
+                            fontSize = 19.sp
                         )
 
                         Row(
@@ -1350,26 +1925,26 @@ private fun DashboardScreen(
                         ) {
 
                             Text(
-                                "85%",
+                                text = "85%",
                                 color = Amarillo,
-                                fontSize = 24.sp,
+                                fontSize = 25.sp,
                                 fontWeight =
                                     FontWeight.Bold
                             )
 
                             Spacer(
-                                modifier = Modifier.width(8.dp)
+                                Modifier.width(7.dp)
                             )
 
                             Text(
-                                "Esfuerzo alto",
+                                text = t.effortHigh,
                                 color = Blanco,
                                 fontSize = 17.sp
                             )
                         }
 
                         Spacer(
-                            modifier = Modifier.height(12.dp)
+                            Modifier.height(10.dp)
                         )
 
                         Row(
@@ -1377,25 +1952,21 @@ private fun DashboardScreen(
                                 Arrangement.spacedBy(10.dp)
                         ) {
 
-                            DashboardMetric(
-                                modifier =
-                                    Modifier.weight(1f),
-                                title =
-                                    "Frecuencia cardíaca",
-                                value = "154 BPM"
+                            Metric(
+                                Modifier.weight(1f),
+                                t.heartRate,
+                                "154 BPM"
                             )
 
-                            DashboardMetric(
-                                modifier =
-                                    Modifier.weight(1f),
-                                title =
-                                    "SpO₂ (Oxígeno en sangre)",
-                                value = "97%"
+                            Metric(
+                                Modifier.weight(1f),
+                                t.oxygen,
+                                "97%"
                             )
                         }
 
                         Spacer(
-                            modifier = Modifier.height(10.dp)
+                            Modifier.height(10.dp)
                         )
 
                         Row(
@@ -1403,101 +1974,101 @@ private fun DashboardScreen(
                                 Arrangement.spacedBy(10.dp)
                         ) {
 
-                            DashboardMetric(
-                                modifier =
-                                    Modifier.weight(1f),
-                                title = "Temperatura",
-                                value = "36,8 °C"
+                            Metric(
+                                Modifier.weight(1f),
+                                t.temperature,
+                                "36,8 °C"
                             )
 
-                            DashboardMetric(
-                                modifier =
-                                    Modifier.weight(1f),
-                                title =
-                                    "Actividad muscular",
-                                value = "Alta"
+                            Metric(
+                                Modifier.weight(1f),
+                                t.muscleActivity,
+                                t.high
                             )
                         }
 
                         Spacer(
-                            modifier = Modifier.height(10.dp)
+                            Modifier.height(10.dp)
                         )
 
-                        DashboardMetric(
-                            modifier =
-                                Modifier.fillMaxWidth(),
-                            title = "Movimiento",
-                            value = "Normal"
+                        Metric(
+                            Modifier.fillMaxWidth(),
+                            t.movement,
+                            t.normal
                         )
                     }
                 }
 
                 Spacer(
-                    modifier = Modifier.height(15.dp)
+                    Modifier.height(14.dp)
                 )
 
-                /* CONEXIONES */
-
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Morado
-                    ),
-                    shape = RoundedCornerShape(20.dp)
+                    Modifier.fillMaxWidth(),
+
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor =
+                                Morado
+                        ),
+
+                    shape =
+                        RoundedCornerShape(20.dp)
                 ) {
 
                     Column(
-                        modifier = Modifier.padding(15.dp)
+                        Modifier.padding(15.dp)
                     ) {
 
                         Text(
-                            "Conecta la banda",
+                            text = t.connectBand,
                             color = Blanco,
                             fontSize = 19.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight =
+                                FontWeight.Bold
                         )
 
                         ConnectionLine(
                             icon = Icons.Default.Bluetooth,
-                            title = "Bluetooth",
-                            enabled = bluetooth,
-                            onChange = {
-                                bluetooth = it
-                            }
-                        )
+                            title = t.bluetooth,
+                            enabled = bluetooth
+                        ) {
+                            bluetooth = it
+                        }
 
                         ConnectionLine(
                             icon = Icons.Default.Wifi,
-                            title = "Wi-Fi",
-                            enabled = wifi,
-                            onChange = {
-                                wifi = it
-                            }
-                        )
+                            title = t.wifi,
+                            enabled = wifi
+                        ) {
+                            wifi = it
+                        }
                     }
                 }
 
                 Spacer(
-                    modifier = Modifier.height(30.dp)
+                    Modifier.height(30.dp)
                 )
             }
         }
     }
 }
 
-/* ============================================================
-   MENU
-   ============================================================ */
+// ============================================================
+// MENU
+// ============================================================
 
 @Composable
 private fun MenuScreen(
+    t: AppStrings,
     onHome: () -> Unit,
     onProfile: () -> Unit,
+    onSettings: () -> Unit,
     onLogout: () -> Unit
 ) {
 
     Column(
-        modifier = Modifier
+        Modifier
             .fillMaxSize()
             .background(Fondo)
     ) {
@@ -1507,52 +2078,714 @@ private fun MenuScreen(
         )
 
         Spacer(
-            modifier = Modifier.height(15.dp)
+            Modifier.height(10.dp)
         )
 
         MenuItem(
-            "Inicio",
+            t.home,
             Icons.Default.Home,
             onHome
         )
 
         MenuItem(
-            "Perfil",
+            t.profile,
             Icons.Default.Person,
             onProfile
         )
 
         MenuItem(
-            "Configuración",
+            t.settings,
             Icons.Default.Settings,
-            {}
+            onSettings
         )
 
         MenuItem(
-            "Sobre nosotros",
+            t.aboutUs,
             Icons.Default.Info,
             {}
         )
 
         Spacer(
-            modifier = Modifier.weight(1f)
+            Modifier.weight(1f)
         )
 
         MenuItem(
-            "Cerrar sesión",
+            t.logout,
             Icons.Default.PowerSettingsNew,
             onLogout
         )
 
         Spacer(
-            modifier = Modifier.height(25.dp)
+            Modifier.height(25.dp)
         )
     }
 }
 
-/* ============================================================
-   COMPONENTES VISUALES
-   ============================================================ */
+// ============================================================
+// CONFIGURACIÓN COMPLETA
+// ============================================================
+
+@Composable
+private fun SettingsScreen(
+    t: AppStrings,
+    language: AppLanguage,
+    onLanguageChange: (AppLanguage) -> Unit,
+    onBack: () -> Unit
+) {
+
+    var bluetooth by remember {
+        mutableStateOf(false)
+    }
+
+    var wifi by remember {
+        mutableStateOf(false)
+    }
+
+    var effortAlerts by remember {
+        mutableStateOf(true)
+    }
+
+    var heartAlerts by remember {
+        mutableStateOf(true)
+    }
+
+    var oxygenAlerts by remember {
+        mutableStateOf(true)
+    }
+
+    var temperatureAlerts by remember {
+        mutableStateOf(true)
+    }
+
+    var vibration by remember {
+        mutableStateOf(true)
+    }
+
+    var sound by remember {
+        mutableStateOf(false)
+    }
+
+    var automaticUpdate by remember {
+        mutableStateOf(true)
+    }
+
+    var updateFrequency by remember {
+        mutableStateOf(t.seconds15)
+    }
+
+    var textSize by remember {
+        mutableStateOf(t.normalSize)
+    }
+
+    var animations by remember {
+        mutableStateOf(true)
+    }
+
+    var percentages by remember {
+        mutableStateOf(true)
+    }
+
+    var heartRate by remember {
+        mutableStateOf(true)
+    }
+
+    var oxygen by remember {
+        mutableStateOf(true)
+    }
+
+    var temperature by remember {
+        mutableStateOf(true)
+    }
+
+    var movement by remember {
+        mutableStateOf(true)
+    }
+
+    var muscle by remember {
+        mutableStateOf(true)
+    }
+
+    var effort by remember {
+        mutableStateOf(true)
+    }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Fondo)
+    ) {
+
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(62.dp)
+                .background(MoradoClaro)
+                .padding(
+                    horizontal = 7.dp
+                ),
+
+            verticalAlignment =
+                Alignment.CenterVertically
+        ) {
+
+            IconButton(
+                onClick = onBack
+            ) {
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = Blanco
+                )
+            }
+
+            LessionLogo(
+                Modifier
+                    .width(115.dp)
+                    .height(52.dp)
+            )
+        }
+
+        LazyColumn(
+            Modifier
+                .fillMaxSize()
+                .padding(
+                    horizontal = 17.dp
+                )
+        ) {
+
+            item {
+
+                // --------------------------------------------
+                // ENTRENAMIENTO
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "🏃",
+                    t.trainingPreferences
+                )
+
+                SettingsCard {
+
+                    SettingsRow(
+                        t.mainSport,
+                        "Perfil"
+                    )
+
+                    SettingsRow(
+                        t.trainingLevel,
+                        t.intermediate
+                    )
+
+                    SettingsRow(
+                        t.objective,
+                        t.performance
+                    )
+
+                    SettingsRow(
+                        t.weeklyHours,
+                        "Perfil"
+                    )
+
+                    SettingsRow(
+                        t.defaultIntensity,
+                        t.high
+                    )
+                }
+
+                // --------------------------------------------
+                // ALERTAS
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "🩺",
+                    t.alertsSecurity
+                )
+
+                SettingsCard {
+
+                    SettingsSwitch(
+                        t.effortAlerts,
+                        effortAlerts
+                    ) {
+                        effortAlerts = it
+                    }
+
+                    SettingsSwitch(
+                        t.heartAlerts,
+                        heartAlerts
+                    ) {
+                        heartAlerts = it
+                    }
+
+                    SettingsSwitch(
+                        t.oxygenAlerts,
+                        oxygenAlerts
+                    ) {
+                        oxygenAlerts = it
+                    }
+
+                    SettingsSwitch(
+                        t.temperatureAlerts,
+                        temperatureAlerts
+                    ) {
+                        temperatureAlerts = it
+                    }
+
+                    SettingsSwitch(
+                        t.vibration,
+                        vibration
+                    ) {
+                        vibration = it
+                    }
+
+                    SettingsSwitch(
+                        t.alertSound,
+                        sound
+                    ) {
+                        sound = it
+                    }
+                }
+
+                // --------------------------------------------
+                // BANDA
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "📡",
+                    t.bandConnection
+                )
+
+                SettingsCard {
+
+                    ConnectionSetting(
+                        icon = Icons.Default.Bluetooth,
+                        title = t.bluetooth,
+                        status = if (bluetooth)
+                            t.connected
+                        else
+                            t.disconnected,
+                        enabled = bluetooth
+                    ) {
+                        bluetooth = it
+                    }
+
+                    ConnectionSetting(
+                        icon = Icons.Default.Wifi,
+                        title = t.wifi,
+                        status = if (wifi)
+                            t.connected
+                        else
+                            t.disconnected,
+                        enabled = wifi
+                    ) {
+                        wifi = it
+                    }
+
+                    SettingsButton(
+                        t.searchBand
+                    )
+
+                    SettingsButton(
+                        t.syncNow
+                    )
+
+                    SettingsRow(
+                        t.bandName,
+                        "LESSION Band 01"
+                    )
+
+                    SettingsRow(
+                        t.battery,
+                        "82%"
+                    )
+
+                    SettingsRow(
+                        t.lastSync,
+                        "2 min"
+                    )
+
+                    SettingsButton(
+                        t.unpairBand,
+                        true
+                    )
+                }
+
+                // --------------------------------------------
+                // DATOS
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "📊",
+                    t.dataMeasurements
+                )
+
+                SettingsCard {
+
+                    SettingsSwitch(
+                        t.heartRate,
+                        heartRate
+                    ) {
+                        heartRate = it
+                    }
+
+                    SettingsSwitch(
+                        t.oxygen,
+                        oxygen
+                    ) {
+                        oxygen = it
+                    }
+
+                    SettingsSwitch(
+                        t.temperature,
+                        temperature
+                    ) {
+                        temperature = it
+                    }
+
+                    SettingsSwitch(
+                        t.movement,
+                        movement
+                    ) {
+                        movement = it
+                    }
+
+                    SettingsSwitch(
+                        t.muscleActivity,
+                        muscle
+                    ) {
+                        muscle = it
+                    }
+
+                    SettingsSwitch(
+                        t.effortLevel,
+                        effort
+                    ) {
+                        effort = it
+                    }
+
+                    SettingsSwitch(
+                        t.automaticUpdate,
+                        automaticUpdate
+                    ) {
+                        automaticUpdate = it
+                    }
+
+                    SettingsDropdown(
+                        t.updateFrequency,
+                        updateFrequency,
+
+                        listOf(
+                            t.seconds5,
+                            t.seconds15,
+                            t.seconds30,
+                            t.manual
+                        )
+                    ) {
+                        updateFrequency = it
+                    }
+                }
+
+                // --------------------------------------------
+                // APARIENCIA
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "🎨",
+                    t.appearance
+                )
+
+                SettingsCard {
+
+                    SettingsRow(
+                        t.theme,
+                        t.lessionTheme
+                    )
+
+                    SettingsDropdown(
+                        t.textSize,
+                        textSize,
+
+                        listOf(
+                            t.normalSize,
+                            t.largeSize
+                        )
+                    ) {
+                        textSize = it
+                    }
+
+                    SettingsSwitch(
+                        t.animations,
+                        animations
+                    ) {
+                        animations = it
+                    }
+
+                    SettingsSwitch(
+                        t.percentages,
+                        percentages
+                    ) {
+                        percentages = it
+                    }
+                }
+
+                // --------------------------------------------
+                // IDIOMA
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "🌎",
+                    t.language
+                )
+
+                SettingsCard {
+
+                    LanguageSelector(
+                        t = t,
+                        selected = language,
+                        onSelected =
+                            onLanguageChange
+                    )
+                }
+
+                // --------------------------------------------
+                // PRIVACIDAD
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "🔐",
+                    t.privacy
+                )
+
+                SettingsCard {
+
+                    SettingsSwitch(
+                        t.personalData,
+                        true
+                    ) {}
+
+                    SettingsSwitch(
+                        t.dataStorage,
+                        true
+                    ) {}
+
+                    SettingsButton(
+                        t.deleteHistory,
+                        true
+                    )
+
+                    SettingsButton(
+                        t.deleteAllData,
+                        true
+                    )
+                }
+
+                // --------------------------------------------
+                // ACERCA DE
+                // --------------------------------------------
+
+                SettingsTitle(
+                    "ℹ️",
+                    t.aboutLession
+                )
+
+                SettingsCard {
+
+                    Text(
+                        text = "LESSION",
+                        color = Amarillo,
+                        fontSize = 25.sp,
+                        fontWeight =
+                            FontWeight.Bold
+                    )
+
+                    Spacer(
+                        Modifier.height(5.dp)
+                    )
+
+                    Text(
+                        t.slogan,
+                        color = Blanco,
+                        fontSize = 15.sp
+                    )
+
+                    Spacer(
+                        Modifier.height(8.dp)
+                    )
+
+                    Text(
+                        t.version,
+                        color = Gris,
+                        fontSize = 14.sp
+                    )
+
+                    SettingsButton(
+                        t.support
+                    )
+
+                    SettingsButton(
+                        t.terms
+                    )
+
+                    SettingsButton(
+                        t.privacyPolicy
+                    )
+                }
+
+                Spacer(
+                    Modifier.height(35.dp)
+                )
+            }
+        }
+    }
+}
+
+// ============================================================
+// SELECTOR DE IDIOMA
+// ============================================================
+
+@Composable
+private fun LanguageSelector(
+    t: AppStrings,
+    selected: AppLanguage,
+    onSelected: (AppLanguage) -> Unit
+) {
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    val currentText =
+        when (selected) {
+
+            AppLanguage.ESPANOL ->
+                t.spanish
+
+            AppLanguage.ENGLISH ->
+                t.english
+
+            AppLanguage.ESPANOL_LATINO ->
+                t.latinSpanish
+        }
+
+    Box(
+        Modifier.fillMaxWidth()
+    ) {
+
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .clickable {
+                    expanded = true
+                }
+                .padding(
+                    vertical = 9.dp
+                ),
+
+            verticalAlignment =
+                Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = t.language,
+                color = Blanco,
+                fontSize = 17.sp,
+
+                modifier = Modifier.weight(1f)
+            )
+
+            Text(
+                currentText,
+                color = Amarillo,
+                fontSize = 16.sp
+            )
+
+            Icon(
+                imageVector = Icons.Default.ArrowDropDown,
+                contentDescription = null,
+                tint = Blanco
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+
+            onDismissRequest = {
+                expanded = false
+            },
+
+            modifier =
+                Modifier.background(
+                    Morado
+                )
+        ) {
+
+            DropdownMenuItem(
+
+                text = {
+                    Text(
+                        t.spanish,
+                        color = Blanco,
+                        fontSize = 16.sp
+                    )
+                },
+
+                onClick = {
+
+                    onSelected(
+                        AppLanguage.ESPANOL
+                    )
+
+                    expanded = false
+                }
+            )
+
+            DropdownMenuItem(
+
+                text = {
+                    Text(
+                        t.english,
+                        color = Blanco,
+                        fontSize = 16.sp
+                    )
+                },
+
+                onClick = {
+
+                    onSelected(
+                        AppLanguage.ENGLISH
+                    )
+
+                    expanded = false
+                }
+            )
+
+            DropdownMenuItem(
+
+                text = {
+                    Text(
+                        t.latinSpanish,
+                        color = Blanco,
+                        fontSize = 16.sp
+                    )
+                },
+
+                onClick = {
+
+                    onSelected(
+                        AppLanguage.ESPANOL_LATINO
+                    )
+
+                    expanded = false
+                }
+            )
+        }
+    }
+}
+
+// ============================================================
+// TOP BAR
+// ============================================================
 
 @Composable
 private fun TopBar(
@@ -1560,72 +2793,53 @@ private fun TopBar(
 ) {
 
     Row(
-        modifier = Modifier
+        Modifier
             .fillMaxWidth()
             .height(62.dp)
-            .background(MoradoClaro)
-            .padding(horizontal = 10.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .background(
+                MoradoClaro
+            )
+            .padding(
+                horizontal = 9.dp
+            ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
+        // ====================================================
+        // SOLO EL LOGO REAL
+        // NO HAY TEXTO "LESSION"
+        // ====================================================
+
         LessionLogo(
-            modifier = Modifier.size(45.dp)
+            Modifier
+                .width(115.dp)
+                .height(52.dp)
         )
 
         Spacer(
-            modifier = Modifier.width(5.dp)
-        )
-
-        Text(
-            "LESSION",
-            color = Amarillo,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.ExtraBold
-        )
-
-        Spacer(
-            modifier = Modifier.weight(1f)
+            Modifier.weight(1f)
         )
 
         IconButton(
             onClick = onMenu
         ) {
 
-            Icon(
-                Icons.Default.Menu,
-                contentDescription = "Menu",
-                tint = Blanco,
-                modifier = Modifier.size(30.dp)
-            )
+        Icon(
+            imageVector = Icons.Default.Menu,
+            contentDescription = null,
+            tint = Blanco,
+            modifier =
+                Modifier.size(30.dp)
+        )
         }
     }
 }
 
-@Composable
-private fun SmallPurpleButton(
-    text: String,
-    onClick: () -> Unit
-) {
-
-    Button(
-        onClick = onClick,
-        modifier = Modifier
-            .width(145.dp)
-            .height(45.dp),
-        shape = RoundedCornerShape(25.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MoradoClaro,
-            contentColor = Blanco
-        )
-    ) {
-
-        Text(
-            text = text,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
+// ============================================================
+// INPUT
+// ============================================================
 
 @Composable
 private fun LessionField(
@@ -1638,37 +2852,63 @@ private fun LessionField(
 
     OutlinedTextField(
         value = value,
-        onValueChange = onValueChange,
+
+        onValueChange =
+            onValueChange,
+
         modifier = modifier
             .fillMaxWidth()
             .height(55.dp),
+
         singleLine = true,
+
         placeholder = {
+
             Text(
-                hint,
+                text = hint,
                 color = Gris,
                 fontSize = 14.sp
             )
         },
-        textStyle = LocalTextStyle.current.copy(
-            color = Blanco,
-            fontSize = 16.sp
-        ),
+
+        textStyle =
+            androidx.compose.ui.text.TextStyle(
+                color = Blanco,
+                fontSize = 16.sp
+            ),
+
         visualTransformation =
             if (password)
                 PasswordVisualTransformation()
             else
                 VisualTransformation.None,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Cian,
-            unfocusedBorderColor = MoradoClaro,
-            focusedTextColor = Blanco,
-            unfocusedTextColor = Blanco,
-            cursorColor = Amarillo
-        ),
-        shape = RoundedCornerShape(20.dp)
+
+        colors =
+            OutlinedTextFieldDefaults.colors(
+                focusedBorderColor =
+                    Cian,
+
+                unfocusedBorderColor =
+                    MoradoClaro,
+
+                focusedTextColor =
+                    Blanco,
+
+                unfocusedTextColor =
+                    Blanco,
+
+                cursorColor =
+                    Amarillo
+            ),
+
+        shape =
+            RoundedCornerShape(20.dp)
     )
 }
+
+// ============================================================
+// DROPDOWN
+// ============================================================
 
 @Composable
 private fun DropdownField(
@@ -1683,43 +2923,60 @@ private fun DropdownField(
     }
 
     Box(
-        modifier = Modifier.fillMaxWidth()
+        Modifier.fillMaxWidth()
     ) {
 
         OutlinedTextField(
             value = value,
+
             onValueChange = {},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
+
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
+
             readOnly = true,
+
             placeholder = {
+
                 Text(
-                    hint,
+                    text = hint,
                     color = Gris,
                     fontSize = 14.sp
                 )
             },
+
             trailingIcon = {
+
                 Icon(
-                    Icons.Default.ArrowDropDown,
+                    imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = null,
                     tint = Blanco
                 )
             },
-            textStyle = LocalTextStyle.current.copy(
-                color = Blanco,
-                fontSize = 16.sp
-            ),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Cian,
-                unfocusedBorderColor = MoradoClaro
-            ),
-            shape = RoundedCornerShape(20.dp)
+
+            textStyle =
+                androidx.compose.ui.text.TextStyle(
+                    color = Blanco,
+                    fontSize = 16.sp
+                ),
+
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor =
+                        Cian,
+
+                    unfocusedBorderColor =
+                        MoradoClaro
+                ),
+
+            shape =
+                RoundedCornerShape(20.dp)
         )
 
         Box(
-            modifier = Modifier
+            Modifier
                 .matchParentSize()
                 .clickable {
                     expanded = true
@@ -1728,25 +2985,36 @@ private fun DropdownField(
 
         DropdownMenu(
             expanded = expanded,
+
             onDismissRequest = {
                 expanded = false
             },
-            modifier = Modifier.background(Morado)
+
+            modifier =
+                Modifier.background(
+                    Morado
+                )
         ) {
 
             options.forEach { option ->
 
                 DropdownMenuItem(
+
                     text = {
+
                         Text(
-                            option,
+                            text = option,
                             color = Blanco,
                             fontSize = 16.sp
                         )
                     },
+
                     onClick = {
 
-                        onSelected(option)
+                        onSelected(
+                            option
+                        )
+
                         expanded = false
                     }
                 )
@@ -1755,71 +3023,91 @@ private fun DropdownField(
     }
 }
 
+// ============================================================
+// AVATAR
+// ============================================================
+
 @Composable
 private fun ProfileHeader(
     avatar: String = "",
-    onAvatarClick: (() -> Unit)? = null
+    onAvatarClick: (() -> Unit)? = null,
+    addAvatarText: String = "Agregar avatar"
 ) {
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        Modifier.fillMaxWidth(),
+
+        horizontalAlignment =
+            Alignment.CenterHorizontally
     ) {
 
         Box(
-            modifier = Modifier
+            Modifier
                 .size(92.dp)
                 .clip(CircleShape)
-                .background(MoradoClaro)
+                .background(
+                    MoradoClaro
+                )
                 .border(
                     2.dp,
                     Amarillo,
                     CircleShape
                 )
                 .clickable(
-                    enabled = onAvatarClick != null
+                    enabled =
+                        onAvatarClick != null
                 ) {
+
                     onAvatarClick?.invoke()
                 },
-            contentAlignment = Alignment.Center
+
+            contentAlignment =
+                Alignment.Center
         ) {
 
-            if (avatar.isBlank()) {
+            if (avatar.isNotBlank()) {
 
-                Icon(
-                    Icons.Default.Person,
-                    contentDescription = null,
-                    tint = Blanco,
-                    modifier = Modifier.size(55.dp)
+                AsyncImage(
+                    model = avatar,
+                    contentDescription = "Avatar",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
 
             } else {
 
-                // Se mantiene el avatar dentro del mismo círculo
-                // del diseño original.
                 Icon(
-                    Icons.Default.Person,
+                    imageVector = Icons.Default.Person,
                     contentDescription = null,
-                    tint = Amarillo,
-                    modifier = Modifier.size(55.dp)
+                    tint = Blanco,
+                    modifier =
+                        Modifier.size(55.dp)
                 )
             }
         }
 
-        if (onAvatarClick != null) {
+        if (
+            onAvatarClick != null
+        ) {
 
             Spacer(
-                modifier = Modifier.height(6.dp)
+                Modifier.height(5.dp)
             )
 
             Text(
-                "Agregar avatar",
+                text = addAvatarText,
                 color = Amarillo,
                 fontSize = 14.sp
             )
         }
     }
 }
+
+// ============================================================
+// PROFILE READ ONLY
+// ============================================================
 
 @Composable
 private fun ProfileReadOnly(
@@ -1828,93 +3116,154 @@ private fun ProfileReadOnly(
 ) {
 
     Column(
-        modifier = Modifier
+        Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(
+                vertical = 4.dp
+            )
     ) {
 
         Text(
-            title,
+            text = title,
             color = Gris,
             fontSize = 13.sp
         )
 
         Text(
-            value,
+            text = value,
             color = Blanco,
             fontSize = 17.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight =
+                FontWeight.Medium
         )
     }
 }
 
+// ============================================================
+// BOTÓN
+// ============================================================
+
 @Composable
-private fun DashboardLegend(
+private fun SmallPurpleButton(
+    text: String,
+    onClick: () -> Unit
+) {
+
+    Button(
+        onClick = onClick,
+
+        Modifier
+            .width(150.dp)
+            .height(46.dp),
+
+        shape =
+            RoundedCornerShape(25.dp),
+
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor =
+                    MoradoClaro,
+
+                contentColor =
+                    Blanco
+            )
+    ) {
+
+        Text(
+            text = text,
+            fontSize = 15.sp,
+            fontWeight =
+                FontWeight.Bold
+        )
+    }
+}
+
+// ============================================================
+// DASHBOARD LEGEND
+// ============================================================
+
+@Composable
+private fun Legend(
     color: Color,
     text: String
 ) {
 
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
         Box(
-            modifier = Modifier
+            Modifier
                 .size(11.dp)
                 .clip(CircleShape)
                 .background(color)
         )
 
         Spacer(
-            modifier = Modifier.width(5.dp)
+            Modifier.width(5.dp)
         )
 
         Text(
-            text,
+            text = text,
             color = Blanco,
             fontSize = 11.sp
         )
     }
 }
 
+// ============================================================
+// MÉTRICA
+// ============================================================
+
 @Composable
-private fun DashboardMetric(
+private fun Metric(
     modifier: Modifier,
     title: String,
     value: String
 ) {
 
     Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MoradoClaro
-        ),
-        shape = RoundedCornerShape(14.dp)
+        modifier,
+
+        colors =
+            CardDefaults.cardColors(
+                containerColor =
+                    MoradoClaro
+            ),
+
+        shape =
+            RoundedCornerShape(14.dp)
     ) {
 
         Column(
-            modifier = Modifier.padding(11.dp)
+            Modifier.padding(11.dp)
         ) {
 
             Text(
-                title,
+                text = title,
                 color = Blanco,
                 fontSize = 12.sp
             )
 
             Spacer(
-                modifier = Modifier.height(5.dp)
+                Modifier.height(4.dp)
             )
 
             Text(
-                value,
+                text = value,
                 color = Amarillo,
                 fontSize = 21.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight =
+                    FontWeight.Bold
             )
         }
     }
 }
+
+// ============================================================
+// CONEXIÓN BANDA
+// ============================================================
 
 @Composable
 private fun ConnectionLine(
@@ -1925,27 +3274,38 @@ private fun ConnectionLine(
 ) {
 
     Row(
-        modifier = Modifier
+        Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(
+                vertical = 5.dp
+            ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
         Icon(
-            icon,
+            imageVector = icon,
             contentDescription = null,
-            tint = if (enabled) Amarillo else Blanco,
+
+            tint =
+                if (enabled)
+                    Amarillo
+                else
+                    Blanco,
+
             modifier = Modifier.size(27.dp)
         )
 
         Spacer(
-            modifier = Modifier.width(8.dp)
+            Modifier.width(8.dp)
         )
 
         Text(
-            title,
+            text = title,
             color = Blanco,
             fontSize = 15.sp,
+
             modifier = Modifier.weight(1f)
         )
 
@@ -1956,6 +3316,10 @@ private fun ConnectionLine(
     }
 }
 
+// ============================================================
+// MENU ITEM
+// ============================================================
+
 @Composable
 private fun MenuItem(
     text: String,
@@ -1964,7 +3328,7 @@ private fun MenuItem(
 ) {
 
     Row(
-        modifier = Modifier
+        Modifier
             .fillMaxWidth()
             .clickable {
                 onClick()
@@ -1973,62 +3337,493 @@ private fun MenuItem(
                 horizontal = 25.dp,
                 vertical = 17.dp
             ),
-        verticalAlignment = Alignment.CenterVertically
+
+        verticalAlignment =
+            Alignment.CenterVertically
     ) {
 
         Icon(
-            icon,
+            imageVector = icon,
             contentDescription = null,
             tint = Amarillo,
-            modifier = Modifier.size(27.dp)
+            modifier =
+                Modifier.size(27.dp)
         )
 
         Spacer(
-            modifier = Modifier.width(17.dp)
+            Modifier.width(17.dp)
         )
 
         Text(
-            text,
+            text = text,
             color = Blanco,
             fontSize = 18.sp
         )
     }
 }
 
-/* ============================================================
-   DATOS
-   ============================================================ */
+// ============================================================
+// SETTINGS TITLE
+// ============================================================
 
-private fun saveProfile(
-    context: Context,
-    profile: ProfileData
+@Composable
+private fun SettingsTitle(
+    icon: String,
+    title: String
 ) {
-    val prefs = context.getSharedPreferences("lession_profile", Context.MODE_PRIVATE)
-    prefs.edit().apply {
-        putString("name", profile.name)
-        putString("birthDate", profile.birthDate)
-        putString("weight", profile.weight)
-        putString("height", profile.height)
-        putString("gender", profile.gender)
-        putString("bodyType", profile.bodyType)
-        putString("sport", profile.sport)
-        putString("weeklyHours", profile.weeklyHours)
-        putString("avatar", profile.avatar)
-        apply()
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(
+                top = 18.dp,
+                bottom = 9.dp
+            ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = icon,
+            fontSize = 22.sp
+        )
+
+        Spacer(
+            Modifier.width(8.dp)
+        )
+
+        Text(
+            text = title,
+            color = Blanco,
+            fontSize = 19.sp,
+            fontWeight =
+                FontWeight.Bold
+        )
     }
 }
 
-private fun loadProfile(context: Context): ProfileData {
-    val prefs = context.getSharedPreferences("lession_profile", Context.MODE_PRIVATE)
-    return ProfileData(
-        name = prefs.getString("name", "") ?: "",
-        birthDate = prefs.getString("birthDate", "") ?: "",
-        weight = prefs.getString("weight", "") ?: "",
-        height = prefs.getString("height", "") ?: "",
-        gender = prefs.getString("gender", "") ?: "",
-        bodyType = prefs.getString("bodyType", "") ?: "",
-        sport = prefs.getString("sport", "") ?: "",
-        weeklyHours = prefs.getString("weeklyHours", "") ?: "",
-        avatar = prefs.getString("avatar", "") ?: ""
+// ============================================================
+// SETTINGS CARD
+// ============================================================
+
+@Composable
+private fun SettingsCard(
+    content:
+    @Composable
+    ColumnScope.() -> Unit
+) {
+
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(
+                Morado,
+                RoundedCornerShape(19.dp)
+            )
+            .padding(14.dp),
+
+        content = content
     )
 }
+
+// ============================================================
+// SETTINGS ROW
+// ============================================================
+
+@Composable
+private fun SettingsRow(
+    title: String,
+    value: String
+) {
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 8.dp
+            ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = title,
+            color = Blanco,
+            fontSize = 15.sp,
+
+            modifier = Modifier.weight(1f)
+        )
+
+        Text(
+            text = value,
+            color = Amarillo,
+            fontSize = 14.sp
+        )
+    }
+}
+
+// ============================================================
+// SETTINGS SWITCH
+// ============================================================
+
+@Composable
+private fun SettingsSwitch(
+    title: String,
+    checked: Boolean,
+    onChange: (Boolean) -> Unit
+) {
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 5.dp
+            ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = title,
+            color = Blanco,
+            fontSize = 15.sp,
+
+            modifier = Modifier.weight(1f)
+        )
+
+        Switch(
+            checked = checked,
+            onCheckedChange = onChange
+        )
+    }
+}
+
+// ============================================================
+// CONNECTION SETTING
+// ============================================================
+
+@Composable
+private fun ConnectionSetting(
+    icon: ImageVector,
+    title: String,
+    status: String,
+    enabled: Boolean,
+    onChange: (Boolean) -> Unit
+) {
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(
+                vertical = 7.dp
+            ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
+    ) {
+
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+
+            tint =
+                if (enabled)
+                    Amarillo
+                else
+                    Blanco,
+
+            modifier = Modifier.size(27.dp)
+        )
+
+        Spacer(
+            Modifier.width(10.dp)
+        )
+
+        Column(
+            Modifier.weight(1f)
+        ) {
+
+            Text(
+                text = title,
+                color = Blanco,
+                fontSize = 16.sp
+            )
+
+            Text(
+                text = status,
+                color =
+                    if (enabled)
+                        Verde
+                    else
+                        Gris,
+
+                fontSize = 12.sp
+            )
+        }
+
+        Switch(
+            checked = enabled,
+            onCheckedChange = onChange
+        )
+    }
+}
+
+// ============================================================
+// SETTINGS BUTTON
+// ============================================================
+
+@Composable
+private fun SettingsButton(
+    text: String,
+    danger: Boolean = false
+) {
+
+    TextButton(
+        onClick = {}
+    ) {
+
+        Text(
+            text = text,
+
+            color =
+                if (danger)
+                    Rojo
+                else
+                    Amarillo,
+
+            fontSize = 15.sp
+        )
+    }
+}
+
+// ============================================================
+// SETTINGS DROPDOWN
+// ============================================================
+
+@Composable
+private fun SettingsDropdown(
+    title: String,
+    value: String,
+    options: List<String>,
+    onSelected: (String) -> Unit
+) {
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clickable {
+                expanded = true
+            }
+            .padding(
+                vertical = 9.dp
+            ),
+
+        verticalAlignment =
+            Alignment.CenterVertically
+    ) {
+
+        Text(
+            text = title,
+            color = Blanco,
+            fontSize = 15.sp,
+
+            modifier = Modifier.weight(1f)
+        )
+
+        Text(
+            text = value,
+            color = Amarillo,
+            fontSize = 14.sp
+        )
+
+        Icon(
+            imageVector = Icons.Default.ArrowDropDown,
+            contentDescription = null,
+            tint = Blanco
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+
+            onDismissRequest = {
+                expanded = false
+            },
+
+            modifier =
+                Modifier.background(
+                    Morado
+                )
+        ) {
+
+            options.forEach { option ->
+
+                DropdownMenuItem(
+
+                    text = {
+
+                        Text(
+                            text = option,
+                            color = Blanco,
+                            fontSize = 16.sp
+                        )
+                    },
+
+                    onClick = {
+
+                        onSelected(
+                            option
+                        )
+
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+// ============================================================
+// PERFIL STORAGE
+// ============================================================
+
+private fun saveProfile(
+    preferences:
+    android.content.SharedPreferences,
+
+    profile: ProfileData
+) {
+
+    preferences.edit {
+
+        putString(
+            "profile_name",
+            profile.name
+        )
+
+        putString(
+            "profile_birthDate",
+            profile.birthDate
+        )
+
+        putString(
+            "profile_weight",
+            profile.weight
+        )
+
+        putString(
+            "profile_height",
+            profile.height
+        )
+
+        putString(
+            "profile_gender",
+            profile.gender
+        )
+
+        putString(
+            "profile_bodyType",
+            profile.bodyType
+        )
+
+        putString(
+            "profile_sport",
+            profile.sport
+        )
+
+        putString(
+            "profile_weeklyHours",
+            profile.weeklyHours
+        )
+
+        putString(
+            "profile_avatar",
+            profile.avatar
+        )
+    }
+}
+
+// ============================================================
+// LOAD PROFILE
+// ============================================================
+
+private fun loadProfile(
+    preferences:
+    android.content.SharedPreferences
+): ProfileData {
+
+    return ProfileData(
+
+        name =
+            preferences.getString(
+                "profile_name",
+                ""
+            ) ?: "",
+
+        birthDate =
+            preferences.getString(
+                "profile_birthDate",
+                ""
+            ) ?: "",
+
+        weight =
+            preferences.getString(
+                "profile_weight",
+                ""
+            ) ?: "",
+
+        height =
+            preferences.getString(
+                "profile_height",
+                ""
+            ) ?: "",
+
+        gender =
+            preferences.getString(
+                "profile_gender",
+                ""
+            ) ?: "",
+
+        bodyType =
+            preferences.getString(
+                "profile_bodyType",
+                ""
+            ) ?: "",
+
+        sport =
+            preferences.getString(
+                "profile_sport",
+                ""
+            ) ?: "",
+
+        weeklyHours =
+            preferences.getString(
+                "profile_weeklyHours",
+                ""
+            ) ?: "",
+
+        avatar =
+            preferences.getString(
+                "profile_avatar",
+                ""
+            ) ?: ""
+    )
+}
+
+// ============================================================
+// FUNCIÓN AUXILIAR
+// ============================================================
+
+private fun languageForMessage(
+    t: AppStrings
+): Boolean {
+
+    return t.login != "Log In"
+}
+
