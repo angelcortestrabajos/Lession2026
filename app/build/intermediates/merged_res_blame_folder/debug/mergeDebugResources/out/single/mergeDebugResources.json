@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "com.lession.app-debug-47:/drawable-nodpi_screen_dashboard.png.flat",
+        "source": "com.lession.app-main-49:/drawable-nodpi/screen_dashboard.png"
+    },
+    {
+        "merged": "com.lession.app-debug-47:/drawable-nodpi_screen_menu.png.flat",
+        "source": "com.lession.app-main-49:/drawable-nodpi/screen_menu.png"
+    },
+    {
+        "merged": "com.lession.app-debug-47:/drawable-nodpi_screen_login.png.flat",
+        "source": "com.lession.app-main-49:/drawable-nodpi/screen_login.png"
+    },
+    {
+        "merged": "com.lession.app-debug-47:/drawable-nodpi_screen_signup.png.flat",
+        "source": "com.lession.app-main-49:/drawable-nodpi/screen_signup.png"
+    },
+    {
+        "merged": "com.lession.app-debug-47:/drawable-nodpi_screen_profile.png.flat",
+        "source": "com.lession.app-main-49:/drawable-nodpi/screen_profile.png"
+    },
+    {
+        "merged": "com.lession.app-debug-47:/drawable_logo_lession.png.flat",
+        "source": "com.lession.app-main-49:/drawable/logo_lession.png"
+    },
+    {
+        "merged": "com.lession.app-debug-47:/drawable-nodpi_screen_welcome.png.flat",
+        "source": "com.lession.app-main-49:/drawable-nodpi/screen_welcome.png"
+    }
+]

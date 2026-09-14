@@ -1,0 +1,423 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:3:1-67:12
+INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:3:1-67:12
+INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:3:1-67:12
+INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:3:1-67:12
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\dddde3bc393f0691638bd4456792ee09\workspace\transformed\material3-release\AndroidManifest.xml:17:1-22:12
+MERGED from [io.coil-kt:coil-compose:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5e7c410ecce4e0ec50f56c6c2e631e8b\workspace\transformed\coil-compose-2.7.0\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-compose-base:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\569462f527f2ea28f1a6be04208cafbb\workspace\transformed\coil-compose-base-2.7.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\d442f1f31d11744b73879400c34aa398\workspace\transformed\animation-core-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\781d2d8adab611bfd11175e19c3f1830\workspace\transformed\material-ripple-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\0be64b71bb9e770797f27790b2451597\workspace\transformed\animation-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\2676515aab231fa148d35783f9042cb7\workspace\transformed\foundation-layout-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f23fee1ca24087099cdfae2f6086953c\workspace\transformed\foundation-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\77d563d90056d7141582d85708f13018\workspace\transformed\ui-unit-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\8badc12f81560d69159a67dcf1da83eb\workspace\transformed\ui-geometry-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\bbd467cc6fa79adfe19c1605a4769780\workspace\transformed\ui-util-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a1e5ad577b7f95c559efe02083b0dbcf\workspace\transformed\ui-text-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4353d8dfaee64c423a2d3a518cf30000\workspace\transformed\ui-tooling-preview-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\21a020fd9f4d7ce53a3a2831dbb983e0\workspace\transformed\ui-graphics-release\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\01053660afff50a55f7f02ae2d7ab7ee\workspace\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1168bc7b480da5c755acb50d95b57c8f\workspace\transformed\material-icons-extended-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\817b93a364e2ed22f66a8e10aaed6c32\workspace\transformed\material-icons-core-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\80e589ed53efca8a94f510ae94ecb467\workspace\transformed\ui-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a27a8a27ee687732342784a7f7cb1f7f\workspace\transformed\activity-1.10.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.activity:activity-ktx:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\843672ab80e719a2911c2a02e808e2f0\workspace\transformed\activity-ktx-1.10.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity-compose:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e1a6d56d6adf70a189231355b7b3619a\workspace\transformed\activity-compose-1.10.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5ea5c3a7e9947bb921009c7527edfa91\workspace\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:17:1-35:12
+MERGED from [io.github.jan-tennert.supabase:postgrest-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\3e9df7d638ec67ac7d659e4e2e8f257e\workspace\transformed\postgrest-kt-debug\AndroidManifest.xml:2:1-7:12
+MERGED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:2:1-20:12
+MERGED from [io.github.jan-tennert.supabase:supabase-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\b69c02610a273a1f21b6d25225fdbc08\workspace\transformed\supabase-kt-debug\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e05bf1a6700f6366c43a6f11bae948c7\workspace\transformed\coil-2.7.0\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-base:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7d4cf18e2851041fefb5146c15c6da91\workspace\transformed\coil-base-2.7.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\c0137db4acbf2b373847682d29b496d7\workspace\transformed\autofill-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\0f523fe782b5dfb708c90efbc70a5fdd\workspace\transformed\graphics-path-1.0.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\c50528c4c7bef98524e44ce5681a10e7\workspace\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.browser:browser:1.8.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1ccb6699c417cbf404bdf24458f0e86a\workspace\transformed\browser-1.8.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\ba72e500994a276fc5a9a038197972ad\workspace\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\6e463bdea1f0c10fa979a6202a6e3d0e\workspace\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\77241f1705b50852dd5d695db69a009e\workspace\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\777b60f8755b12e834f1d71678835548\workspace\transformed\core-ktx-1.13.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6007f2590bca9c3f3abd5036a7af8b0\workspace\transformed\lifecycle-livedata-core-2.8.4\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17e0f22429316508c2cae83e04508c3d\workspace\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7d861d0a42649a99841a44ffdefdecb1\workspace\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\84efdceb368cdd92f61af6261f3ba93e\workspace\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\98b3c50b8fda97e8d96c92c029a6aa63\workspace\transformed\lifecycle-runtime-release\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\b4070f3bbe06a0b7e3d26f75a7e35641\workspace\transformed\lifecycle-viewmodel-ktx-2.8.4\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\2f22a0bf08b1c9b098ae87716d0bebf4\workspace\transformed\lifecycle-viewmodel-savedstate-2.8.4\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\fc41346a80b32341f07efadb13daeb1a\workspace\transformed\savedstate-1.2.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4ffa2b81e79f58db7e8c5ac6ba8daf29\workspace\transformed\runtime-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4aebad85525bdc71b4bf51768728423f\workspace\transformed\runtime-saveable-release\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core-viewtree:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1656d974f8af54333a4080c22f414947\workspace\transformed\core-viewtree-1.0.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e2be04b457496c8a3baf5be9872aa602\workspace\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:2:1-7:12
+MERGED from [com.soywiz.korlibs.krypto:krypto-android:4.0.10] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4d0fdb6e51a89e0be87d7d00e1ecd9a6\workspace\transformed\krypto-debug\AndroidManifest.xml:2:1-9:12
+MERGED from [com.russhwolf:multiplatform-settings-coroutines-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4d52bb40dda2a870849ee7f6a343e62f\workspace\transformed\multiplatform-settings-coroutines-debug\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:17:1-55:12
+MERGED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fb773a52585c8a47f27013bc0e1330b\workspace\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a6cb95170d59c381b786e7049dccb668\workspace\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7c47e582d188d42f19b6d126b18a5a42\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\ec00967857b28820a366a8658ba86293\workspace\transformed\exifinterface-1.3.7\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e12470d23f609e2a8f2fa48050860b2b\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e52328f5b51b1e015e60815620494b0b\workspace\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
+MERGED from [com.russhwolf:multiplatform-settings-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\bf09b9fba2d6fa202b384a447803aef1\workspace\transformed\multiplatform-settings-debug\AndroidManifest.xml:2:1-7:12
+MERGED from [co.touchlab:kermit-android-debug:2.0.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5b5e58baa3db7de03901d0fb9225ae5a\workspace\transformed\kermit-debug\AndroidManifest.xml:2:1-7:12
+MERGED from [co.touchlab:kermit-core-android-debug:2.0.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a1e8c7f80f53873b394a583fd448f9d1\workspace\transformed\kermit-core-debug\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f3c68840205f08172b50e816b87c3d3d\workspace\transformed\multidex-2.0.1\AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+	xmlns:tools
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:3:11-57
+	android:versionCode
+		INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:4:5-63
+uses-permission#android.permission.BLUETOOTH
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:6:5-68
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:6:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:7:5-74
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:7:22-71
+uses-permission#android.permission.BLUETOOTH_SCAN
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:9:5-11:58
+	android:usesPermissionFlags
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:11:9-55
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:10:9-57
+uses-permission#android.permission.BLUETOOTH_CONNECT
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:13:5-14:63
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:14:9-60
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:16:5-76
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:16:22-73
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:17:5-76
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:17:22-73
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:18:5-79
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:18:22-76
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:20:5-21:45
+	tools:ignore
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:21:9-42
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:20:22-76
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:23:5-67
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:23:22-64
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:25:5-77
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:25:22-74
+uses-permission#android.permission.SCHEDULE_EXACT_ALARM
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:40:5-79
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:40:22-76
+application
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:42:5-65:19
+INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:42:5-65:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
+MERGED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:8:5-18:19
+MERGED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:8:5-18:19
+MERGED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:23:5-53:19
+MERGED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:23:5-33:19
+MERGED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fb773a52585c8a47f27013bc0e1330b\workspace\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fb773a52585c8a47f27013bc0e1330b\workspace\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e12470d23f609e2a8f2fa48050860b2b\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e12470d23f609e2a8f2fa48050860b2b\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+	android:supportsRtl
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:46:9-35
+	android:label
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:44:9-32
+	android:allowBackup
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:45:9-35
+	android:theme
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:43:9-45
+receiver#com.lession.app.MotivationNotificationReceiver
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:48:9-50:40
+	android:exported
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:50:13-37
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:49:13-59
+activity#com.lession.app.MainActivity
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:52:9-63:20
+	android:exported
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:54:13-36
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:53:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:56:13-61:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:57:17-69
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:57:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:59:17-60:71
+	android:name
+		ADDED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml:60:21-68
+uses-sdk
+INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\dddde3bc393f0691638bd4456792ee09\workspace\transformed\material3-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.material3:material3-android:1.3.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\dddde3bc393f0691638bd4456792ee09\workspace\transformed\material3-release\AndroidManifest.xml:20:5-44
+MERGED from [io.coil-kt:coil-compose:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5e7c410ecce4e0ec50f56c6c2e631e8b\workspace\transformed\coil-compose-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5e7c410ecce4e0ec50f56c6c2e631e8b\workspace\transformed\coil-compose-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\569462f527f2ea28f1a6be04208cafbb\workspace\transformed\coil-compose-base-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\569462f527f2ea28f1a6be04208cafbb\workspace\transformed\coil-compose-base-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\d442f1f31d11744b73879400c34aa398\workspace\transformed\animation-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-core-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\d442f1f31d11744b73879400c34aa398\workspace\transformed\animation-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\781d2d8adab611bfd11175e19c3f1830\workspace\transformed\material-ripple-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-ripple-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\781d2d8adab611bfd11175e19c3f1830\workspace\transformed\material-ripple-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\0be64b71bb9e770797f27790b2451597\workspace\transformed\animation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.animation:animation-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\0be64b71bb9e770797f27790b2451597\workspace\transformed\animation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\2676515aab231fa148d35783f9042cb7\workspace\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-layout-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\2676515aab231fa148d35783f9042cb7\workspace\transformed\foundation-layout-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f23fee1ca24087099cdfae2f6086953c\workspace\transformed\foundation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.foundation:foundation-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f23fee1ca24087099cdfae2f6086953c\workspace\transformed\foundation-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\77d563d90056d7141582d85708f13018\workspace\transformed\ui-unit-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-unit-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\77d563d90056d7141582d85708f13018\workspace\transformed\ui-unit-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\8badc12f81560d69159a67dcf1da83eb\workspace\transformed\ui-geometry-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-geometry-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\8badc12f81560d69159a67dcf1da83eb\workspace\transformed\ui-geometry-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\bbd467cc6fa79adfe19c1605a4769780\workspace\transformed\ui-util-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-util-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\bbd467cc6fa79adfe19c1605a4769780\workspace\transformed\ui-util-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a1e5ad577b7f95c559efe02083b0dbcf\workspace\transformed\ui-text-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-text-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a1e5ad577b7f95c559efe02083b0dbcf\workspace\transformed\ui-text-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4353d8dfaee64c423a2d3a518cf30000\workspace\transformed\ui-tooling-preview-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4353d8dfaee64c423a2d3a518cf30000\workspace\transformed\ui-tooling-preview-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\21a020fd9f4d7ce53a3a2831dbb983e0\workspace\transformed\ui-graphics-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-graphics-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\21a020fd9f4d7ce53a3a2831dbb983e0\workspace\transformed\ui-graphics-release\AndroidManifest.xml:5:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\01053660afff50a55f7f02ae2d7ab7ee\workspace\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:21:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\01053660afff50a55f7f02ae2d7ab7ee\workspace\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1168bc7b480da5c755acb50d95b57c8f\workspace\transformed\material-icons-extended-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-extended-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1168bc7b480da5c755acb50d95b57c8f\workspace\transformed\material-icons-extended-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\817b93a364e2ed22f66a8e10aaed6c32\workspace\transformed\material-icons-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.material:material-icons-core-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\817b93a364e2ed22f66a8e10aaed6c32\workspace\transformed\material-icons-core-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\80e589ed53efca8a94f510ae94ecb467\workspace\transformed\ui-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.ui:ui-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\80e589ed53efca8a94f510ae94ecb467\workspace\transformed\ui-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a27a8a27ee687732342784a7f7cb1f7f\workspace\transformed\activity-1.10.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a27a8a27ee687732342784a7f7cb1f7f\workspace\transformed\activity-1.10.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity-ktx:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\843672ab80e719a2911c2a02e808e2f0\workspace\transformed\activity-ktx-1.10.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\843672ab80e719a2911c2a02e808e2f0\workspace\transformed\activity-ktx-1.10.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e1a6d56d6adf70a189231355b7b3619a\workspace\transformed\activity-compose-1.10.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-compose:1.10.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e1a6d56d6adf70a189231355b7b3619a\workspace\transformed\activity-compose-1.10.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5ea5c3a7e9947bb921009c7527edfa91\workspace\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5ea5c3a7e9947bb921009c7527edfa91\workspace\transformed\savedstate-ktx-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [io.github.jan-tennert.supabase:postgrest-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\3e9df7d638ec67ac7d659e4e2e8f257e\workspace\transformed\postgrest-kt-debug\AndroidManifest.xml:5:5-44
+MERGED from [io.github.jan-tennert.supabase:postgrest-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\3e9df7d638ec67ac7d659e4e2e8f257e\workspace\transformed\postgrest-kt-debug\AndroidManifest.xml:5:5-44
+MERGED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:6:5-44
+MERGED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:6:5-44
+MERGED from [io.github.jan-tennert.supabase:supabase-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\b69c02610a273a1f21b6d25225fdbc08\workspace\transformed\supabase-kt-debug\AndroidManifest.xml:5:5-44
+MERGED from [io.github.jan-tennert.supabase:supabase-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\b69c02610a273a1f21b6d25225fdbc08\workspace\transformed\supabase-kt-debug\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e05bf1a6700f6366c43a6f11bae948c7\workspace\transformed\coil-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e05bf1a6700f6366c43a6f11bae948c7\workspace\transformed\coil-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7d4cf18e2851041fefb5146c15c6da91\workspace\transformed\coil-base-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.7.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7d4cf18e2851041fefb5146c15c6da91\workspace\transformed\coil-base-2.7.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\c0137db4acbf2b373847682d29b496d7\workspace\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\c0137db4acbf2b373847682d29b496d7\workspace\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\0f523fe782b5dfb708c90efbc70a5fdd\workspace\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\0f523fe782b5dfb708c90efbc70a5fdd\workspace\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\c50528c4c7bef98524e44ce5681a10e7\workspace\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\c50528c4c7bef98524e44ce5681a10e7\workspace\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.browser:browser:1.8.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1ccb6699c417cbf404bdf24458f0e86a\workspace\transformed\browser-1.8.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.browser:browser:1.8.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1ccb6699c417cbf404bdf24458f0e86a\workspace\transformed\browser-1.8.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\ba72e500994a276fc5a9a038197972ad\workspace\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\ba72e500994a276fc5a9a038197972ad\workspace\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\6e463bdea1f0c10fa979a6202a6e3d0e\workspace\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\6e463bdea1f0c10fa979a6202a6e3d0e\workspace\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\77241f1705b50852dd5d695db69a009e\workspace\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\77241f1705b50852dd5d695db69a009e\workspace\transformed\customview-poolingcontainer-1.0.0\AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\777b60f8755b12e834f1d71678835548\workspace\transformed\core-ktx-1.13.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\777b60f8755b12e834f1d71678835548\workspace\transformed\core-ktx-1.13.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6007f2590bca9c3f3abd5036a7af8b0\workspace\transformed\lifecycle-livedata-core-2.8.4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6007f2590bca9c3f3abd5036a7af8b0\workspace\transformed\lifecycle-livedata-core-2.8.4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17e0f22429316508c2cae83e04508c3d\workspace\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17e0f22429316508c2cae83e04508c3d\workspace\transformed\lifecycle-viewmodel-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7d861d0a42649a99841a44ffdefdecb1\workspace\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7d861d0a42649a99841a44ffdefdecb1\workspace\transformed\lifecycle-runtime-ktx-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\84efdceb368cdd92f61af6261f3ba93e\workspace\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-compose-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\84efdceb368cdd92f61af6261f3ba93e\workspace\transformed\lifecycle-runtime-compose-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\98b3c50b8fda97e8d96c92c029a6aa63\workspace\transformed\lifecycle-runtime-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-android:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\98b3c50b8fda97e8d96c92c029a6aa63\workspace\transformed\lifecycle-runtime-release\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\b4070f3bbe06a0b7e3d26f75a7e35641\workspace\transformed\lifecycle-viewmodel-ktx-2.8.4\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\b4070f3bbe06a0b7e3d26f75a7e35641\workspace\transformed\lifecycle-viewmodel-ktx-2.8.4\AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\2f22a0bf08b1c9b098ae87716d0bebf4\workspace\transformed\lifecycle-viewmodel-savedstate-2.8.4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\2f22a0bf08b1c9b098ae87716d0bebf4\workspace\transformed\lifecycle-viewmodel-savedstate-2.8.4\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\fc41346a80b32341f07efadb13daeb1a\workspace\transformed\savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\fc41346a80b32341f07efadb13daeb1a\workspace\transformed\savedstate-1.2.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4ffa2b81e79f58db7e8c5ac6ba8daf29\workspace\transformed\runtime-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4ffa2b81e79f58db7e8c5ac6ba8daf29\workspace\transformed\runtime-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4aebad85525bdc71b4bf51768728423f\workspace\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.5] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4aebad85525bdc71b4bf51768728423f\workspace\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-viewtree:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1656d974f8af54333a4080c22f414947\workspace\transformed\core-viewtree-1.0.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-viewtree:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\1656d974f8af54333a4080c22f414947\workspace\transformed\core-viewtree-1.0.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e2be04b457496c8a3baf5be9872aa602\workspace\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e2be04b457496c8a3baf5be9872aa602\workspace\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
+MERGED from [com.soywiz.korlibs.krypto:krypto-android:4.0.10] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4d0fdb6e51a89e0be87d7d00e1ecd9a6\workspace\transformed\krypto-debug\AndroidManifest.xml:5:5-7:41
+MERGED from [com.soywiz.korlibs.krypto:krypto-android:4.0.10] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4d0fdb6e51a89e0be87d7d00e1ecd9a6\workspace\transformed\krypto-debug\AndroidManifest.xml:5:5-7:41
+MERGED from [com.russhwolf:multiplatform-settings-coroutines-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4d52bb40dda2a870849ee7f6a343e62f\workspace\transformed\multiplatform-settings-coroutines-debug\AndroidManifest.xml:5:5-44
+MERGED from [com.russhwolf:multiplatform-settings-coroutines-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4d52bb40dda2a870849ee7f6a343e62f\workspace\transformed\multiplatform-settings-coroutines-debug\AndroidManifest.xml:5:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:21:5-44
+MERGED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:21:5-44
+MERGED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fb773a52585c8a47f27013bc0e1330b\workspace\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fb773a52585c8a47f27013bc0e1330b\workspace\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a6cb95170d59c381b786e7049dccb668\workspace\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a6cb95170d59c381b786e7049dccb668\workspace\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7c47e582d188d42f19b6d126b18a5a42\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\7c47e582d188d42f19b6d126b18a5a42\workspace\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\ec00967857b28820a366a8658ba86293\workspace\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\ec00967857b28820a366a8658ba86293\workspace\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e12470d23f609e2a8f2fa48050860b2b\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e12470d23f609e2a8f2fa48050860b2b\workspace\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e52328f5b51b1e015e60815620494b0b\workspace\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\e52328f5b51b1e015e60815620494b0b\workspace\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [com.russhwolf:multiplatform-settings-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\bf09b9fba2d6fa202b384a447803aef1\workspace\transformed\multiplatform-settings-debug\AndroidManifest.xml:5:5-44
+MERGED from [com.russhwolf:multiplatform-settings-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\bf09b9fba2d6fa202b384a447803aef1\workspace\transformed\multiplatform-settings-debug\AndroidManifest.xml:5:5-44
+MERGED from [co.touchlab:kermit-android-debug:2.0.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5b5e58baa3db7de03901d0fb9225ae5a\workspace\transformed\kermit-debug\AndroidManifest.xml:5:5-44
+MERGED from [co.touchlab:kermit-android-debug:2.0.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\5b5e58baa3db7de03901d0fb9225ae5a\workspace\transformed\kermit-debug\AndroidManifest.xml:5:5-44
+MERGED from [co.touchlab:kermit-core-android-debug:2.0.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a1e8c7f80f53873b394a583fd448f9d1\workspace\transformed\kermit-core-debug\AndroidManifest.xml:5:5-44
+MERGED from [co.touchlab:kermit-core-android-debug:2.0.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\a1e8c7f80f53873b394a583fd448f9d1\workspace\transformed\kermit-core-debug\AndroidManifest.xml:5:5-44
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f3c68840205f08172b50e816b87c3d3d\workspace\transformed\multidex-2.0.1\AndroidManifest.xml:20:5-43
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f3c68840205f08172b50e816b87c3d3d\workspace\transformed\multidex-2.0.1\AndroidManifest.xml:20:5-43
+	android:targetSdkVersion
+		INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\PRoA La Falda\Desktop\LessionAndroid\app\src\main\AndroidManifest.xml
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+MERGED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:9:9-17:20
+MERGED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:9:9-17:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:24:9-32:20
+MERGED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:24:9-32:20
+MERGED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fb773a52585c8a47f27013bc0e1330b\workspace\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fb773a52585c8a47f27013bc0e1330b\workspace\transformed\startup-runtime-1.1.1\AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.3.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\4fc3b8fe6953b3b82c9ea787afdcc0dc\workspace\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+meta-data#io.github.jan.supabase.gotrue.SupabaseInitializer
+ADDED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:14:13-16:52
+	android:value
+		ADDED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:16:17-49
+	android:name
+		ADDED from [io.github.jan-tennert.supabase:gotrue-kt-android-debug:2.6.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\23a3240d600a5489923a2e475eb0bed5\workspace\transformed\gotrue-kt-debug\AndroidManifest.xml:15:17-81
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+permission#com.lession.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+uses-permission#com.lession.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.13.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\f6d6c10db1b6777ac98647e1ca11cd8a\workspace\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.8.4] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\58484fa4e2f07a18d98a5f73c2e42a20\workspace\transformed\lifecycle-process-2.8.4\AndroidManifest.xml:30:17-78
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\17f52336f37c7d90e3cc1cdfaede7775\workspace\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+meta-data#com.russhwolf.settings.SettingsInitializer
+ADDED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [com.russhwolf:multiplatform-settings-no-arg-android-debug:1.1.1] C:\Users\PRoA La Falda\.gradle\caches\9.3.1\transforms\83b5a5d89d88d08d87eacc9595987013\workspace\transformed\multiplatform-settings-no-arg-debug\AndroidManifest.xml:30:17-74

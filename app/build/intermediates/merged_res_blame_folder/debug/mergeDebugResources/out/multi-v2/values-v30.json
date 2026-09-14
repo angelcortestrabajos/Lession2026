@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.lession.app-mergeDebugResources-45:/values-v30/values-v30.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\PRoA La Falda\\.gradle\\caches\\9.3.1\\transforms\\dddde3bc393f0691638bd4456792ee09\\workspace\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                }
+            ]
+        }
+    ]
+}
