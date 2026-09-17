@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +43,7 @@ import com.lession.app.ui.screens.*
 import com.lession.app.ui.theme.Background
 import com.lession.app.ui.theme.Red
 import java.util.Calendar
+import kotlinx.coroutines.launch
 
 private const val NOTIFICATION_CHANNEL_ID = "lession_motivation"
 private const val NOTIFICATION_ID = 1001
@@ -205,6 +207,9 @@ private fun LessionApp() {
         mutableStateOf(preferences.getBoolean("notifications_enabled", true))
     }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var authError by remember { mutableStateOf<String?>(null) }
+    var authLoading by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -226,9 +231,20 @@ private fun LessionApp() {
                     onEmailChange = { email = it },
                     onPasswordChange = { password = it },
                     onRememberChange = { rememberPassword = it },
+                    errorMessage = authError,
+                    isLoading = authLoading,
                     onLogin = {
-                        if (email.isBlank() || password.isBlank()) return@LoginScreen
-                        screen = Screen.PROFILE
+                        if (email.isBlank() || password.isBlank()) {
+                            authError = "Ingresá tu correo y contraseña."
+                            return@LoginScreen
+                        }
+                        scope.launch {
+                            authLoading = true
+                            authError = iniciarSesion(email.trim(), password).exceptionOrNull()?.message
+                                ?.let { "No se pudo iniciar sesión. Verificá tus datos." }
+                            if (authError == null) screen = Screen.PROFILE
+                            authLoading = false
+                        }
                     },
                     onBack = { screen = Screen.WELCOME }
                 )
@@ -243,10 +259,24 @@ private fun LessionApp() {
                     onEmailChange = { email = it },
                     onPasswordChange = { password = it },
                     onConfirmPasswordChange = { confirmPassword = it },
+                    errorMessage = authError,
+                    isLoading = authLoading,
                     onSignup = {
-                        if (name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) return@SignupScreen
-                        if (password != confirmPassword) return@SignupScreen
-                        screen = Screen.PROFILE
+                        if (name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                            authError = "Completá todos los campos."
+                            return@SignupScreen
+                        }
+                        if (password != confirmPassword) {
+                            authError = "Las contraseñas no coinciden."
+                            return@SignupScreen
+                        }
+                        scope.launch {
+                            authLoading = true
+                            authError = registrarUsuario(email.trim(), password, name.trim(), "").exceptionOrNull()
+                                ?.let { "No se pudo crear la cuenta. Revisá el correo y la contraseña." }
+                            if (authError == null) screen = Screen.PROFILE
+                            authLoading = false
+                        }
                     },
                     onBack = { screen = Screen.WELCOME }
                 )
@@ -273,6 +303,7 @@ private fun LessionApp() {
                     onLogout = {
                         email = ""
                         password = ""
+                        authError = null
                         confirmPassword = ""
                         screen = Screen.LOGIN
                     },
@@ -292,6 +323,7 @@ private fun LessionApp() {
                     onLogout = {
                         email = ""
                         password = ""
+                        authError = null
                         screen = Screen.LOGIN
                     }
                 )

@@ -38,7 +38,9 @@ fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onRememberChange: (Boolean) -> Unit,
     onLogin: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    errorMessage: String? = null,
+    isLoading: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -75,6 +77,10 @@ fun LoginScreen(
             singleLine = true
         )
 
+        if (errorMessage != null) {
+            Text(text = errorMessage, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+        }
+
         Spacer(modifier = Modifier.height(18.dp))
 
         OutlinedTextField(
@@ -105,7 +111,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.width(10.dp))
 
             Text(
-                text = "Guardar contraseña",
+                text = "Mantener sesión iniciada",
                 fontSize = 16.sp
             )
         }
@@ -114,6 +120,7 @@ fun LoginScreen(
 
         Button(
             onClick = onLogin,
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(58.dp),

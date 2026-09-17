@@ -36,7 +36,9 @@ fun SignupScreen(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSignup: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    errorMessage: String? = null,
+    isLoading: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -66,6 +68,10 @@ fun SignupScreen(
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Nombre completo") }
         )
+
+        if (errorMessage != null) {
+            Text(text = errorMessage, color = androidx.compose.ui.graphics.Color.Red)
+        }
 
         Spacer(modifier = Modifier.height(14.dp))
 
@@ -100,6 +106,7 @@ fun SignupScreen(
 
         Button(
             onClick = onSignup,
+            enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(58.dp),

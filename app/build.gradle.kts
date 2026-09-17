@@ -17,10 +17,24 @@ android {
         versionName = "1.0"
         
         multiDexEnabled = true
+
+        // Definir SUPABASE_URL y SUPABASE_PUBLISHABLE_KEY en gradle.properties
+        // o mediante -P para no guardar credenciales en el código fuente.
+        buildConfigField(
+            "String",
+            "SUPABASE_URL",
+            "\"${project.findProperty("SUPABASE_URL") ?: "TU_SUPABASE_URL"}\""
+        )
+        buildConfigField(
+            "String",
+            "SUPABASE_PUBLISHABLE_KEY",
+            "\"${project.findProperty("SUPABASE_PUBLISHABLE_KEY") ?: "TU_SUPABASE_PUBLISHABLE_KEY"}\""
+        )
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     buildTypes {

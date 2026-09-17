@@ -6045,6 +6045,25 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\PRoA La Falda\\Desktop\\Lession 2026\\Lession2026\\app\\src\\main\\res\\values\\styles.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "57",
+                        "endLines": "8",
+                        "endColumns": "12",
+                        "endOffsets": "488"
+                    },
+                    "to": {
+                        "startLines": "236",
+                        "startColumns": "4",
+                        "startOffsets": "15128",
+                        "endLines": "242",
+                        "endColumns": "12",
+                        "endOffsets": "15553"
+                    }
+                },
+                {
                     "source": "C:\\Users\\PRoA La Falda\\.gradle\\caches\\9.3.1\\transforms\\98b3c50b8fda97e8d96c92c029a6aa63\\workspace\\transformed\\lifecycle-runtime-release\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2",
@@ -6163,25 +6182,6 @@
                         "startOffsets": "370,428,494,557,882,953,7274,7567,7634,7713",
                         "endColumns": "57,65,62,61,70,71,67,66,78,68",
                         "endOffsets": "423,489,552,614,948,1020,7337,7629,7708,7777"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\PRoA La Falda\\Desktop\\LessionAndroid\\app\\src\\main\\res\\values\\styles.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endLines": "8",
-                        "endColumns": "12",
-                        "endOffsets": "480"
-                    },
-                    "to": {
-                        "startLines": "236",
-                        "startColumns": "4",
-                        "startOffsets": "15128",
-                        "endLines": "242",
-                        "endColumns": "12",
-                        "endOffsets": "15553"
                     }
                 },
                 {
